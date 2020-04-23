@@ -4,7 +4,7 @@ class Student {
     const User = require('./user.model');
     const Semester = require('./semester.model.js');
     const Project = require('./project.model.js');
-		return `
+    return `
 			CREATE TABLE ${Student.tableName} (
 				firstname VARCHAR(255) NOT NULL,
 				lastname VARCHAR(255) NOT NULL,
