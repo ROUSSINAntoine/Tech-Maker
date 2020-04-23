@@ -3,15 +3,13 @@ class JuryProject {
   static toSqlTable () {
     const Jury = require('./jury.model.js');
     const Project = require('./project.model.js');
-    return [`
+    return `
 			CREATE TABLE ${JuryProject.tableName} (
-				id SERIAL PRIMARY KEY,
 				jury_id INT REFERENCES ${Jury.tableName},
 				project_id INT REFERENCES ${Project.tableName},
-				passage INT NOT NULL
-			)`,
-		`ALTER TABLE ${JuryProject.tableName} ADD UNIQUE(jury_id, project_id) `
-    ];
+				passage INT NOT NULL,
+				PRIMARY KEY(jury_id, project_id)
+			)`;
   }
 }
 

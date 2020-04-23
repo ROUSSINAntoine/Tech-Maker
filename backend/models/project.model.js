@@ -9,11 +9,12 @@ class Project {
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) UNIQUE NOT NULL,
         describe TEXT,
-        pitch TEXT,
+        slogan TEXT,
         image TEXT UNIQUE,
         identifier INT UNIQUE,
         validate validate_list,
         bankable BOOL NOT NULL,
+        needs TEXT,
         position_id INT REFERENCES ${Position.tableName} 
       )`,
       `ALTER TABLE ${Project.tableName} ADD UNIQUE(position_id)`
