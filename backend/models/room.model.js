@@ -1,8 +1,9 @@
 // const PostgressStore = require('../utils/PostgressStore');
+/* eslint no-tabs: ["error", { allowIndentationTabs: true }] */
 class Room {
   static toSqlTable () {
-		return `
-		CREATE TABLE ${Room.tableName} (
+    return `
+			CREATE TABLE ${Room.tableName} (
 				id SERIAL PRIMARY KEY,
 				name VARCHAR(255) UNIQUE NOT NULL,
 				max_student INT NOT NULL,

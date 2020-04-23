@@ -1,4 +1,5 @@
 // const PostgressStore = require('../utils/PostgressStore');
+/* eslint no-tabs: ["error", { allowIndentationTabs: true }] */
 class Technology {
   static toSqlTable () {
     return [`

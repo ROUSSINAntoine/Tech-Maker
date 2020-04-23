@@ -1,4 +1,4 @@
-
+/* eslint no-tabs: ["error", { allowIndentationTabs: true }] */
 class Judge {
   static toSqlTable () {
     const Jury = require('./jury.model.js');
