@@ -1,10 +1,12 @@
-// const PostgressStore = require('../utils/PostgressStore');
+/* eslint no-tabs: ["error", { allowIndentationTabs: true }] */
+
+const PostgressStore = require('../utils/PostgressStore');
 class Student {
   static toSqlTable () {
     const User = require('./user.model');
     const Semester = require('./semester.model.js');
     const Project = require('./project.model.js');
-		return `
+    return `
 			CREATE TABLE ${Student.tableName} (
 				firstname VARCHAR(255) NOT NULL,
 				lastname VARCHAR(255) NOT NULL,
@@ -14,6 +16,13 @@ class Student {
 				project_id INT REFERENCES ${Project.tableName},
 				PRIMARY KEY(user_id)
 			)`;
+  }
+
+  static async getAll () {
+    const result = await PostgressStore.client.query(
+			`SELECT * FROM ${Student.tableName}`
+    );
+    return result.rows;
   }
 }
 
