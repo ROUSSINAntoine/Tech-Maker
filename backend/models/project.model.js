@@ -1,4 +1,4 @@
-// const PostgressStore = require('../utils/PostgressStore');
+const PostgressStore = require('../utils/PostgressStore');
 
 class Project {
   static toSqlTable () {
@@ -19,6 +19,13 @@ class Project {
     )`,
       `ALTER TABLE ${Project.tableName} ADD UNIQUE(position_id)`
     ];
+  }
+
+  static async getAll () {
+    const result = await PostgressStore.client.query(
+      `SELECT * FROM ${Project.tableName}`
+    );
+    return result.rows;
   }
 }
 
