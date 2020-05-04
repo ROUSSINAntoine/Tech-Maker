@@ -1,17 +1,13 @@
 <template>
   <div id="app">
-    <AdminHomepage/>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import AdminHomepage from './components/AdminHomepage.vue'
 
 export default {
   name: 'App',
-  components: {
-    AdminHomepage
-  }
 }
 </script>
 
