@@ -1,4 +1,4 @@
-// const PostgressStore = require('../utils/PostgressStore');
+// const PostgresStore = require('../utils/PostgressStore');
 class TechnoProject {
   static toSqlTable () {
     const Project = require('./project.model.js');

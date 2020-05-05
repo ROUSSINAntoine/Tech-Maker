@@ -1,4 +1,4 @@
-// const PostgressStore = require('../utils/PostgressStore');
+const PostgresStore = require('../utils/PostgresStore');
 /* eslint no-tabs: ["error", { allowIndentationTabs: true }] */
 class Technology {
   static toSqlTable () {
@@ -7,6 +7,14 @@ class Technology {
 				id SERIAL PRIMARY KEY,
 				name VARCHAR(255) UNIQUE NOT NULL
 			)`];
+  }
+
+  static async getAll () {
+    const result = await PostgresStore.client.query(
+      `SELECT *
+        FROM ${Technology.tableName}`
+    );
+    return result.rows;
   }
 }
 
