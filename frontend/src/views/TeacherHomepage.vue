@@ -1,19 +1,20 @@
 <template>
-  <div id="teacher">
-    <nav>
-      <ul>
-        <li><button>Mes étudiants</button></li>
-        <li><button>Projets</button></li>
-        <li><button>Technologieq</button></li>
-      </ul>
-      <button>Déconnexion</button>
-    </nav>
+  <div id='Teacher'>
+    <TeacherNavbar />
+    <TechnologiesTable :modifyTechno='false' />
   </div>
 </template>
 
 <script>
+import TeacherNavbar from '../components/teacher/TeacherNavbar.vue';
+import TechnologiesTable from '../components/teacher/TechnologiesTable.vue';
+
 export default {
-  name: 'TeacherHomepage'
+  name: 'TeacherHomepage',
+  components: {
+    TeacherNavbar,
+    TechnologiesTable
+  }
 }
 </script>
 
