@@ -1,5 +1,5 @@
 <template>
-  <div id='TechnologiesList'>
+  <div id='TechnologiesTable'>
     <h1>Technologies utilisables par semestres</h1>
     <table>
       <thead>
@@ -34,18 +34,19 @@
             <button v-if='selectedId === technology.id && modifyTechno' v-on:click='updateTechnology()'>Sauvegarder</button>
             <button v-if='selectedId === technology.id && modifyTechno' v-on:click='cancelUpdateTechnology()'>Annuler</button>
             <span v-if='errorUpdateMessage !== null && selectedId === technology.id'>{{ errorUpdateMessage }}</span>
-
             
           </td>
           <td v-for='semester in semesters' v-bind:key='semester.id'>
-            <input
-              type='checkbox'
-              v-model='semester.ckeckedIds'
-              :id='semester.id + "-" + technology.id'
-              :value='technology.id'
-              class='technologyPerSemester'
-            />
-            <div class='checkboxLabel' :for='semester.id + "-" + technology.id'></div>
+            <div class='cell'>
+              <input
+                type='checkbox'
+                v-model='semester.modifyIds'
+                :id='semester.id + "-" + technology.id'
+                :value='technology.id'
+                class='technologySelector'
+              />
+              <label :for='semester.id + "-" + technology.id' class="checker">a</label>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -55,47 +56,32 @@
 </template>
 
 <script>
+import {
+  getTechnologiesPerSemester,
+  setModifiedTechnologiesPerSemester
+} from '../../services/services.js';
+
 export default {
-  name: 'TechnologiesList',
+  name: 'TechnologiesTable',
   data() {
     return {
-      semesters: [
-        {
-          id: 1,
-          name: 'S4 IL',
-          ckeckedIds: []
-        },
-        {
-          id: 2,
-          name: 'S4 SR',
-          ckeckedIds: []
-        }
-      ],
-      technologies: [
-        {
-          id: 1,
-          name: 'C#'
-        },
-        {
-          id: 2,
-          name: 'JavaScript'
-        },
-        {
-          id: 3,
-          name: 'PHP'
-        },
-        {
-          id: 4,
-          name: 'SQL'
-        }
-      ],
+      semesters: [],
+      technologies: [],
       selectedId: null,
       selectedName: null,
       errorUpdateMessage: null
     }
   },
+  async created() {
+    const data = await getTechnologiesPerSemester(this.teacherId);
+    this.semesters = data.semesters.map(semester => {
+      return { ...semester, modifyIds: [...semester.checkedIds] };
+    });
+    this.technologies = data.technologies;
+  },
   props: {
-    modifyTechno: Boolean
+    modifyTechno: Boolean,
+    teacherId: Number
   },
   methods: {
     /**
@@ -103,7 +89,32 @@ export default {
      * Emit data format is Array<Object(id: Number, name: String, ckeckedIds: Array<Number>)>
      */
     sendIds () {
-      console.log(this.semesters);
+      const updateList = [];
+      let copyModifyIds;
+
+      for (const semester of this.semesters) {
+        copyModifyIds = [...semester.modifyIds];
+
+        semester.checkedIds.forEach(oldId => {
+          if (!copyModifyIds.includes(oldId)) {
+            updateList.push({
+              semesterId: semester.id,
+              technologyId: oldId,
+              add: false
+            });
+          } else {
+            copyModifyIds = copyModifyIds.filter(id => id !== oldId);
+          }
+        });
+
+        copyModifyIds.forEach(id => updateList.push({
+          semesterId: semester.id,
+          technologyId: id,
+          add: true
+        }));
+      }
+
+      setModifiedTechnologiesPerSemester(updateList);
     },
     /**
      * Prepare selectedId et selectedName.
@@ -144,25 +155,45 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-ul {
-  list-style-type: none;
-}
-.technologyAction {
-  display: none;
-}
-.technologyItem:hover > .technologyAction {
-  display: inline;
-}
-
-th, td {
-  border: 1px solid black;
-  padding: 3px;
-}
 table {
   border-collapse: collapse;
 }
-
-td {
+th, td {
+  border: 1px solid black;
+  margin: 0px;
   padding: 0px;
+}
+
+.cell {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+.checker {
+  display: table-cell;
+  cursor: pointer;
+  min-width: 100%;
+  width: 100%;
+  color: transparent;
+  
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.checker:hover {
+  background-color: #CCC;
+}
+
+.technologySelector {
+  position: absolute;
+  left: -200px;
+  opacity: 0;
+}
+
+.technologySelector:checked + .checker {
+  background-color: #00aa00 !important;
 }
 </style>

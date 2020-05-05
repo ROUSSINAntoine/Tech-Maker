@@ -1,19 +1,27 @@
 <template>
   <div id='Teacher'>
     <TeacherNavbar />
-    <TechnologiesTable :modifyTechno='false' />
+    <TechnologiesTable :modifyTechno='false' :teacherId='teacherId' />
+    <ProjectsCards />
   </div>
 </template>
 
 <script>
 import TeacherNavbar from '../components/teacher/TeacherNavbar.vue';
 import TechnologiesTable from '../components/teacher/TechnologiesTable.vue';
+import ProjectsCards from '../components/teacher/ProjectsCards.vue';
 
 export default {
   name: 'TeacherHomepage',
   components: {
     TeacherNavbar,
-    TechnologiesTable
+    TechnologiesTable,
+    ProjectsCards
+  },
+  data() {
+    return {
+      teacherId: 1
+    }
   }
 }
 </script>
