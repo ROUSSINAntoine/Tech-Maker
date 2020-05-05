@@ -1,38 +1,30 @@
 <template>
-  <div class="studentHomePage">
-    <div class="form">
-      <h1>Mon projet</h1>
+  <div class="StudentHomepage">
+    <h1>Espace étudiant</h1>
+    
+    <h2>{{ name }}</h2>
 
-      <label for="name"><h2>Nom du projet</h2></label>
-      <input v-model="name" type="text" id="name">
+    <h2>Image (WIP)</h2>
 
-      <label for="slogan"><h2>slogan</h2></label>
-      <input v-model="slogan" type="text" name="slogan" id="slogan">
+    <h2>Slogan</h2>
+    <p>{{ slogan }}</p>
+    
+    <h2>Description</h2>
+    <p>{{ describe }}</p>
+    
+    <h2>Technologies</h2>
+    <ul>
+      <li 
+        v-for='technologie in technologies' 
+        v-bind:key='technologie.id'
+      >{{ technologie }}</li>
+    </ul>
 
-      <label for="describe"><h2>describe</h2></label>
-      <textarea v-model="describe" id ="describe"></textarea>
-
-      <label for="image"><h2>image (WIP)</h2></label>
-      <input v-on:change="image" disabled type="file" name="image" id="image">
-
-      <h2>technologies</h2>
-      <input type="checkbox" value="Vue.js" id="Vue.js" v-model="technologies">
-      <label for="Vue.js">Vue.js</label><br>
-      <input type="checkbox" value="Postgress" id="Postgress" v-model="technologies">
-      <label for="Postgress">Postgress</label><br>
-      <input type="checkbox" value="PHP" id="PHP" v-model="technologies">
-      <label for="PGP">PHP</label>
-
-      <span> {{ technologies }} </span>
-
-      <h2>Membres</h2>
-      <p>WIP</p>
-
-      <button v-on:click="submitForm" type="submit">Envoyer</button>
-    </div>
+    <router-link to='./StudentForm' tag='button'>Modifier</router-link>
+    <router-view></router-view>
   </div>
 </template>
-  
+
 <script>
 export default {
   name: 'StudentHomepage',
@@ -40,38 +32,16 @@ export default {
   },
   data () {
     return {
-      technologies: [],
-      name: null,
-      slogan: null,
-      describe: null,
-      image: null,
+      name: 'TechMaker',
+      slogan: 'Tech\'Maker pour un Tech\'Day meilleur !',
+      describe: 'Tech\'Maker est une solution web pour faciliter l\'organisation du Tech\'Day, un forum organisé par IN\'TECH dans le but de présenter les projets informatiques de ses étudiants à de nombreux intervenants externes. Cette solution permet la création des équipes de jurys, assignation des stands, organiser cet événement n\'aura jamais été aussi simple !',
+      technologies: ['Javascript', 'Vue.js', 'PostgreSQL']
     };
   },
   methods: {
-    /**
-     *  @param {string} name
-     *  @param {string} slogan
-     *  @param {string} describe
-     *  @param {string} image
-     *  @param {string} technologies
-     */
-    submitForm() {
-      console.log(this.name + " " + this.slogan + " " + this.describe + " " + this.image);
-      for (let i = 0; i < this.technologies.length; i++) {
-        console.log(this.technologies[i]);
-      }
-      this.$emit("editProject", {
-        name: this.name,
-        slogan: this.slogan,
-        describe: this.describe, 
-        image: this.image,
-        technologies: this.technologies
-      })
-    },
+    editForm() {
+      this.$emit('editForm')
+    }
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
