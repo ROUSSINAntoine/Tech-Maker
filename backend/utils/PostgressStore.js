@@ -5,7 +5,7 @@ const config = require('../server.config.js');
 console.log(config);
 // console.log(myfile)
 
-class PostgresStore {
+class PostgressStore {
   async init () {
     this.pool = new pg.Pool(config.postgres);
     this.client = await this.pool.connect();
@@ -55,4 +55,4 @@ class PostgresStore {
   }
 }
 
-module.exports = new PostgresStore();
+module.exports = new PostgressStore();

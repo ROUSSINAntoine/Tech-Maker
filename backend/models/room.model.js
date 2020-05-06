@@ -1,4 +1,4 @@
-// const PostgresStore = require('../utils/PostgressStore');
+// const PostgressStore = require('../utils/PostgressStore');
 /* eslint no-tabs: ["error", { allowIndentationTabs: true }] */
 class Room {
   static toSqlTable () {

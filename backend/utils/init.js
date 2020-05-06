@@ -1,3 +1,3 @@
-const PostgresStore = require('./PostgressStore.js');
+const PostgressStore = require('./PostgressStore.js');
 
-PostgresStore.reset();
+PostgressStore.reset();

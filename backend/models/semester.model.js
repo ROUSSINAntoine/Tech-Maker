@@ -1,4 +1,4 @@
-// const PostgressStore = require('../utils/PostgressStore');
+const PostgressStore = require('../utils/PostgressStore');
 class Semester {
   static toSqlTable () {
     const Teacher = require('./teacher.model.js');
@@ -9,6 +9,16 @@ class Semester {
           name semester_list UNIQUE NOT NULL,
           referent_id INT REFERENCES ${Teacher.tableName}
       )`];
+  }
+
+  static async getSemesterByTeacher (teacherId) {
+    const result = await PostgressStore.client.query({
+      text: `SELECT id, name
+              FROM ${Semester.tableName}
+              WHERE referent_id = $1`,
+      values: [teacherId]
+    });
+    return result.rows;
   }
 }
 

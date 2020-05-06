@@ -1,6 +1,6 @@
 /* eslint no-tabs: ["error", { allowIndentationTabs: true }] */
 
-const PostgresStore = require('../utils/PostgresStore');
+const PostgressStore = require('../utils/PostgressStore');
 class Student {
   static toSqlTable () {
     const User = require('./user.model');
@@ -19,7 +19,7 @@ class Student {
   }
 
   static async getAll () {
-    const result = await PostgresStore.client.query(
+    const result = await PostgressStore.client.query(
 			`SELECT * FROM ${Student.tableName}`
     );
     return result.rows;
