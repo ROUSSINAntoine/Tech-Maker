@@ -78,7 +78,7 @@ export default {
   async created() {
     const data = this.isAdmin
       ? await getAllTechnologies()
-      : await getTechnologiesPerTeacher(this.$router.id);
+      : await getTechnologiesPerTeacher(this.$route.params.id);
     this.semesters = data.semesters.map(semester => {
       return { ...semester, modifyIds: [...semester.checkedIds] };
     });
@@ -148,7 +148,6 @@ export default {
         this.errorUpdateMessage = 'Le nom ne doit pas être laissé vide.';
       } else {
         this.technologies.find(techno => techno.id === this.selectedId).name = this.selectedName;
-        console.log(this.selectedId, this.selectedName);
         updateTechnologyName(this.selectedId, this.selectedName);
         this.cancelUpdateTechnology();
       }

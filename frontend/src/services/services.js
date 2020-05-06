@@ -7,7 +7,6 @@ const SERVER_URL = 'http://localhost:3001';
  * @returns {Promise<Object<(semester: Object<(id: Number, name: String, ckeckedIds: Array<Number>)>, technologies: Array<Object<(id: Number, name: String)>)>>}
  */
 export function getTechnologiesPerTeacher (teacherId) {
-  console.log('yo2');
   return fetch(`${SERVER_URL}/teacher/${teacherId}/techno`)
     .then(resp => resp.json())
     .then(data => data);
@@ -18,7 +17,6 @@ export function getTechnologiesPerTeacher (teacherId) {
  * @returns {Promise<Object<(semester: Object<(id: Number, name: String, ckeckedIds: Array<Number>)>, technologies: Array<Object<(id: Number, name: String)>)>>}
  */
 export function getAllTechnologies () {
-  console.log('yo3');
   return fetch(`${SERVER_URL}/admin/techno`)
     .then(resp => resp.json())
     .then(data => data);

@@ -6,7 +6,7 @@
         <li><router-link to='projects'><button>Projets</button></router-link></li>
         <li><router-link to='technologies'><button>Technologies</button></router-link></li>
       </ul>
-      <router-link to='/admin'><button>Déconnexion</button></router-link>
+      <router-link to='/login'><button>Déconnexion</button></router-link>
     </nav>
   </div>
 </template>
