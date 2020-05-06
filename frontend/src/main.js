@@ -5,12 +5,14 @@ import VueRouter from 'vue-router';
 import AdminHomepage from './components/admin/AdminHomepage.vue';
 import StudentHomepage from './components/student/StudentHomepage.vue';
 import TeacherHomepage from './views/TeacherHomepage.vue';
+import Login from './views/Login.vue';
 import TechnologiesTable from './components/TechnologiesTable.vue';
 import ProjectsCards from './components/teacher/ProjectsCards.vue';
 
 const routes = [
   { path: '/admin', component: AdminHomepage },
   { path: '/student', component: StudentHomepage },
+  { path: '/login', component: Login },
   {
     path: '/teacher/:id', component: TeacherHomepage,
     props: { isAdmin: false},
