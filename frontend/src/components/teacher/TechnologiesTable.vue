@@ -14,25 +14,25 @@
             <span v-if='selectedId !== technology.id'>{{ technology.name }}</span>
             <button
               v-on:click='prepareUpdateTechnology(technology.id, technology.name)'
-              v-if='selectedId !== technology.id && modifyTechno'
+              v-if='selectedId !== technology.id && isAdmin'
               class='technologyAction'
             >Modifier</button>
             <button
               v-on:click='deleteTechnology(technology.id)'
-              v-if='selectedId !== technology.id && modifyTechno'
+              v-if='selectedId !== technology.id && isAdmin'
               class='technologyAction'
             >Supprimer</button>
 
             <input
               type='text'
               v-model='selectedName'
-              v-if='selectedId === technology.id && modifyTechno'
+              v-if='selectedId === technology.id && isAdmin'
               title='Nom de la technologie'
               placeholder='Nom de la technologie'
               required
             />
-            <button v-if='selectedId === technology.id && modifyTechno' v-on:click='updateTechnology()'>Sauvegarder</button>
-            <button v-if='selectedId === technology.id && modifyTechno' v-on:click='cancelUpdateTechnology()'>Annuler</button>
+            <button v-if='selectedId === technology.id && isAdmin' v-on:click='updateTechnology()'>Sauvegarder</button>
+            <button v-if='selectedId === technology.id && isAdmin' v-on:click='cancelUpdateTechnology()'>Annuler</button>
             <span v-if='errorUpdateMessage !== null && selectedId === technology.id'>{{ errorUpdateMessage }}</span>
             
           </td>
@@ -57,8 +57,11 @@
 
 <script>
 import {
-  getTechnologiesPerSemester,
-  setModifiedTechnologiesPerSemester
+  getTechnologiesPerTeacher,
+  getAllTechnologies,
+  setModifiedTechnologiesPerSemester,
+  updateTechnologyName,
+  deleteTechnology
 } from '../../services/services.js';
 
 export default {
@@ -73,14 +76,16 @@ export default {
     }
   },
   async created() {
-    const data = await getTechnologiesPerSemester(this.teacherId);
+    const data = this.isAdmin
+      ? await getAllTechnologies()
+      : await getTechnologiesPerTeacher(this.teacherId);
     this.semesters = data.semesters.map(semester => {
       return { ...semester, modifyIds: [...semester.checkedIds] };
     });
     this.technologies = data.technologies;
   },
   props: {
-    modifyTechno: Boolean,
+    isAdmin: Boolean,
     teacherId: Number
   },
   methods: {
@@ -122,7 +127,6 @@ export default {
      * @param {String} name Name of the technology
      */
     prepareUpdateTechnology (id, name) {
-      console.log(id, name);
       this.selectedId = id;
       this.selectedName = name;
     },
@@ -132,6 +136,7 @@ export default {
      */
     deleteTechnology (id) {
       console.log(id);
+      deleteTechnology(id);
       this.technologies = this.technologies.filter(techno => techno.id !== id);
     },
     cancelUpdateTechnology () {
@@ -142,10 +147,10 @@ export default {
     updateTechnology () {
       if (this.selectedName === null || this.selectedName.trim() === '') {
         this.errorUpdateMessage = 'Le nom ne doit pas être laissé vide.';
-        console.log('rt');
       } else {
-        console.log(this.selectedName);
         this.technologies.find(techno => techno.id === this.selectedId).name = this.selectedName;
+        console.log(this.selectedId, this.selectedName);
+        updateTechnologyName(this.selectedId, this.selectedName);
         this.cancelUpdateTechnology();
       }
     }
@@ -155,6 +160,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.technologyAction {
+  display: none;
+}
+.technologyItem:hover > .technologyAction {
+  display: inline;
+}
+
 table {
   border-collapse: collapse;
 }

@@ -1,8 +1,8 @@
 <template>
   <div id='Teacher'>
     <TeacherNavbar />
-    <TechnologiesTable :modifyTechno='false' :teacherId='teacherId' />
-    <ProjectsCards />
+    <TechnologiesTable :isAdmin='true' :teacherId='teacherId' />
+    <ProjectsCards :teacherId='teacherId' />
   </div>
 </template>
 
