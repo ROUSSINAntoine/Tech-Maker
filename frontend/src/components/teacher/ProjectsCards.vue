@@ -24,11 +24,8 @@ export default {
       semesters: []
     };
   },
-  props: {
-    teacherId: Number
-  },
   async created() {
-    this.semesters = await getProjectsPerTeacher(this.teacherId);
+    this.semesters = await getProjectsPerTeacher(this.$router.id);
   },
   methods: {
   }

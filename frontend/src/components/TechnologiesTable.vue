@@ -62,7 +62,7 @@ import {
   setModifiedTechnologiesPerSemester,
   updateTechnologyName,
   deleteTechnology
-} from '../../services/services.js';
+} from '../services/services.js';
 
 export default {
   name: 'TechnologiesTable',
@@ -78,7 +78,7 @@ export default {
   async created() {
     const data = this.isAdmin
       ? await getAllTechnologies()
-      : await getTechnologiesPerTeacher(this.teacherId);
+      : await getTechnologiesPerTeacher(this.$router.id);
     this.semesters = data.semesters.map(semester => {
       return { ...semester, modifyIds: [...semester.checkedIds] };
     });
@@ -86,7 +86,6 @@ export default {
   },
   props: {
     isAdmin: Boolean,
-    teacherId: Number
   },
   methods: {
     /**

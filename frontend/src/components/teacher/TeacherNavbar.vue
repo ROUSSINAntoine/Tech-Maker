@@ -2,11 +2,11 @@
   <div id='TeacherNavbar'>
     <nav>
       <ul>
-        <li><button>Mes étudiants</button></li>
-        <li><button>Projets</button></li>
-        <li><button>Technologies</button></li>
+        <li><router-link to='etudiants'><button>Mes étudiants</button></router-link></li>
+        <li><router-link to='projects'><button>Projets</button></router-link></li>
+        <li><router-link to='technologies'><button>Technologies</button></router-link></li>
       </ul>
-      <router-link to='/login'><button>Déconnexion</button></router-link>
+      <router-link to='/admin'><button>Déconnexion</button></router-link>
     </nav>
   </div>
 </template>
