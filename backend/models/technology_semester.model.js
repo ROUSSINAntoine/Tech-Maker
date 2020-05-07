@@ -12,27 +12,34 @@ class TechnologySemester {
   }
 
   static async getAssignedTechno (semesterID) {
-    let condition = '';
-    semesterID = semesterID.map(i => parseInt(i, 10));
-    semesterID.filter(i => isSafeNumber(i));
+    // let condition = '';
+    // semesterID = semesterID.map(i => parseInt(i, 10));
+    // semesterID.filter(i => isSafeNumber(i));
 
-    for (let i = 0; i < semesterID.length; i++) {
-      condition += `semester_id = $${i}`;
-    }
+    // for (let i = 0; i < semesterID.length; i++) {
+    //   condition += `semester_id = $${i}`;
+    // }
+
+    // const result = await PostgressStore.client.query({
+    //   TEXT: `SELECT *
+    //           FROM ${TechnologySemester.tableName}
+    //           WHERE ${condition}`,
+    //   VALUES: semesterID
+    // });
 
     const result = await PostgressStore.client.query({
-      TEXT: `SELECT *
+      text: `SELECT technology_id
               FROM ${TechnologySemester.tableName}
-              WHERE ${condition}`,
-      VALUES: semesterID
+              WHERE semester_id = $1`,
+      values: [semesterID]
     });
     return result.rows;
   }
 }
 
-function isSafeNumber (nbrs) {
-  return Number.isInteger(nbrs) && nbrs > 0;
-}
+// function isSafeNumber (nbrs) {
+//   return Number.isInteger(nbrs) && nbrs > 0;
+// }
 
 /** @type {String} */
 TechnologySemester.tableName = 'technology_semester';
