@@ -3,6 +3,7 @@
     <TeacherNavbar />
 
     <router-view></router-view>
+    <router-view name='CreateProject'></router-view>
   </div>
 </template>
 
@@ -13,8 +14,6 @@ export default {
   name: 'TeacherHomepage',
   components: {
     TeacherNavbar
-  },
-  data() {
   }
 }
 </script>

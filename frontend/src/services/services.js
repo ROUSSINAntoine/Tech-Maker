@@ -73,3 +73,35 @@ export function getProjectsPerTeacher (id) {
     .then(resp => resp.json())
     .then(data => data);
 }
+
+/**
+ * Send technology's name and get id.
+ * @param {String} name Technology's name
+ * @returns {Object<(id: Number, name: String)>}
+ */
+export function createTechnology (name) {
+  return fetch(`${SERVER_URL}/admin/createTechno`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name: name })
+  });
+}
+
+/**
+ * Send project's name and get id.
+ * @param {String} name Project's name
+ * @param {Number} semesterId Id of project semester
+ * @returns {Object<(id: Number, name: String)>}
+ */
+export function createProject (name, semesterId) {
+  console.log(0);
+  /*return */fetch(`${SERVER_URL}/teacher/createProject`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name: name, semesterId: semesterId})
+  });
+}
