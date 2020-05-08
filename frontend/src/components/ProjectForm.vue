@@ -1,21 +1,26 @@
 <template>
-  <div class="StudentForm">
+  <div class="ProjectForm">
     <div class="form">
-      <h1>Mon projet</h1>
+      <h1>Projet {{ }}</h1>
 
       <label for="name"><h2>Nom du projet</h2></label>
-      <input v-model="name" type="text" id="name">
+      <input v-model="name" type="text" id="name" placeholder="Nom de projet" />
 
-      <label for="slogan"><h2>slogan</h2></label>
-      <input v-model="slogan" type="text" name="slogan" id="slogan">
+      <label for="slogan"><h2>Slogan</h2></label>
+      <input v-model="slogan" type="text" id="slogan" placeholder="Slogan" />
 
-      <label for="describe"><h2>describe</h2></label>
-      <textarea v-model="describe" id ="describe"></textarea>
+      <label for="describe"><h2>Describe</h2></label>
+      <textarea v-model="describe" id="describe" placeholder="Description..."></textarea>
 
-      <label for="image"><h2>image (WIP)</h2></label>
-      <input v-on:change="image" disabled type="file" name="image" id="image">
+      <label for="image"><h2>Logo (WIP)</h2></label>
+      <input v-on:change="image" disabled type="file" name="image" id="image" />
 
       <h2>technologies</h2>
+      <ul v-for="technology in technologies" v-bind:key="technology.id">
+        <li>
+          <input type="checkbox" v-model="technology" :id="" />
+        </li>
+      </ul>
       <input type="checkbox" value="Vue.js" id="Vue.js" v-model="technologies">
       <label for="Vue.js">Vue.js</label><br>
       <input type="checkbox" value="Postgress" id="Postgress" v-model="technologies">
@@ -35,18 +40,42 @@
   
 <script>
 export default {
-  name: 'StudentForm',
+  name: 'ProjectForm',
   props: {
+    generalModifier: Boolean,
+    studentModifier: Boolean
   },
   data () {
     return {
+      oldData: {
+        name: null,
+        slogan: null,
+        describe: null,
+        image: null,
+        technologies: [],
+        members: []
+      },
+      currentData: {
+        name: null,
+        slogan: null,
+        describe: null,
+        image: null,
+        technologies: [],
+        members: []
+      },
+      students: [],
+      technologies: []
+/*
       technologies: [],
       name: null,
       slogan: null,
       describe: null,
-      image: null,
+      image: null,*/
     };
   },
+  created() {
+    
+  }
   methods: {
     /**
      *  @param {string} name
