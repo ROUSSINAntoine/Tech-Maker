@@ -1,102 +1,270 @@
 <template>
   <div class="ProjectForm">
-    <div class="form">
-      <h1>Projet {{ }}</h1>
+    <h2>Fiche projet: {{ currentData.name }}</h2>
 
-      <label for="name"><h2>Nom du projet</h2></label>
-      <input v-model="name" type="text" id="name" placeholder="Nom de projet" />
+    <label for="name"><h2>Nom du projet</h2></label>
+    <input
+      v-if="generalModifier || studentModifier"
+      v-model="currentData.name"
+      type="text"
+      id="name"
+      placeholder="Entrer le nom du projet"
+      required
+    />
+    <span v-else>{{ currentData.name }}</span>
 
-      <label for="slogan"><h2>Slogan</h2></label>
-      <input v-model="slogan" type="text" id="slogan" placeholder="Slogan" />
+    <h2>Semestre</h2>
+    <span>Projet de {{ currentData.semester.name }}</span>
 
-      <label for="describe"><h2>Describe</h2></label>
-      <textarea v-model="describe" id="describe" placeholder="Description..."></textarea>
+    <label for="slogan"><h2>Slogan</h2></label>
+    <input
+      v-if="generalModifier || studentModifier"
+      v-model="currentData.slogan"
+      type="text"
+      id="slogan"
+      placeholder="Entrer votre slogan"
+    />
+    <span v-else>{{ currentData.slogan }}</span>
 
-      <label for="image"><h2>Logo (WIP)</h2></label>
-      <input v-on:change="image" disabled type="file" name="image" id="image" />
+    <label for="describe"><h2>Description</h2></label>
+    <textarea
+      v-if="generalModifier || studentModifier"
+      v-model="currentData.describe"
+      id="describe"
+      placeholder="Description du projet..."
+    ></textarea>
+    <p v-else>{{ currentData.describe }}</p>
 
-      <h2>technologies</h2>
-      <ul v-for="technology in technologies" v-bind:key="technology.id">
-        <li>
-          <input type="checkbox" v-model="technology" :id="" />
-        </li>
-      </ul>
-      <input type="checkbox" value="Vue.js" id="Vue.js" v-model="technologies">
-      <label for="Vue.js">Vue.js</label><br>
-      <input type="checkbox" value="Postgress" id="Postgress" v-model="technologies">
-      <label for="Postgress">Postgress</label><br>
-      <input type="checkbox" value="PHP" id="PHP" v-model="technologies">
-      <label for="PGP">PHP</label>
-
-      <span> {{ technologies }} </span>
-
-      <h2>Membres</h2>
-      <p>WIP</p>
-
-      <button v-on:click="submitForm" type="submit">Envoyer</button>
+    <h2>Logo du projet</h2>
+    <div>
+      <div v-if="!currentData.logo && (generalModifier || studentModifier)">
+        <input type="file" @change="onFileChange" accept="image/png"  id="inputImage" />
+      </div>
+      <div v-else>
+        <img :src="currentData.logo" />
+        <button @click="removeImage"  v-if="generalModifier ||studentModifier">Supprimer l'image</button>
+      </div>
+      <span v-if="imageError">{{ imageError }}</span>
     </div>
+
+    <h2>Technologie(s) utilisée(s)</h2>
+    <ul v-for="technology in technologies" v-bind:key="technology.id">
+      <li>
+        <input
+          v-if="generalModifier || studentModifier"
+          v-model="currentData.technologies"
+          type="checkbox"
+          :value="technology.id"
+          :id="'techno' + technology.id"
+        />
+        <label :for="'techno' + technology.id">{{ technology.name }}</label>
+      </li>
+    </ul>
+
+    <h2>Membres</h2>
+    <ul v-for="student in students" v-bind:key="student.name">
+      <li v-if="currentData.membersId.includes(student.id)">
+        <span>{{ student.name }}</span>
+        <button v-if="studentModifier" v-on:click="removeMember(student.id)">Retirer</button>
+      </li>
+    </ul>
+
+    <div v-if="studentModifier">
+      <button v-if="!selectStudent" v-on:click="selectStudent = true">Ajouter un étudiant au projet</button>
+      <div v-else>
+        <h3>Liste des étudiants</h3>
+        <ul v-for="student in students" v-bind:key="student.id">
+          <li v-if="!currentData.membersId.includes(student.id)"><button v-on:click="addMember(student.id)">{{ student.name }}</button></li>
+        </ul>
+        <button v-on:click="selectStudent = false">Annuler</button>
+      </div>
+    </div>
+
+    <button
+      v-if="generalModifier || studentModifier"
+      v-on:click="submitForm()"
+      type="submit"
+    >Sauvegarder</button>
   </div>
 </template>
-  
+
 <script>
+import {
+  getTechnologiesPerSemester,
+  getStudentsPerSemester,
+  getProjectData,
+  setModifiedprojectData
+} from '../services/services.js';
+
 export default {
   name: 'ProjectForm',
   props: {
-    generalModifier: Boolean,
-    studentModifier: Boolean
+    generalModifier: {
+      type: Boolean,
+      default: false
+    },
+    studentModifier: {
+      type: Boolean,
+      default: false
+    },
+    projectId: Number
   },
   data () {
     return {
-      oldData: {
-        name: null,
-        slogan: null,
-        describe: null,
-        image: null,
-        technologies: [],
-        members: []
-      },
+      selectStudent: false,
+      /** @type {{
+       * name: String,
+       * slogan: String,
+       * describe: String,
+       * logo: String,
+       * technologies: Array.<Number>,
+       * membersId: Array.<Number>,
+       * semester: { id: Number, name: String } }}
+       */
+      oldData: null,
+      /** @type {{
+       * name: String,
+       * slogan: String,
+       * describe: String,
+       * logo: String,
+       * technologies: Array.<Number>,
+       * membersId: Array.<Number>,
+       * semester: { id: Number, name: String } }}
+       */
       currentData: {
         name: null,
         slogan: null,
         describe: null,
-        image: null,
+        logo: null,
         technologies: [],
-        members: []
+        membersId: [],
+        semester: {
+          id: null,
+          name: null
+        }
       },
+      /** @type {String} */
+      imageError: null,
+      imageMinSize: {
+        width: 800,
+        height: 800
+      },
+      /** @type {Array.<{ id: Number, name: String }>} */
       students: [],
-      technologies: []
-/*
+      /** @type {Array.<{ id: Number, name: String }>} */
       technologies: [],
-      name: null,
-      slogan: null,
-      describe: null,
-      image: null,*/
+      /** @type {Array.<{ id: Number, name: String }>} */
+      projects: []
     };
   },
-  created() {
-    
-  }
+  async created () {
+    this.oldData = await getProjectData(this.projectId);
+    this.currentData = { ...this.oldData };
+    this.currentData.technologies = [ ...this.oldData.technologies ];
+    this.currentData.membersId = [ ...this.oldData.membersId ];
+    this.students = await getStudentsPerSemester(this.currentData.semester.id);
+    this.technologies = await getTechnologiesPerSemester(this.currentData.semester.id);
+  },
   methods: {
     /**
-     *  @param {string} name
-     *  @param {string} slogan
-     *  @param {string} describe
-     *  @param {string} image
-     *  @param {string} technologies
+     * Remove member from project members list.
+     * @param {Number} memberId
      */
-    submitForm() {
-      console.log(this.name + " " + this.slogan + " " + this.describe + " " + this.image);
-      for (let i = 0; i < this.technologies.length; i++) {
-        console.log(this.technologies[i]);
-      }
-      this.$emit("editProject", {
-        name: this.name,
-        slogan: this.slogan,
-        describe: this.describe, 
-        image: this.image,
-        technologies: this.technologies
-      })
+    removeMember (memberId) {
+      this.currentData.membersId.splice(this.currentData.membersId.indexOf(memberId), 1);
     },
+    /**
+     * Adding student from project members list.
+     * @param {Number} studentId
+     */
+    addMember (studentId) {
+      this.currentData.membersId.push(studentId);
+      this.selectStudent = false;
+    },
+    onFileChange(e) {
+      var files = e.target.files;
+      if (!files.length) {
+        return;
+      }
+      if (files[0].type !== 'image/png') {
+        document.getElementById('inputImage').value = '';
+        this.removeImage();
+        this.imageError = "L'image doit être au format PNG."; 
+        return;
+      }
+      this.createImage(files[0]);
+    },
+    createImage(file) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const img = new Image();
+
+        img.onload = () => {
+          if (img.width < this.imageMinSize.width || img.height < this.imageMinSize.height) {
+            document.getElementById('inputImage').value = '';
+            this.imageError = `L'image doit avoir un format minimum de ${this.imageMinSize.width} x ${this.imageMinSize.height}.`;
+            this.removeImage();
+          } else {
+            this.currentData.logo = e.target.result;
+            this.imageError = null;
+          }
+        };
+        img.src = e.target.result;
+        
+      };
+      reader.readAsDataURL(file);
+    },
+    removeImage () {
+      this.currentData.logo = '';
+    },
+    submitForm() {
+      const modifiedData = { projectId: this.projectId };
+      if (this.oldData.name !== this.currentData.name) {
+        modifiedData.name = this.currentData.name;
+      }
+      if (this.oldData.slogan !== this.currentData.slogan) {
+        modifiedData.slogan = this.currentData.slogan;
+      }
+      if (this.oldData.describe !== this.currentData.describe) {
+        modifiedData.describe = this.currentData.describe;
+      }
+      if (this.oldData.logo !== this.currentData.logo) {
+        modifiedData.logo = this.currentData.logo;
+      }
+      let update = this.getUpdatedElement(this.oldData.technologies, this.currentData.technologies);
+      if (update.length > 0) {
+        modifiedData.technologies = update;
+      }
+      update = this.getUpdatedElement(this.oldData.membersId, this.currentData.membersId);
+      if (update.length > 0) {
+        modifiedData.membersId = update;
+      }
+      if (Object.keys(modifiedData).length > 1) {
+        setModifiedprojectData(modifiedData);
+      }
+    },
+    /**
+     * Get list with the deleted or added element from the currentList.
+     * If an element was added, his add is `true`,
+     * else if his deleted, his add is `false`.
+     * @param {Array.<Number>} oldList
+     * @param {Array.<Number>} currentList
+     * @returns {Array.<{ id: Number, add: Boolean }>}
+     */
+    getUpdatedElement (oldList, currentList) {
+      const updateList = [];
+      let copyModifiedItem = [ ...currentList ];
+      oldList.forEach(item => {
+        if (copyModifiedItem.find(item2 => item2 === item) === undefined) {
+          updateList.push({ id: item, add: false });
+        } else {
+          copyModifiedItem = copyModifiedItem.filter(item2 => item2 !== item);
+        }
+      });
+      copyModifiedItem.forEach(item => updateList.push({ id: item, add: true }));
+      return updateList;
+    }
   }
 }
 </script>
