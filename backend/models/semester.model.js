@@ -15,7 +15,8 @@ class Semester {
     const result = await PostgressStore.client.query({
       text: `SELECT id, name
               FROM ${Semester.tableName}
-              WHERE referent_id = $1`,
+              WHERE referent_id = $1
+              ORDER BY id`,
       values: [teacherId]
     });
     return result.rows;
