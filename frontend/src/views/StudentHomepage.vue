@@ -4,7 +4,7 @@
 
     <h1>Espace étudiant</h1>
 
-    <ProjectForm :studentModifier="true" :projectId="projectId" v-if="projectId !== null" />
+    <ProjectForm :editable="true" :projectId="projectId" v-if="projectId !== null" />
     <h2 v-else>Vous n'avez aucun projet</h2>
   </div>
 </template>

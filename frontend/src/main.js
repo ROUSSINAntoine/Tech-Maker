@@ -9,6 +9,7 @@ import TeacherHomepage from './views/TeacherHomepage.vue';
 import TechnologiesTable from './components/TechnologiesTable.vue';
 import ProjectsCards from './components/teacher/ProjectsCards.vue';
 import CreateProject from './components/teacher/CreateProject.vue';
+import ProjectForm from './components/ProjectForm.vue';
 
 const routes = [
   { path: '/admin', component: AdminHomepage },
@@ -23,7 +24,12 @@ const routes = [
         component: TechnologiesTable,
         props: { isAdmin: false }
       },
-      { path: 'projects', components: { default:  ProjectsCards, 'CreateProject': CreateProject} }
+      { path: 'projects', components: { default:  ProjectsCards, 'CreateProject': CreateProject} },
+      { 
+        path: 'project/:id',
+        component: ProjectForm,
+        props: (route) => ({ editable: true, projectId: route.params.id })
+      }
     ]
   }
 ];

@@ -1,10 +1,10 @@
 <template>
   <div class="ProjectForm">
-    <h2>Fiche projet: {{ currentData.name }}</h2>
+    <h2>Fiche projet</h2>
 
     <label for="name"><h2>Nom du projet</h2></label>
     <input
-      v-if="generalModifier || studentModifier"
+      v-if="editable"
       v-model="currentData.name"
       type="text"
       id="name"
@@ -14,11 +14,26 @@
     <span v-else>{{ currentData.name }}</span>
 
     <h2>Semestre</h2>
-    <span>Projet de {{ currentData.semester.name }}</span>
+    <div v-if="userType === 'admin' || (userType === 'teacher' && editable)">
+      <ul v-for="semester in semesters" v-bind:key="semester.name">
+        <li>
+          <input
+            type="radio"
+            v-model="currentData.semesterId"
+            :id="'semester' + semester.id"
+            :value="semester.id"
+            required
+            onchange="changeSemester()"
+          />
+          <label :for="'semester' + semester.id">{{ semester.name }}</label>
+        </li>
+      </ul>
+    </div>
+    <span v-else>Projet de {{ currentData.semester.name }}</span>
 
     <label for="slogan"><h2>Slogan</h2></label>
     <input
-      v-if="generalModifier || studentModifier"
+      v-if="editable"
       v-model="currentData.slogan"
       type="text"
       id="slogan"
@@ -28,7 +43,7 @@
 
     <label for="describe"><h2>Description</h2></label>
     <textarea
-      v-if="generalModifier || studentModifier"
+      v-if="editable"
       v-model="currentData.describe"
       id="describe"
       placeholder="Description du projet..."
@@ -37,12 +52,12 @@
 
     <h2>Logo du projet</h2>
     <div>
-      <div v-if="!currentData.logo && (generalModifier || studentModifier)">
+      <div v-if="!currentData.logo && editable">
         <input type="file" @change="onFileChange" accept="image/png"  id="inputImage" />
       </div>
       <div v-else>
         <img :src="currentData.logo" />
-        <button @click="removeImage"  v-if="generalModifier ||studentModifier">Supprimer l'image</button>
+        <button @click="removeImage" v-if="editable">Supprimer l'image</button>
       </div>
       <span v-if="imageError">{{ imageError }}</span>
     </div>
@@ -51,7 +66,7 @@
     <ul v-for="technology in technologies" v-bind:key="technology.id">
       <li>
         <input
-          v-if="generalModifier || studentModifier"
+          v-if="editable"
           v-model="currentData.technologies"
           type="checkbox"
           :value="technology.id"
@@ -65,23 +80,25 @@
     <ul v-for="student in students" v-bind:key="student.name">
       <li v-if="currentData.membersId.includes(student.id)">
         <span>{{ student.name }}</span>
-        <button v-if="studentModifier" v-on:click="removeMember(student.id)">Retirer</button>
+        <button v-if="(userType === 'Teacher' && editable) || userType === 'admin'" v-on:click="removeMember(student.id)">Retirer</button>
       </li>
     </ul>
 
-    <div v-if="studentModifier">
+    <div v-if="(userType === 'Teacher' && editable) || userType === 'admin'">
       <button v-if="!selectStudent" v-on:click="selectStudent = true">Ajouter un étudiant au projet</button>
       <div v-else>
         <h3>Liste des étudiants</h3>
         <ul v-for="student in students" v-bind:key="student.id">
-          <li v-if="!currentData.membersId.includes(student.id)"><button v-on:click="addMember(student.id)">{{ student.name }}</button></li>
+          <li v-if="!currentData.membersId.includes(student.id)">
+            <button v-on:click="addMember(student.id)">{{ student.name }}</button>
+          </li>
         </ul>
         <button v-on:click="selectStudent = false">Annuler</button>
       </div>
     </div>
 
     <button
-      v-if="generalModifier || studentModifier"
+      v-if="editable || userType === 'admin'"
       v-on:click="submitForm()"
       type="submit"
     >Sauvegarder</button>
@@ -93,17 +110,15 @@ import {
   getTechnologiesPerSemester,
   getStudentsPerSemester,
   getProjectData,
-  setModifiedprojectData
+  setModifiedprojectData,
+  getSemestersPerTeacher,
+  getAllSemestersName
 } from '../services/services.js';
 
 export default {
   name: 'ProjectForm',
   props: {
-    generalModifier: {
-      type: Boolean,
-      default: false
-    },
-    studentModifier: {
+    editable: {
       type: Boolean,
       default: false
     },
@@ -113,23 +128,25 @@ export default {
     return {
       selectStudent: false,
       /** @type {{
-       * name: String,
-       * slogan: String,
-       * describe: String,
-       * logo: String,
-       * technologies: Array.<Number>,
-       * membersId: Array.<Number>,
-       * semester: { id: Number, name: String } }}
+       *  name: String,
+       *  slogan: String,
+       *  describe: String,
+       *  logo: String,
+       *  technologies: Array.<Number>,
+       *  membersId: Array.<Number>,
+       *  semesterId: id: Number
+       * }}
        */
       oldData: null,
       /** @type {{
-       * name: String,
-       * slogan: String,
-       * describe: String,
-       * logo: String,
-       * technologies: Array.<Number>,
-       * membersId: Array.<Number>,
-       * semester: { id: Number, name: String } }}
+       *  name: String,
+       *  slogan: String,
+       *  describe: String,
+       *  logo: String,
+       *  technologies: Array.<Number>,
+       *  membersId: Array.<Number>,
+       *  semesterId: id: Number
+       * }}
        */
       currentData: {
         name: null,
@@ -154,18 +171,34 @@ export default {
       /** @type {Array.<{ id: Number, name: String }>} */
       technologies: [],
       /** @type {Array.<{ id: Number, name: String }>} */
-      projects: []
+      projects: [],
+      /** @type {Array.<{ id: Number, name: String }>} */
+      semesters: [],
+      /** @type {String} */
+      userType: null
     };
   },
   async created () {
+    // get user type (admin, teacher or student)
+    this.userType = this.$route.path.split('/')[1];
     this.oldData = await getProjectData(this.projectId);
     this.currentData = { ...this.oldData };
     this.currentData.technologies = [ ...this.oldData.technologies ];
     this.currentData.membersId = [ ...this.oldData.membersId ];
+
     this.students = await getStudentsPerSemester(this.currentData.semester.id);
     this.technologies = await getTechnologiesPerSemester(this.currentData.semester.id);
+    this.semesters = this.userType === 'admin'
+      ? await getAllSemestersName()
+      : this.userType === 'teacher'
+        ? await getSemestersPerTeacher(this.$route.params.id)
+        : [];
   },
   methods: {
+    async changeSemester () {
+      this.technologies = await getTechnologiesPerSemester(this.currentData.semesterId);
+      this.currentData.technologies = this.currentData.technologies.filter(t => this.technologies.find(t2 => t2.id === t) !== undefined);
+    },
     /**
      * Remove member from project members list.
      * @param {Number} memberId
@@ -231,6 +264,9 @@ export default {
       }
       if (this.oldData.logo !== this.currentData.logo) {
         modifiedData.logo = this.currentData.logo;
+      }
+      if (this.oldData.semesterId !== this.currentData.semesterId) {
+        modifiedData.semesterId = this.currentData.semesterId;
       }
       let update = this.getUpdatedElement(this.oldData.technologies, this.currentData.technologies);
       if (update.length > 0) {

@@ -12,38 +12,38 @@
 </template>
 
 <script>
-import { createProject } from '../../services/services.js';
+import {
+  createProject,
+  getSemesterPerTeacher
+} from '../../services/services.js';
 
 export default {
   name: 'CreateProject',
   data() {
     return {
+      /** 
+       * Admin is `true`, Teacher is `false`.
+       */
+      adminOrTeacher: false,
       projectName: null,
       errorMessage: null,
       projectSemesterId: null,
-      semesters: [
-        {
-          id: 1,
-          name: 'S1'
-        },
-        {
-          id: 5,
-          name: 'S4 IL'
-        }
-      ]
+      /** @type {Array.<{ id: Number, name: String }>} */
+      semesters: []
     };
   },
+  async created () {
+    this.semester = await getSemesterPerTeacher(this.$route.params.id);
+  },
   methods: {
-    async saveProject() {
+    async saveProject () {
       if (this.projectName === null || this.projectName === '') {
         this.errorMessage = 'Le nom du projet ne doit pas être laissé vide.';
-        return;
       } else if (this.projectSemesterId === null) {
         this.errorMessage = 'Un semester doit être selectionné'
       } else {
-        console.log(-1);
-        /*const project = await */createProject(this.projectName, this.projectSemesterId);
-//        console.log(project);
+        const project = await createProject(this.projectName, this.projectSemesterId);
+        console.log(project);
         this.errorMessage = null;
       }
     }

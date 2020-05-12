@@ -150,6 +150,10 @@ export default {
         this.technologies.find(techno => techno.id === this.selectedId).name = this.selectedName;
         updateTechnologyName(this.selectedId, this.selectedName);
         this.cancelUpdateTechnology();
+        this.semesters.forEach(s => {
+          s.checkedIds = [ ...s.modifyIds ],
+          s.modifyIds = []
+        });
       }
     }
   }

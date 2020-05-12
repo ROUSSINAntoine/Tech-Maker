@@ -4,7 +4,10 @@ const SERVER_URL = 'http://localhost:3001';
 /**
  * Get list of technologies per semester.
  * @param {Number} teacherId Teacher's Id
- * @returns {Promise<{ semester: { id: Number, name: String, ckeckedIds: Array.<Number> }, technologies: Array.<{ id: Number, name: String } }>}
+ * @returns {Promise<{
+ *  semester: Array.<{ id: Number, name: String, ckeckedIds: Array.<Number> }>,
+ *  technologies: Array.<{ id: Number, name: String }
+ * }>}
  */
 export function getTechnologiesPerTeacher (teacherId) {
   return fetch(`${SERVER_URL}/teacher/${teacherId}/techno`)
@@ -14,7 +17,10 @@ export function getTechnologiesPerTeacher (teacherId) {
 
 /**
  * Get list if technologies per semester for all semesters.
- * @returns {Promise<{ semester: { id: Number, name: String, ckeckedIds: Array.<Number> }, technologies: Array.<{ id: Number, name: String } }>}
+ * @returns {Promise<{
+ *  semester: { id: Number, name: String, ckeckedIds: Array.<Number> },
+ *  technologies: Array.<{ id: Number, name: String }
+ * }>}
  */
 export function getAllTechnologies () {
   return fetch(`${SERVER_URL}/admin/techno`)
@@ -66,7 +72,11 @@ export function deleteTechnology (id) {
 /**
  * Get all projects for the teacher.
  * @param {Number} id Teacher's id
- * @returns {Promise<Array.<{ id: Number, name: String, projects: Array.<{ id: Number, name: String, logo: String } }>>}
+ * @returns {Promise<Array.<{
+ *  id: Number,
+ *  name: String,
+ *  projects: Array.<{ id: Number, name: String, logo: String }
+ * }>>}
  */
 export function getProjectsPerTeacher (id) {
   return fetch(`${SERVER_URL}/teacher/${id}/projects`)
@@ -102,7 +112,7 @@ export function createProject (name, semesterId) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ name: name, semesterId: semesterId})
+    body: JSON.stringify({ name: name, semesterId: semesterId })
   });
 }
 
@@ -131,7 +141,16 @@ export function getStudentsPerSemester (semesterId) {
 /**
  * Get data from the project.
  * @param {Number} projectId Id of the project
- * @returns {Promise<{ id: Number, name: String, slogan: String, describe: String, technologies: Array.<Number>, membersId: Array.<Number>, needs: String, semester: { id: Number, name: String } }>}
+ * @returns {Promise<{
+ *  id: Number,
+ *  name: String,
+ *  slogan: String,
+ *  describe: String,
+ *  technologies: Array.<Number>,
+ *  membersId: Array.<Number>,
+ *  needs: String,
+ *  semester: { id: Number, name: String }
+ * }>}
  */
 export function getProjectData (projectId) {
   return fetch(`${SERVER_URL}/project/${projectId}`)
@@ -154,7 +173,16 @@ export function getStudentData (studentId) {
  * Send technologies added or deleted from the semesters.
  * If add property is `true`, item is added,
  * if add property is `false` item is deleted.
- * @param {{ projectId: Number, name?: String, slogan?: String, describe?: String, logo?: String, technologies?: Array.<{ id: Number, add: Boolean }>, members?: Array.<{ id: Number, add: Boolean }> }} modifiedData
+ * @param {{
+ *  projectId: Number,
+ *  name?: String,
+ *  slogan?: String,
+ *  describe?: String,
+ *  logo?: String,
+ *  technologies?: Array.<{ id: Number, add: Boolean }>,
+ *  members?: Array.<{ id: Number, add: Boolean }>,
+ *  semesterId?: Number
+ * }} modifiedData
  */
 export function setModifiedprojectData (modifiedData) {
   fetch(`${SERVER_URL}/modifiedProject`, {
@@ -164,4 +192,25 @@ export function setModifiedprojectData (modifiedData) {
     },
     body: JSON.stringify(modifiedData)
   });
+}
+
+/**
+ * Get all semesters for the teacher.
+ * @param {Number} teacherId Id of teacher
+ * @returns {Promise<Array.<{ id: Number, name: String }>>} 
+ */
+export function getSemestersPerTeacher (teacherId) {
+  return fetch(`${SERVER_URL}/teacher/${teacherId}/semesters`)
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+/**
+ * Get all semesters name and id.
+ * @returns {Promise<Array.<{ id: Number, name: String }>>}
+ */
+export function getAllSemestersName () {
+  return fetch(`${SERVER_URL}/semestersName`)
+    .then(resp => resp.json())
+    .then(data => data);
 }
