@@ -4,14 +4,15 @@ import VueRouter from 'vue-router';
 
 import Login from './views/Login.vue';
 import AdminHomepage from './components/admin/AdminHomepage.vue';
-import StudentHomepage from './components/student/StudentHomepage.vue';
+import StudentHomepage from './views/StudentHomepage.vue';
 import TeacherHomepage from './views/TeacherHomepage.vue';
 import TechnologiesTable from './components/TechnologiesTable.vue';
 import ProjectsCards from './components/teacher/ProjectsCards.vue';
+import CreateProject from './components/teacher/CreateProject.vue';
 
 const routes = [
   { path: '/admin', component: AdminHomepage },
-  { path: '/student', component: StudentHomepage },
+  { path: '/student/:id', component: StudentHomepage },
   { path: '/', component: Login },
   { path: '/login', component: Login },
   {
@@ -22,7 +23,7 @@ const routes = [
         component: TechnologiesTable,
         props: { isAdmin: false }
       },
-      { path: 'projects', component: ProjectsCards }
+      { path: 'projects', components: { default:  ProjectsCards, 'CreateProject': CreateProject} }
     ]
   }
 ];
@@ -31,8 +32,8 @@ Vue.use(VueRouter);
 Vue.config.productionTip = false;
 
 const router = new VueRouter({
-  routes: routes,
-  mode: 'history'
+  routes: routes/*,
+  mode: 'history'*/
 });
 
 new Vue({

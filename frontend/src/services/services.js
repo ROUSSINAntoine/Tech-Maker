@@ -5,7 +5,7 @@ const SERVER_URL = 'http://localhost:3000';
 /**
  * Get list of technologies per semester.
  * @param {Number} teacherId Teacher's Id
- * @returns {Promise<Object<(semester: Object<(id: Number, name: String, ckeckedIds: Array<Number>)>, technologies: Array<Object<(id: Number, name: String)>)>>}
+ * @returns {Promise<{ semester: { id: Number, name: String, ckeckedIds: Array.<Number> }, technologies: Array.<{ id: Number, name: String } }>}
  */
 export function getTechnologiesPerTeacher (teacherId) {
   return fetch(`${SERVER_URL}/teacher/${teacherId}/techno`)
@@ -15,7 +15,7 @@ export function getTechnologiesPerTeacher (teacherId) {
 
 /**
  * Get list if technologies per semester for all semesters.
- * @returns {Promise<Object<(semester: Object<(id: Number, name: String, ckeckedIds: Array<Number>)>, technologies: Array<Object<(id: Number, name: String)>)>>}
+ * @returns {Promise<{ semester: { id: Number, name: String, ckeckedIds: Array.<Number> }, technologies: Array.<{ id: Number, name: String } }>}
  */
 export function getAllTechnologies () {
   return fetch(`${SERVER_URL}/admin/techno`)
@@ -27,7 +27,7 @@ export function getAllTechnologies () {
  * Send technologies added or deleted from the semesters.
  * If add is `true`, technologie is added,
  * if add is `false` technologie is deleted.
- * @param {Array<Object<(semesterId: Number, technologyId: Number, add: Boolean)>>} updateTechno
+ * @param {Array.<{ semesterId: Number, technologyId: Number, add: Boolean }>} updateTechno
  */
 export function setModifiedTechnologiesPerSemester (updateTechno) {
   fetch(`${SERVER_URL}/modifiedTechnologiesPerSemester`, {
@@ -67,10 +67,102 @@ export function deleteTechnology (id) {
 /**
  * Get all projects for the teacher.
  * @param {Number} id Teacher's id
- * @returns {Array<Object<(id: Number, name: String, projects: Array<Object<(id: Number, name: String, logo: String)>>)>>}
+ * @returns {Promise<Array.<{ id: Number, name: String, projects: Array.<{ id: Number, name: String, logo: String } }>>}
  */
 export function getProjectsPerTeacher (id) {
   return fetch(`${SERVER_URL}/teacher/${id}/projects`)
     .then(resp => resp.json())
     .then(data => data);
+}
+
+/**
+ * Send technology's name and get id.
+ * @param {String} name Technology's name
+ * @returns {Promise<{ id: Number, name: String }>}
+ */
+export function createTechnology (name) {
+  return fetch(`${SERVER_URL}/admin/createTechno`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name: name })
+  });
+}
+
+/**
+ * Send project's name and get id.
+ * @param {String} name Project's name
+ * @param {Number} semesterId Id of project semester
+ * @returns {{ id: Number, name: String }}
+ */
+export function createProject (name, semesterId) {
+  console.log(0);
+  /*return */fetch(`${SERVER_URL}/teacher/createProject`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name: name, semesterId: semesterId})
+  });
+}
+
+/**
+ * Get all technologies of the semester.
+ * @param {Number} semesterId Id of semester
+ * @returns {Promise<Array.<{ id: Number, name: String }>>}
+ */
+export function getTechnologiesPerSemester (semesterId) {
+  return fetch(`${SERVER_URL}/technologies/${semesterId}`)
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+/**
+ * Get all students of the semester.
+ * @param {Number} semesterId Id of the semester
+ * @returns {Promise<Array.<{ id: Number, name: String }>>}
+ */
+export function getStudentsPerSemester (semesterId) {
+  return fetch(`${SERVER_URL}/students/${semesterId}`)
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+/**
+ * Get data from the project.
+ * @param {Number} projectId Id of the project
+ * @returns {Promise<{ id: Number, name: String, slogan: String, describe: String, technologies: Array.<Number>, membersId: Array.<Number>, needs: String, semester: { id: Number, name: String } }>}
+ */
+export function getProjectData (projectId) {
+  return fetch(`${SERVER_URL}/project/${projectId}`)
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+/**
+ * Get student data.
+ * @param {Number} studentId Id of student
+ * @returns {Promise<{ id: Number, name: String, projectId: (Number | null) }>}
+ */
+export function getStudentData (studentId) {
+  return fetch(`${SERVER_URL}/student/${studentId}`)
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+/**
+ * Send technologies added or deleted from the semesters.
+ * If add property is `true`, item is added,
+ * if add property is `false` item is deleted.
+ * @param {{ projectId: Number, name?: String, slogan?: String, describe?: String, logo?: String, technologies?: Array.<{ id: Number, add: Boolean }>, members?: Array.<{ id: Number, add: Boolean }> }} modifiedData
+ */
+export function setModifiedprojectData (modifiedData) {
+  fetch(`${SERVER_URL}/modifiedProject`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(modifiedData)
+  });
 }
