@@ -1,5 +1,6 @@
-//const SERVER_URL = 'https://localhost:8080';
-const SERVER_URL = 'http://localhost:3001';
+// const SERVER_URL = 'https://localhost:8080';
+const fetch = require('node-fetch');
+const SERVER_URL = 'http://localhost:3000';
 
 /**
  * Get list of technologies per semester.
@@ -30,7 +31,7 @@ export function getAllTechnologies () {
  */
 export function setModifiedTechnologiesPerSemester (updateTechno) {
   fetch(`${SERVER_URL}/modifiedTechnologiesPerSemester`, {
-    method: 'post',
+    method: 'put',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -54,7 +55,7 @@ export function updateTechnologyName (id, newName) {
 }
 
 /**
- * Send technology's id to be deleted. 
+ * Send technology's id to be deleted
  * @param {Number} id Technology'id
  */
 export function deleteTechnology (id) {

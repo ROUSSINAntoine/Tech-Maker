@@ -21,17 +21,28 @@ router.get('/teacher/:id/techno', async function (req, res, next) {
       semesters[i].checkedIds.push(linkedTechno[j].technology_id);
     }
   }
-  const techno = await Technology.getAll();
+  const technologies = await Technology.getAll();
   const response = {
     semesters,
-    techno
+    technologies
   };
+  console.log('panda');
   res.send(response);
 });
 
-router.post('/admin/techno', async function (req, res, next) {
-  const response = Technology.createTechno(req.body.name);
-  res.send(response);
+// router.post('/admin/techno', async function (req, res, next) {
+//   const response = Technology.createTechno(req.body.name);
+//   res.send(response);
+// });
+
+router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
+  const changes = req.body;
+  for (let i = 0; i < changes.length; i++) {
+    console.log(changes[i].add);
+    changes[i].add
+      ? await TechnologySemester.add(changes[i].semesterId, changes[i].technologyId)
+      : await TechnologySemester.delete(changes[i].semesterId, changes[i].technologyId);
+  }
 });
 
 module.exports = router;

@@ -79,6 +79,7 @@ export default {
     const data = this.isAdmin
       ? await getAllTechnologies()
       : await getTechnologiesPerTeacher(this.$route.params.id);
+      console.log(data);
     this.semesters = data.semesters.map(semester => {
       return { ...semester, modifyIds: [...semester.checkedIds] };
     });
@@ -149,6 +150,10 @@ export default {
       } else {
         this.technologies.find(techno => techno.id === this.selectedId).name = this.selectedName;
         updateTechnologyName(this.selectedId, this.selectedName);
+        this.semesters.forEach(s => {
+          s.checkedIds = [ ...s.modifyIds ],
+          s.modifyIds = []
+        });
         this.cancelUpdateTechnology();
       }
     }
