@@ -1,4 +1,4 @@
-// const PostgressStore = require('../utils/PostgressStore');
+const PostgressStore = require('../utils/PostgressStore.js');
 class TechnologySemester {
   static toSqlTable () {
     const Semester = require('./semester.model.js');
@@ -10,7 +10,36 @@ class TechnologySemester {
             PRIMARY KEY(semester_id, technology_id)
         )`;
   }
+
+  static async getAssignedTechno (semesterID) {
+    // let condition = '';
+    // semesterID = semesterID.map(i => parseInt(i, 10));
+    // semesterID.filter(i => isSafeNumber(i));
+
+    // for (let i = 0; i < semesterID.length; i++) {
+    //   condition += `semester_id = $${i}`;
+    // }
+
+    // const result = await PostgressStore.client.query({
+    //   TEXT: `SELECT *
+    //           FROM ${TechnologySemester.tableName}
+    //           WHERE ${condition}`,
+    //   VALUES: semesterID
+    // });
+
+    const result = await PostgressStore.client.query({
+      text: `SELECT technology_id
+              FROM ${TechnologySemester.tableName}
+              WHERE semester_id = $1`,
+      values: [semesterID]
+    });
+    return result.rows;
+  }
 }
+
+// function isSafeNumber (nbrs) {
+//   return Number.isInteger(nbrs) && nbrs > 0;
+// }
 
 /** @type {String} */
 TechnologySemester.tableName = 'technology_semester';

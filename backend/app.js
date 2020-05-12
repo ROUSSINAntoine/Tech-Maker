@@ -2,9 +2,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var PostgressStore = require('./utils/PostgressStore.js');
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
+PostgressStore.init();
 
 var app = express();
 
@@ -15,6 +16,5 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 module.exports = app;
