@@ -1,0 +1,44 @@
+<template>
+  <div name='AdminStudentCSV'>
+    <h2>Entrer un CSV</h2>
+      <input type="file" 
+        @change='onfileChange' 
+        accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
+        id='InputCSV'
+      >
+      <button v-on:click='submitForm()' type='submit'>Envoyer</button>
+  </div>
+</template>
+
+<script>
+import { AddStudentCSV } from '../../services/services';
+export default {
+  name: 'AdminStudentCSV',
+  data () {
+    return {
+      currdentData: {
+        csv: null
+      }
+    }
+  },
+  methods: {
+    onfileChange(e) {
+      var files = e.target.files || e.dataTransfert.files;
+      if (!files.length) return;
+      this.createInput(files[0]);
+    },
+    createInput(file) {
+      var reader = new FileReader();
+        reader.onload = e => {
+          this.currdentData.csv = e.target.result;
+          console.log(e.target.result);
+        };
+        reader.readAsText(file);
+    },
+    submitForm() {
+      const data = { csv: this.currdentData.csv };
+      AddStudentCSV(data);
+    }
+  }
+}
+</script>
