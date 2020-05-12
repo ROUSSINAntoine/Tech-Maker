@@ -23,13 +23,15 @@
             :id="'semester' + semester.id"
             :value="semester.id"
             required
-            onchange="changeSemester()"
+            v-on:change="changeSemester()"
           />
           <label :for="'semester' + semester.id">{{ semester.name }}</label>
         </li>
       </ul>
     </div>
-    <span v-else>Projet de {{ currentData.semester.name }}</span>
+    <span v-else-if="semesters.find(s => s.id === currentData.semesterId)">
+      Projet de {{ semesters.find(s => s.id === currentData.semesterId).name }}
+    </span>
 
     <label for="slogan"><h2>Slogan</h2></label>
     <input
@@ -80,11 +82,11 @@
     <ul v-for="student in students" v-bind:key="student.name">
       <li v-if="currentData.membersId.includes(student.id)">
         <span>{{ student.name }}</span>
-        <button v-if="(userType === 'Teacher' && editable) || userType === 'admin'" v-on:click="removeMember(student.id)">Retirer</button>
+        <button v-if="(userType === 'teacher' && editable) || userType === 'admin'" v-on:click="removeMember(student.id)">Retirer</button>
       </li>
     </ul>
 
-    <div v-if="(userType === 'Teacher' && editable) || userType === 'admin'">
+    <div v-if="(userType === 'teacher' && editable) || userType === 'admin'">
       <button v-if="!selectStudent" v-on:click="selectStudent = true">Ajouter un étudiant au projet</button>
       <div v-else>
         <h3>Liste des étudiants</h3>
@@ -181,21 +183,20 @@ export default {
   async created () {
     // get user type (admin, teacher or student)
     this.userType = this.$route.path.split('/')[1];
-    this.oldData = await getProjectData(this.projectId);
+    this.oldData = await getProjectData(Number(this.projectId));
     this.currentData = { ...this.oldData };
     this.currentData.technologies = [ ...this.oldData.technologies ];
     this.currentData.membersId = [ ...this.oldData.membersId ];
 
-    this.students = await getStudentsPerSemester(this.currentData.semester.id);
-    this.technologies = await getTechnologiesPerSemester(this.currentData.semester.id);
-    this.semesters = this.userType === 'admin'
-      ? await getAllSemestersName()
-      : this.userType === 'teacher'
-        ? await getSemestersPerTeacher(this.$route.params.id)
-        : [];
+    this.students = await getStudentsPerSemester(this.currentData.semesterId);
+    this.technologies = await getTechnologiesPerSemester(this.currentData.semesterId);
+    this.semesters = this.userType === 'teacher'
+      ? await getSemestersPerTeacher(this.$route.params.id)
+      : await getAllSemestersName();
   },
   methods: {
     async changeSemester () {
+      console.log("owo");
       this.technologies = await getTechnologiesPerSemester(this.currentData.semesterId);
       this.currentData.technologies = this.currentData.technologies.filter(t => this.technologies.find(t2 => t2.id === t) !== undefined);
     },
@@ -252,29 +253,36 @@ export default {
       this.currentData.logo = '';
     },
     submitForm() {
-      const modifiedData = { projectId: this.projectId };
+      const modifiedData = { projectId: Number(this.projectId) };
       if (this.oldData.name !== this.currentData.name) {
         modifiedData.name = this.currentData.name;
+        this.oldData.name = this.currentData.name;
       }
       if (this.oldData.slogan !== this.currentData.slogan) {
         modifiedData.slogan = this.currentData.slogan;
+        this.oldData.slogan = this.currentData.slogan;
       }
       if (this.oldData.describe !== this.currentData.describe) {
         modifiedData.describe = this.currentData.describe;
+        this.oldData.describe = this.currentData.describe;
       }
       if (this.oldData.logo !== this.currentData.logo) {
         modifiedData.logo = this.currentData.logo;
+        this.oldData.logo = this.currentData.logo;
       }
       if (this.oldData.semesterId !== this.currentData.semesterId) {
         modifiedData.semesterId = this.currentData.semesterId;
+        this.oldData.semesterId = this.currentData.semesterId;
       }
       let update = this.getUpdatedElement(this.oldData.technologies, this.currentData.technologies);
       if (update.length > 0) {
         modifiedData.technologies = update;
+        this.oldData.technologies = [ ...this.currentData.technologies ];
       }
       update = this.getUpdatedElement(this.oldData.membersId, this.currentData.membersId);
       if (update.length > 0) {
         modifiedData.membersId = update;
+        this.oldData.membersId = [ ...this.currentData.membersId ];
       }
       if (Object.keys(modifiedData).length > 1) {
         setModifiedprojectData(modifiedData);

@@ -26,9 +26,9 @@ const routes = [
       },
       { path: 'projects', components: { default:  ProjectsCards, 'CreateProject': CreateProject} },
       { 
-        path: 'project/:id',
+        path: 'project/:pid',
         component: ProjectForm,
-        props: (route) => ({ editable: true, projectId: route.params.id })
+        props: (route) => ({ editable: true, projectId: Number(route.params.pid) })
       }
     ]
   }

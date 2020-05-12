@@ -122,7 +122,7 @@ export function createProject (name, semesterId) {
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
 export function getTechnologiesPerSemester (semesterId) {
-  return fetch(`${SERVER_URL}/technologies/${semesterId}`)
+  return fetch(`${SERVER_URL}/technologiesPerSemester/${semesterId}`)
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -149,7 +149,7 @@ export function getStudentsPerSemester (semesterId) {
  *  technologies: Array.<Number>,
  *  membersId: Array.<Number>,
  *  needs: String,
- *  semester: { id: Number, name: String }
+ *  semesterId: Number
  * }>}
  */
 export function getProjectData (projectId) {
