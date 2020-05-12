@@ -16,23 +16,6 @@ class Technology {
     );
     return result.rows;
   }
-
-  static async getTechnoPerSemester (semesterId) {
-    const result = await PostgressStore.client.query({
-      TEXT: `
-              SELECT t.id AS id,
-                t.name AS name
-              FROM ${Technology.tableName} AS t
-              JOIN Technology_Semester AS ts
-              ON t.id = ts.technology_id
-              JOIN Semester AS s
-              ON ts.semester_id = s.id
-              WHERE s.id = $1
-              ORDER BY t.name`,
-      VALUES: [semesterId]
-    });
-    return result.rows;
-  }
 }
 
 /** @type {String} */
