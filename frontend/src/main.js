@@ -6,7 +6,7 @@ import AdminHomepage from './components/admin/AdminHomepage.vue';
 import AdminStudentCSV from './components/admin/AdminStudentCSV.vue';
 
 const routes = [
-  { path: '/admin', component: AdminHomepage, children: [
+  { path: '/admin/:id', component: AdminHomepage, children: [
     { path: 'AdminStudentCSV', component: AdminStudentCSV }
   ] }
 ];
