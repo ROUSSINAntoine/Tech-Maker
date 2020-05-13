@@ -1,19 +1,19 @@
 <template>
-  <div id='ProjectsCards'>
-    <ul v-for='semester in semesters' v-bind:key='semester.id'>
+  <div id="ProjectsCards">
+    <ul v-for="semester in semesters" v-bind:key="semester.id">
       <li>
         <h2>Projet des {{ semester.name }}</h2>
-        <ul v-for='project in semester.projects' v-bind:key='project.id'>
-          <router-link :to='"project/" + project.id' :projectId="project.id">
+        <ul v-for="project in semester.projects" v-bind:key="project.id">
+          <router-link :to="'project/' + project.id" :projectId="project.id">
             <li>
-              <img :src='project.logo' :alt='"Logo du projet " + project.name' />
+              <img :src="project.logo ? project.logo : 'file:///D:/dev/S4/Tech-Maker-test-server/img/camera-solid.svg'" :alt="'Logo du projet ' + project.name" />
               <span>{{ project.name }}</span>
             </li>
           </router-link>
         </ul>
       </li>
     </ul>
-    <CreateProject />
+    <CreateProject :created-project="addProject()" />
   </div>
 </template>
 
@@ -41,6 +41,14 @@ export default {
     this.semesters = await getProjectsPerTeacher(this.$route.params.id);
   },
   methods: {
+    /**
+     * Add new created project on the project list
+     * @param {Array.<{ id: Number, name: String }>}
+     */
+    addProject (data) {
+      this.semesters.push({ ...data, logo: null });
+      this.semesters.sort((sA, sB ) => sA.name < sB.name ? -1 : sA.name === sB.name ? 0 : 1)
+    }
   }
 }
 </script>

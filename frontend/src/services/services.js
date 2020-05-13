@@ -1,6 +1,6 @@
 // const SERVER_URL = 'https://localhost:8080';
 const fetch = require('node-fetch');
-const SERVER_URL = 'http://localhost:3000';
+const SERVER_URL = 'http://localhost:3001';
 
 /**
  * Get list of technologies per semester.
@@ -101,19 +101,18 @@ export function createTechnology (name) {
 }
 
 /**
- * Send project's name and get id.
+ * Send project's name and semester, and get id.
  * @param {String} name Project's name
  * @param {Number} semesterId Id of project semester
- * @returns {{ id: Number, name: String }}
+ * @returns {Promise<{ id: Number, name: String, error?: String }>}
  */
 export function createProject (name, semesterId) {
-  console.log(0);
-  /*return */fetch(`${SERVER_URL}/teacher/createProject`, {
+  fetch(`${SERVER_URL}/createProject`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ name: name, semesterId: semesterId })
+    body: JSON.stringify({ name, semesterId })
   });
 }
 
