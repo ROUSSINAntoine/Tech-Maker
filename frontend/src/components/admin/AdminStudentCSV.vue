@@ -3,7 +3,7 @@
     <h2>Entrer un CSV</h2>
       <input type="file" 
         @change='onfileChange' 
-        accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
+        accept='.csv'
         id='InputCSV'
       >
       <button v-on:click='submitForm()' type='submit'>Envoyer</button>
@@ -31,13 +31,14 @@ export default {
       var reader = new FileReader();
         reader.onload = e => {
           this.currdentData.csv = e.target.result;
-          console.log(e.target.result);
+          // console.log(e.target.result);
         };
         reader.readAsText(file);
     },
     submitForm() {
       const data = { csv: this.currdentData.csv };
       AddStudentCSV(data);
+      console.log(data);
     }
   }
 }
