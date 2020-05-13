@@ -172,7 +172,7 @@ export function setModifiedprojectData (modifiedData) {
  * @param {string} Content of the csv
  */
 export function AddStudentCSV (csv) {
-  fetch(`${SERVER_URL}/StudentCSV`, {
+  fetch(`${SERVER_URL}/admin/StudentCSV`, {
     method: 'post',
     headers: {
       'Content-type': 'application/json'

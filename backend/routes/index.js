@@ -48,4 +48,8 @@ router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
   res.end('it worked');
 });
 
+router.post('/admin/StudentCSV', async function (req, res, next) {
+  console.log(req.body);
+});
+
 module.exports = router;
