@@ -175,8 +175,8 @@ export function AddStudentCSV (csv) {
   fetch(`${SERVER_URL}/admin/StudentCSV`, {
     method: 'post',
     headers: {
-      'Content-type': 'application/json'
+      'Content-Type': 'application/json'
     },
-    body: JSON.parse(csv)
+    body: JSON.stringify(csv)
   });
 }
