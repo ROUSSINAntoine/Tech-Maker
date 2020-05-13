@@ -16,6 +16,14 @@ class Technology {
     );
     return result.rows;
   }
+
+  static async createTechno (name) {
+    await PostgressStore.client.query({
+      text: `INSERT INTO technology(
+        name)
+        VALUES ($1)`
+    });
+  }
 }
 
 /** @type {String} */

@@ -30,10 +30,10 @@ router.get('/teacher/:id/techno', async function (req, res, next) {
   res.send(response);
 });
 
-// router.post('/admin/techno', async function (req, res, next) {
-//   const response = Technology.createTechno(req.body.name);
-//   res.send(response);
-// });
+router.post('/admin/techno', async function (req, res, next) {
+  const response = Technology.createTechno(req.body.name);
+  res.send(response);
+});
 
 router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
   const changes = req.body;
@@ -43,6 +43,8 @@ router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
       ? await TechnologySemester.add(changes[i].semesterId, changes[i].technologyId)
       : await TechnologySemester.delete(changes[i].semesterId, changes[i].technologyId);
   }
+
+  res.end('it worked');
 });
 
 module.exports = router;
