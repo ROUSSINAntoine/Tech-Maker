@@ -12,23 +12,29 @@ import ProjectsCards from './components/teacher/ProjectsCards.vue';
 import CreateProject from './components/teacher/CreateProject.vue';
 
 const routes = [
-  { path: '/admin', component: AdminHomepage, children: [
-    { path: 'AdminStudentCSV', component: AdminStudentCSV }
-  ] },
+  {
+    path: '/admin',
+    component: AdminHomepage,
+    children: [
+      { path: 'AdminStudentCSV', component: AdminStudentCSV }
+    ]
+  },
   { path: '/student/:id', component: StudentHomepage },
   { path: '/', component: Login },
   { path: '/login', component: Login },
   {
-    path: '/teacher/:id', component: TeacherHomepage,
+    path: '/teacher/:id',
+    component: TeacherHomepage,
     children: [
       {
         path: 'technologies',
         component: TechnologiesTable,
         props: { isAdmin: false }
       },
-      { path: 'projects', components: { default:  ProjectsCards, 'CreateProject': CreateProject} }
+      { path: 'projects', components: { default: ProjectsCards, CreateProject: CreateProject } }
     ]
   }
+];
 
 Vue.use(VueRouter);
 Vue.config.productionTip = false;

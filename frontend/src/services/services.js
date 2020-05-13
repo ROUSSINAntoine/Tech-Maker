@@ -98,12 +98,12 @@ export function createTechnology (name) {
  */
 export function createProject (name, semesterId) {
   console.log(0);
-  /*return */fetch(`${SERVER_URL}/teacher/createProject`, {
+  /* return */fetch(`${SERVER_URL}/teacher/createProject`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ name: name, semesterId: semesterId})
+    body: JSON.stringify({ name: name, semesterId: semesterId })
   });
 }
 
