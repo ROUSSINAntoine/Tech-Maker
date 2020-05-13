@@ -2,7 +2,7 @@
   <div id='TeacherNavbar'>
     <nav>
       <ul>
-        <li><router-link to='etudiants'><button>Mes étudiants</button></router-link></li>
+        <li><router-link to='students'><button>Mes étudiants</button></router-link></li>
         <li><router-link to='projects'><button>Projets</button></router-link></li>
         <li><router-link to='technologies'><button>Technologies</button></router-link></li>
       </ul>

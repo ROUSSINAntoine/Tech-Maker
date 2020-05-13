@@ -12,7 +12,8 @@ class Technology {
   static async getAll () {
     const result = await PostgressStore.client.query(
       `SELECT *
-        FROM ${Technology.tableName}`
+        FROM ${Technology.tableName}
+        ORDER BY name`
     );
     return result.rows;
   }
