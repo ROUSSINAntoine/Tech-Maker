@@ -1,7 +1,7 @@
 <template>
   <div name='AdminHomepage'>
     <div name='navbar'>
-      <router-link to='AdminStudentCSV' tag="button">Étudiants</router-link>
+      <router-link to='admin/AdminStudentCSV' tag="button">Étudiants</router-link>
       <button v-on:click='a_jurys'>Jurys</button>
       <button v-on:click='a_judges'>Juges</button>
       <button v-on:click='a_profs'>Professeur</button>
