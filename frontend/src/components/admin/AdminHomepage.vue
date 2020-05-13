@@ -1,14 +1,19 @@
 <template>
-  <div name='navbar'>
-    <button v-on:click='a_students'>Étudiants</button>
-    <button v-on:click='a_jurys'>Jurys</button>
-    <button v-on:click='a_judges'>Juges</button>
-    <button v-on:click='a_profs'>Professeur</button>
-    <button v-on:click='a_rooms'>Salles</button>
-    <button v-on:click='a_rollback'>Réinitialiser</button>
-    <button v-on:click='logout'>Déconnexion</button>
+  <div name='AdminHomepage'>
+    <div name='navbar'>
+      <router-link to='AdminStudentCSV' tag="button">Étudiants</router-link>
+      <button v-on:click='a_jurys'>Jurys</button>
+      <button v-on:click='a_judges'>Juges</button>
+      <button v-on:click='a_profs'>Professeur</button>
+      <button v-on:click='a_rooms'>Salles</button>
+      <button v-on:click='a_rollback'>Réinitialiser</button>
+      <button v-on:click='logout'>Déconnexion</button>
+    </div>
+
+    <div name='content'>
+      <router-view></router-view>
+    </div>
   </div>
-  
 </template>
 
 <script>

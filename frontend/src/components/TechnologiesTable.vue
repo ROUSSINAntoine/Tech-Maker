@@ -120,6 +120,9 @@ export default {
       }
 
       setModifiedTechnologiesPerSemester(updateList);
+      this.semesters.forEach(s => {
+          s.checkedIds = [ ...s.modifyIds ]
+      });
     },
     /**
      * Prepare selectedId et selectedName.
@@ -150,10 +153,6 @@ export default {
       } else {
         this.technologies.find(techno => techno.id === this.selectedId).name = this.selectedName;
         updateTechnologyName(this.selectedId, this.selectedName);
-        this.semesters.forEach(s => {
-          s.checkedIds = [ ...s.modifyIds ],
-          s.modifyIds = []
-        });
         this.cancelUpdateTechnology();
       }
     }
