@@ -37,6 +37,7 @@ router.post('/admin/techno', async function (req, res, next) {
 
 router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
   const changes = req.body;
+  console.log(req.body);
   for (let i = 0; i < changes.length; i++) {
     console.log(changes[i].add);
     changes[i].add
