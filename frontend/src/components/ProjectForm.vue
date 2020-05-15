@@ -19,6 +19,7 @@
         <li>
           <input
             type="radio"
+            name="semester"
             v-model="currentData.semesterId"
             :id="'semester' + semester.id"
             :value="semester.id"
@@ -82,7 +83,21 @@
     <ul v-for="student in students" v-bind:key="student.name">
       <li v-if="currentData.membersId.includes(student.id)">
         <span>{{ student.name }}</span>
-        <button v-if="(userType === 'teacher' && editable) || userType === 'admin'" v-on:click="removeMember(student.id)">Retirer</button>
+        <span v-if="currentData.projectManager === student.id">(Chef)</span>
+        <button
+          v-if="(userType === 'teacher' && editable) || userType === 'admin'"
+          v-on:click="removeMember(student.id)"
+        >Retirer</button>
+        
+        <button
+          v-if="currentData.projectManager !== student.id"
+          v-on:click="currentData.projectManager = student.id"
+        >Chef de projet</button>
+
+        <button
+          v-if="currentData.projectManager === student.id"
+          v-on:click="currentData.projectManager = null"
+        >Retirer chef</button>
       </li>
     </ul>
 
@@ -104,13 +119,15 @@
       v-on:click="submitForm()"
       type="submit"
     >Sauvegarder</button>
+
+    <span v-if="errorMessage !== null">{{ errorMessage }}</span>
   </div>
 </template>
 
 <script>
 import {
   getTechnologiesPerSemester,
-  getStudentsPerSemester,
+  getStudentsPerSemesterNotOnProject,
   getProjectData,
   setModifiedprojectData,
   getSemestersPerTeacher,
@@ -136,7 +153,8 @@ export default {
        *  logo: String,
        *  technologies: Array.<Number>,
        *  membersId: Array.<Number>,
-       *  semesterId: id: Number
+       *  semesterId: id: Number,
+       *  projectManager: Number
        * }}
        */
       oldData: null,
@@ -147,7 +165,8 @@ export default {
        *  logo: String,
        *  technologies: Array.<Number>,
        *  membersId: Array.<Number>,
-       *  semesterId: id: Number
+       *  semesterId: id: Number,
+       *  projectManager: Number
        * }}
        */
       currentData: {
@@ -157,10 +176,8 @@ export default {
         logo: null,
         technologies: [],
         membersId: [],
-        semester: {
-          id: null,
-          name: null
-        }
+        semesterId: null,
+        projectManager: null
       },
       /** @type {String} */
       imageError: null,
@@ -173,11 +190,11 @@ export default {
       /** @type {Array.<{ id: Number, name: String }>} */
       technologies: [],
       /** @type {Array.<{ id: Number, name: String }>} */
-      projects: [],
-      /** @type {Array.<{ id: Number, name: String }>} */
       semesters: [],
       /** @type {String} */
-      userType: null
+      userType: null,
+      /** @type {String} */
+      errorMessage: null
     };
   },
   async created () {
@@ -187,18 +204,21 @@ export default {
     this.currentData = { ...this.oldData };
     this.currentData.technologies = [ ...this.oldData.technologies ];
     this.currentData.membersId = [ ...this.oldData.membersId ];
-
-    this.students = await getStudentsPerSemester(this.currentData.semesterId);
+    this.students = await getStudentsPerSemesterNotOnProject(this.currentData.semesterId);
     this.technologies = await getTechnologiesPerSemester(this.currentData.semesterId);
-    this.semesters = this.userType === 'teacher'
+    this.semesters = (this.userType === 'teacher')
       ? await getSemestersPerTeacher(this.$route.params.id)
       : await getAllSemestersName();
   },
   methods: {
     async changeSemester () {
-      console.log("owo");
       this.technologies = await getTechnologiesPerSemester(this.currentData.semesterId);
       this.currentData.technologies = this.currentData.technologies.filter(t => this.technologies.find(t2 => t2.id === t) !== undefined);
+      this.currentData.membersId = [];
+      this.semesters = (this.userType === 'teacher')
+        ? await getSemestersPerTeacher(this.$route.params.id)
+        : await getAllSemestersName();
+      this.currentData.projectManager = null;
     },
     /**
      * Remove member from project members list.
@@ -206,6 +226,9 @@ export default {
      */
     removeMember (memberId) {
       this.currentData.membersId.splice(this.currentData.membersId.indexOf(memberId), 1);
+      if (this.currentData.projectManager === memberId) {
+        this.currentData.projectManager = null;
+      }
     },
     /**
      * Adding student from project members list.
@@ -253,6 +276,10 @@ export default {
       this.currentData.logo = '';
     },
     submitForm() {
+      if (this.currentData.membersId.length === 0) {
+        this.errorMessage = 'Il doit y avoir au moins un membre dans le projet.';
+        return;
+      }
       const modifiedData = { projectId: Number(this.projectId) };
       if (this.oldData.name !== this.currentData.name) {
         modifiedData.name = this.currentData.name;
@@ -274,6 +301,10 @@ export default {
         modifiedData.semesterId = this.currentData.semesterId;
         this.oldData.semesterId = this.currentData.semesterId;
       }
+      if (this.oldData.projectManager !== this.currentData.projectManager) {
+        modifiedData.projectManager = this.currentData.projectManager;
+        this.oldData.projectManager = this.currentData.projectManager;
+      }
       let update = this.getUpdatedElement(this.oldData.technologies, this.currentData.technologies);
       if (update.length > 0) {
         modifiedData.technologies = update;
@@ -286,6 +317,7 @@ export default {
       }
       if (Object.keys(modifiedData).length > 1) {
         setModifiedprojectData(modifiedData);
+        this.errorMessage = null;
       }
     },
     /**

@@ -3,7 +3,6 @@
     <TeacherNavbar />
 
     <router-view></router-view>
-    <router-view name='CreateProject'></router-view>
   </div>
 </template>
 

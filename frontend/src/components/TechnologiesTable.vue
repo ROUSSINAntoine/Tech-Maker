@@ -68,25 +68,37 @@ export default {
   name: 'TechnologiesTable',
   data() {
     return {
+      /** @type {Arra.<{ id: Number, name: String, checkedIds: Array.<Number>, modifyIds: Array.<Number> }>} */
       semesters: [],
+      /** @type {Array.<{ id: Number, name: Number }>} */
       technologies: [],
+      /** @type {Number} */
       selectedId: null,
+      /** @type {String} */
       selectedName: null,
+      /** @type {String} */
       errorUpdateMessage: null
     }
   },
+  props: {
+    isAdmin: Boolean,
+  },
   async created() {
+    /**
+     * @type {
+     *  semesters: { Arra.<{ id: Number, name: String, checkedIds: Array.<Number> }> },
+     *  technologies: Array.<{ id: Number, name: Number }>
+     * }
+     */
     const data = this.isAdmin
       ? await getAllTechnologies()
       : await getTechnologiesPerTeacher(this.$route.params.id);
-      console.log(data);
+
     this.semesters = data.semesters.map(semester => {
       return { ...semester, modifyIds: [...semester.checkedIds] };
     });
+    
     this.technologies = data.technologies;
-  },
-  props: {
-    isAdmin: Boolean,
   },
   methods: {
     /**
@@ -94,7 +106,9 @@ export default {
      * Emit data format is Array<Object(id: Number, name: String, ckeckedIds: Array<Number>)>
      */
     sendIds () {
+      /** @type {Array.<{ semesterId: Number, technologyId: Number, add: Boolean }>} */
       const updateList = [];
+      /** @type {Array.<Number>} */
       let copyModifyIds;
 
       for (const semester of this.semesters) {
@@ -117,9 +131,13 @@ export default {
           technologyId: id,
           add: true
         }));
+
+        semester.checkedIds = semester.modifyIds;
       }
 
-      setModifiedTechnologiesPerSemester(updateList);
+      if (updateList.length > 0) {
+        setModifiedTechnologiesPerSemester(updateList);
+      }
     },
     /**
      * Prepare selectedId et selectedName.

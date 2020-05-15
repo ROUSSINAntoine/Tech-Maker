@@ -96,24 +96,27 @@ export function createTechnology (name) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ name: name })
+    body: JSON.stringify({ name })
   });
 }
 
 /**
  * Send project's name and semester, and get id.
  * @param {String} name Project's name
- * @param {Number} semesterId Id of project semester
+ * @param {Array.<Number>} membersId Ids of project member
+ * @param {Number} projectManager Id of project manager
  * @returns {Promise<{ id: Number, name: String, error?: String }>}
  */
-export function createProject (name, semesterId) {
-  fetch(`${SERVER_URL}/createProject`, {
+export function createProject (name, membersId, projectManager) {
+  return fetch(`${SERVER_URL}/createProject`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ name, semesterId })
-  });
+    body: JSON.stringify({ name, membersId, projectManager })
+  })
+    .then(resp => resp.json())
+    .then(data => data);
 }
 
 /**
@@ -139,6 +142,17 @@ export function getStudentsPerSemester (semesterId) {
 }
 
 /**
+ * Get students of the semester if they aren't in a project.
+ * @param {Number} semesterId Id of the semester
+ * @returns {Promise<Array.<{ id: Number, name: String }>>}
+ */
+export function getStudentsPerSemesterNotOnProject (semesterId) {
+  return fetch(`${SERVER_URL}/studentsNoProject/${semesterId}`)
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+/**
  * Get data from the project.
  * @param {Number} projectId Id of the project
  * @returns {Promise<{
@@ -149,7 +163,8 @@ export function getStudentsPerSemester (semesterId) {
  *  technologies: Array.<Number>,
  *  membersId: Array.<Number>,
  *  needs: String,
- *  semesterId: Number
+ *  semesterId: Number,
+ *  projectManager: Number
  * }>}
  */
 export function getProjectData (projectId) {
@@ -181,7 +196,8 @@ export function getStudentData (studentId) {
  *  logo?: String,
  *  technologies?: Array.<{ id: Number, add: Boolean }>,
  *  members?: Array.<{ id: Number, add: Boolean }>,
- *  semesterId?: Number
+ *  semesterId?: Number,
+ * projectManager?: Number
  * }} modifiedData
  */
 export function setModifiedprojectData (modifiedData) {

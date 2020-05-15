@@ -8,7 +8,6 @@ import StudentHomepage from './views/StudentHomepage.vue';
 import TeacherHomepage from './views/TeacherHomepage.vue';
 import TechnologiesTable from './components/TechnologiesTable.vue';
 import ProjectsCards from './components/teacher/ProjectsCards.vue';
-import CreateProject from './components/teacher/CreateProject.vue';
 import ProjectForm from './components/ProjectForm.vue';
 
 const routes = [
@@ -24,7 +23,7 @@ const routes = [
         component: TechnologiesTable,
         props: { isAdmin: false }
       },
-      { path: 'projects', components: { default:  ProjectsCards, 'CreateProject': CreateProject} },
+      { path: 'projects', component: ProjectsCards },
       { 
         path: 'project/:pid',
         component: ProjectForm,
