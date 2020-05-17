@@ -1,5 +1,5 @@
 <template>
-  <div id='NewTechnologyForm'>
+  <div id='CreateTechnology'>
     <input
       v-model='technologyName'
       type='text'
@@ -7,32 +7,40 @@
       placeholder='Nom de la technologie'
       required
     />
-    <input v-model='technologyId' type='hidden' />
+    <!--input v-model='technologyId' type='hidden' /-->
     <button v-on:click='sendTechnology()'>Ajouter</button>
     <label v-if='errorMessage'>{{ errorMessage }}</label>
   </div>
 </template>
 
 <script>
+import { createTechnology } from '../../services/services.js';
+
 export default {
-  name: 'NewTechnologyForm',
+  name: 'CreateTechnology',
   data() {
     return {
       errorMessage : null,
-      technologyName: null,
-      technologyId: null
+      technologyName: null/*,
+      technologyId: null*/
     };
   },
   methods: {
-    sendTechnology () {
+    async sendTechnology () {
       if (this.technologyName === null || this.technologyName.trim().length === 0) {
         this.errorMessage = 'Le champ doit être rempli.';
       } else {
-        console.log({ name: this.technologyName, id: this.technologyId });
-        this.errorMessage = null;
-        this.technologyId = null;
+        const resp = await createTechnology(this.technologyName.trim());
+
+        if (resp.error === undefined || resp.error === null) {
+          this.$emit('create-technology', { id: resp.id, name: resp.name });
+          this.errorMessage = null;
+          this.technologyName = null;
+        
+        } else {
+          this.errorMessage = resp.error;
+        }
       }
-      this.technologyName = null;
     }
   }
 }

@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 const SERVER_URL = 'http://localhost:3001';
 
 /**
- * Get list of technologies per semester.
+ * Get list of technologies per teacher's semesters.
  * @param {Number} teacherId Teacher's Id
  * @returns {Promise<{
  *  semester: Array.<{ id: Number, name: String, ckeckedIds: Array.<Number> }>,
@@ -88,7 +88,7 @@ export function getProjectsPerTeacher (id) {
 /**
  * Send technology's name and get id.
  * @param {String} name Technology's name
- * @returns {Promise<{ id: Number, name: String }>}
+ * @returns {Promise<{ id: Number, name: String, error?: String }>}
  */
 export function createTechnology (name) {
   return fetch(`${SERVER_URL}/admin/createTechno`, {
@@ -97,7 +97,9 @@ export function createTechnology (name) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ name })
-  });
+  })
+    .then(resp => resp.json())
+    .then(data => data);
 }
 
 /**

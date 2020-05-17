@@ -31,8 +31,17 @@
               placeholder='Nom de la technologie'
               required
             />
-            <button v-if='selectedId === technology.id && isAdmin' v-on:click='updateTechnology()'>Sauvegarder</button>
-            <button v-if='selectedId === technology.id && isAdmin' v-on:click='cancelUpdateTechnology()'>Annuler</button>
+            
+            <button
+              v-if='selectedId === technology.id && isAdmin'
+              v-on:click='updateTechnology()'
+            >Sauvegarder</button>
+            
+            <button
+              v-if='selectedId === technology.id && isAdmin'
+              v-on:click='cancelUpdateTechnology()'
+            >Annuler</button>
+            
             <span v-if='errorUpdateMessage !== null && selectedId === technology.id'>{{ errorUpdateMessage }}</span>
             
           </td>
@@ -52,10 +61,14 @@
       </tbody>
     </table>
     <button v-on:click='sendIds()'>Sauvegarder</button>
+
+    <CreateTechnology v-if="isAdmin" v-on:create-technology="addTechnology" />
   </div>
 </template>
 
 <script>
+import CreateTechnology from '../components/admin/CreateTechnology.vue';
+
 import {
   getTechnologiesPerTeacher,
   getAllTechnologies,
@@ -66,28 +79,30 @@ import {
 
 export default {
   name: 'TechnologiesTable',
+  components: {
+    CreateTechnology
+  },
   data() {
     return {
-      /** @type {Arra.<{ id: Number, name: String, checkedIds: Array.<Number>, modifyIds: Array.<Number> }>} */
+      /** @type {Array.<{ id: Number, name: String, checkedIds: Array.<Number>, modifyIds: Array.<Number> }>} */
       semesters: [],
-      /** @type {Array.<{ id: Number, name: Number }>} */
+      /** @type {Array.<{ id: Number, name: String }>} */
       technologies: [],
       /** @type {Number} */
       selectedId: null,
       /** @type {String} */
       selectedName: null,
       /** @type {String} */
-      errorUpdateMessage: null
+      errorUpdateMessage: null,
+      isAdmin: false
     }
   },
-  props: {
-    isAdmin: Boolean,
-  },
   async created() {
+    this.isAdmin = this.$route.path.split('/')[1] === 'admin';
     /**
      * @type {
      *  semesters: { Arra.<{ id: Number, name: String, checkedIds: Array.<Number> }> },
-     *  technologies: Array.<{ id: Number, name: Number }>
+     *  technologies: Array.<{ id: Number, name: String }>
      * }
      */
     const data = this.isAdmin
@@ -106,6 +121,7 @@ export default {
      * Emit data format is Array<Object(id: Number, name: String, ckeckedIds: Array<Number>)>
      */
     sendIds () {
+      this
       /** @type {Array.<{ semesterId: Number, technologyId: Number, add: Boolean }>} */
       const updateList = [];
       /** @type {Array.<Number>} */
@@ -153,9 +169,12 @@ export default {
      * Emit data format is id: String
      */
     deleteTechnology (id) {
-      console.log(id);
       deleteTechnology(id);
       this.technologies = this.technologies.filter(techno => techno.id !== id);
+      this.semesters.forEach(semester => {
+        semester.checkedIds = semester.checkedIds.filter(technoId => technoId !== id);
+        semester.modifyIds = semester.modifyIds.filter(technoId => technoId !== id);
+      });
     },
     cancelUpdateTechnology () {
       this.selectedId = null;
@@ -163,21 +182,34 @@ export default {
       this.errorUpdateMessage = null;
     },
     updateTechnology () {
-      if (this.selectedName === null || this.selectedName.trim() === '') {
+      const name = this.selectedName.trim();
+      if (name === null || name === '') {
         this.errorUpdateMessage = 'Le nom ne doit pas être laissé vide.';
-      } else {
-        this.technologies.find(techno => techno.id === this.selectedId).name = this.selectedName;
-        updateTechnologyName(this.selectedId, this.selectedName);
-        this.semesters.forEach(s => {
-          s.checkedIds = [ ...s.modifyIds ],
-          s.modifyIds = []
-        });
+
+      } else if (this.technologies.filter(techno => techno.id !== this.selectedId).find(techno => techno.name.toLowerCase() === name.toLowerCase()) !== undefined) {
+        this.errorUpdateMessage = 'Une technologie a déjà ce nom.';
+      
+      } else if (this.technologies.find(techno => techno.id === this.selectedId).name !== name){
+        updateTechnologyName(this.selectedId, name);
+        this.technologies.find(techno => techno.id === this.selectedId).name = name;
         this.cancelUpdateTechnology();
-        this.semesters.forEach(s => {
-          s.checkedIds = [ ...s.modifyIds ],
-          s.modifyIds = []
-        });
+
+      } else {
+        this.cancelUpdateTechnology();
       }
+    },
+    /**
+     * Add new technolgy from the technology list.
+     * @param {{ id: Number, name: String }} techno New technology data
+     */
+    addTechnology (techno) {
+      this.technologies.push(techno);
+      this.technologies.sort((tA, tB) => tA.name.toLowerCase() < tB.name.toLowerCase()
+        ? -1
+        : tA.name.toLowerCase() === tB.name.toLowerCase()
+          ? 0
+          : 1
+      );
     }
   }
 }

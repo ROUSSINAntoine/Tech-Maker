@@ -65,7 +65,12 @@ export default {
           name: data.name,
           logo: null 
         });
-        semester.projects.sort((sA, sB) => sA.name < sB.name ? -1 : sA.name === sB.name ? 0 : 1)
+        semester.projects.sort((sA, sB) => sA.name.toLowerCase() < sB.name.toLowerCase()
+          ? -1
+          : sA.name.toLowerCase() === sB.name.toLowerCase()
+            ? 0
+            : 1
+        );
       }
     }
   }

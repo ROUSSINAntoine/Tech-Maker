@@ -4,7 +4,7 @@
     <input v-model="password" type="password" placeholder="Mot de passe" required />
     <button v-on:click="sendData" type="submit">Envoyer</button>
     <p v-if="error !== null">{{ error }}</p>-->
-    <router-link to='/admin'><button>Admin</button></router-link>
+    <router-link to='/admin/3'><button>Admin</button></router-link>
     <router-link to='/teacher/1/technologies'><button>Teacher</button></router-link>
     <router-link to='/student/2'><button>Student</button></router-link>
   </div>
