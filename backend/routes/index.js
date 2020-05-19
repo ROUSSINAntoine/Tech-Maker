@@ -109,4 +109,13 @@ router.post('/admin/StudentCSV', async function (req, res, next) {
   await Student.createStudents(csv2);
 });
 
+router.get('/teacher/:id/semesters', async function (req, res, next) {
+  const semesters = await Semester.getSemesterByTeacher(req.params.id);
+  res.send(semesters);
+});
+
+router.get('/admin/semestersName', async function (req, res, next) {
+  const semesters = await Semester.getAllNamesIds();
+  res.send(semesters);
+});
 module.exports = router;

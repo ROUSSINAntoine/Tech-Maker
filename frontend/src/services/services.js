@@ -228,7 +228,7 @@ export function getSemestersPerTeacher (teacherId) {
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
 export function getAllSemestersName () {
-  return fetch(`${SERVER_URL}/semestersName`)
+  return fetch(`${SERVER_URL}/admin/semestersName`)
     .then(resp => resp.json())
     .then(data => data);
 }
