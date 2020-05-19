@@ -21,6 +21,17 @@ class Project {
     ];
   }
 
+  static async createProject (projectName) {
+    const id = await PostgressStore.client.query({
+      text: `INSERT INTO project(
+        name, describe, slogan, image, identifier, validate, bankable, needs, position_id)
+        VALUES ($1, null, null, null, null, 'waiting', false, null, null)
+        RETURNING id;`,
+      values: [projectName]
+    });
+    return id.rows;
+  }
+
   static async getAll () {
     const result = await PostgressStore.client.query(
       `SELECT * FROM ${Project.tableName}`

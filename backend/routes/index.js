@@ -6,14 +6,16 @@ var TechnologySemester = require('../models/technology_semester.model.js');
 var Semester = require('../models/semester.model.js');
 var User = require('../models/user.model.js');
 var Student = require('../models/student.model.js');
+var Project = require('../models/project.model.js');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/teacher/:id/techno', async function (req, res, next) {
-  const semesters = await Semester.getSemesterByTeacher(req.params.id);
+router.get('/teacher/:teacherId/techno', async function (req, res, next) {
+  console.log('panda');
+  const semesters = await Semester.getSemesterByTeacher(req.params.teacherId);
 
   for (let i = 0; i < semesters.length; i++) {
     const linkedTechno = await TechnologySemester.getAssignedTechno(semesters[i].id);
@@ -45,6 +47,20 @@ router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
   }
 
   res.end('it worked');
+});
+
+router.post('/teacher/createProject', async function (req, res, next) {
+  console.log(req.body);
+  const projectId = await Project.createProject(req.body.name);
+  for (let i = 0; i < req.body.membersId.length; i++) {
+    await Student.addProject(projectId, req.body.membersId[i]);
+  }
+  await Student.setProjectManager(req.body.projectManager);
+  const response = {
+    name: req.body.name,
+    id: projectId
+  };
+  res.send(response);
 });
 
 router.post('/admin/StudentCSV', async function (req, res, next) {
@@ -109,13 +125,18 @@ router.post('/admin/StudentCSV', async function (req, res, next) {
   await Student.createStudents(csv2);
 });
 
-router.get('/teacher/:id/semesters', async function (req, res, next) {
-  const semesters = await Semester.getSemesterByTeacher(req.params.id);
+router.get('/teacher/:teacherId/semesters', async function (req, res, next) {
+  const semesters = await Semester.getSemesterByTeacher(req.params.teacherId);
   res.send(semesters);
 });
 
 router.get('/admin/semestersName', async function (req, res, next) {
   const semesters = await Semester.getAllNamesIds();
   res.send(semesters);
+});
+
+router.get('/:semesterId/Students', async function (req, res, next) {
+  const students = await Student.getStudentBySemesterId(req.params.semesterId);
+  res.send(students);
 });
 module.exports = router;

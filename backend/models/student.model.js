@@ -19,10 +19,50 @@ class Student {
   }
 
   static async getAll () {
-    console.log('getAll');
     const result = await PostgressStore.client.query(
-			`SELECT * FROM ${Student.tableName}`
+      `SELECT * 
+        FROM ${Student.tableName}
+        `
     );
+    return result.rows;
+  }
+
+  static async getAllStudentNameId () {
+    const result = await PostgressStore.client.query(
+      `SELECT CONCAT(lastname,' ', firstname) AS name, user_id AS id 
+        FROM ${Student.tableName}
+        ORDER BY name`
+    );
+    return result.rows;
+  }
+
+  static async getStudentBySemesterId (semesteId) {
+    const result = await PostgressStore.client.query({
+      text: `SELECT CONCAT(lastname,' ', firstname) AS name, user_id AS id 
+        FROM ${Student.tableName}
+        WHERE semester_id = $1
+        ORDER BY name`,
+      values: [semesteId]
+    });
+    return result.rows;
+  }
+
+  static async addProject (projectId, studentId) {
+    await PostgressStore.client.query({
+      text: `UPDATE ${Student.name}
+      SET project_id = $1
+      WHERE id = $2`,
+      values: [projectId, studentId]
+    });
+  }
+
+  static async setProjectManager (studentId) {
+    const result = await PostgressStore.client.query({
+      text: `UPDATE ${Student.name}
+      SET project_manager = true
+      WHERE id = $2`,
+      values: [studentId]
+    });
     return result.rows;
   }
 
