@@ -110,7 +110,7 @@ export function createTechnology (name) {
  * @returns {Promise<{ id: Number, name: String, error?: String }>}
  */
 export function createProject (name, membersId, projectManager) {
-  return fetch(`${SERVER_URL}/createProject`, {
+  return fetch(`${SERVER_URL}/teacher/createProject`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
@@ -215,7 +215,7 @@ export function setModifiedprojectData (modifiedData) {
 /**
  * Get all semesters for the teacher.
  * @param {Number} teacherId Id of teacher
- * @returns {Promise<Array.<{ id: Number, name: String }>>} 
+ * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
 export function getSemestersPerTeacher (teacherId) {
   return fetch(`${SERVER_URL}/teacher/${teacherId}/semesters`)
@@ -238,7 +238,7 @@ export function getAllSemestersName () {
  * @param {string} Content of the csv
  */
 export function AddStudentCSV (csv) {
-  fetch(`${SERVER_URL}/StudentCSV`, {
+  fetch(`${SERVER_URL}/admin/StudentCSV`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'

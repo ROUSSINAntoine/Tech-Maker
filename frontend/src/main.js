@@ -14,14 +14,15 @@ import AdminStudentTable from './components/admin/AdminStudentTable.vue';
 
 const routes = [
   {
-    path: '/admin/:id', component: AdminHomepage,
+    path: '/admin/:id',
+    component: AdminHomepage,
     children: [
       { path: 'technologies', component: TechnologiesTable },
       {
         path: 'students',
         components: {
           default: AdminStudentTable,
-          'AdminStudentCSV': AdminStudentCSV
+          AdminStudentCSV: AdminStudentCSV
         }
       }
     ]
@@ -30,11 +31,12 @@ const routes = [
   { path: '/', component: Login },
   { path: '/login', component: Login },
   {
-    path: '/teacher/:id', component: TeacherHomepage,
+    path: '/teacher/:id',
+    component: TeacherHomepage,
     children: [
       { path: 'technologies', component: TechnologiesTable },
       { path: 'projects', component: ProjectsCards },
-      { 
+      {
         path: 'project/:pid',
         component: ProjectForm,
         props: (route) => ({ editable: true, projectId: Number(route.params.pid) })
@@ -47,8 +49,8 @@ Vue.use(VueRouter);
 Vue.config.productionTip = false;
 
 const router = new VueRouter({
-  routes: routes/*,
-  mode: 'history'*/
+  routes: routes,
+  mode: 'history'
 });
 
 new Vue({
