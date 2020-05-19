@@ -9,12 +9,21 @@ import TeacherHomepage from './views/TeacherHomepage.vue';
 import TechnologiesTable from './components/TechnologiesTable.vue';
 import ProjectsCards from './components/teacher/ProjectsCards.vue';
 import ProjectForm from './components/ProjectForm.vue';
+import AdminStudentCSV from './components/admin/AdminStudentCSV.vue';
+import AdminStudentTable from './components/admin/AdminStudentTable.vue';
 
 const routes = [
   {
     path: '/admin/:id', component: AdminHomepage,
     children: [
-      { path: 'technologies', component: TechnologiesTable }
+      { path: 'technologies', component: TechnologiesTable },
+      {
+        path: 'students',
+        components: {
+          default: AdminStudentTable,
+          'AdminStudentCSV': AdminStudentCSV
+        }
+      }
     ]
   },
   { path: '/student/:id', component: StudentHomepage },

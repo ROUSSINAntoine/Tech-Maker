@@ -1,7 +1,8 @@
 <template>
   <div name='AdminHomepage'>
     <AdminNavbar />
-    <!--router-link to='AdminStudentCSV' tag="button">Étudiants</router-link-->
+  
+    <router-view name='AdminStudentCSV'>Étudiants</router-view>
 
     <router-view></router-view>
   </div>
