@@ -31,6 +31,7 @@ class Student {
     const result = await PostgressStore.client.query(
       `SELECT CONCAT(lastname,' ', firstname) AS name, user_id AS id 
         FROM ${Student.tableName}
+        WHERE project_id = null
         ORDER BY name`
     );
     return result.rows;
@@ -38,9 +39,10 @@ class Student {
 
   static async getStudentBySemesterId (semesteId) {
     const result = await PostgressStore.client.query({
-      text: `SELECT CONCAT(lastname,' ', firstname) AS name, user_id AS id 
+      text: `SELECT CONCAT(lastname,' ', firstname) AS name, user_id AS id
         FROM ${Student.tableName}
         WHERE semester_id = $1
+        AND project_id IS NULL
         ORDER BY name`,
       values: [semesteId]
     });
@@ -48,19 +50,21 @@ class Student {
   }
 
   static async addProject (projectId, studentId) {
+    console.log('addProject');
     await PostgressStore.client.query({
       text: `UPDATE ${Student.name}
       SET project_id = $1
-      WHERE id = $2`,
+      WHERE user_id = $2`,
       values: [projectId, studentId]
     });
   }
 
   static async setProjectManager (studentId) {
+    console.log('setProjectManager');
     const result = await PostgressStore.client.query({
       text: `UPDATE ${Student.name}
       SET project_manager = true
-      WHERE id = $2`,
+      WHERE user_id = $1`,
       values: [studentId]
     });
     return result.rows;

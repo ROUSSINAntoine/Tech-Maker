@@ -19,11 +19,14 @@ class Technology {
   }
 
   static async createTechno (name) {
-    await PostgressStore.client.query({
+    const response = await PostgressStore.client.query({
       text: `INSERT INTO technology(
         name)
-        VALUES ($1)`
+        VALUES ($1)
+        RETURNING id`,
+      values: [name]
     });
+    return response.rows;
   }
 }
 

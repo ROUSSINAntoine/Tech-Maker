@@ -22,6 +22,7 @@ class Project {
   }
 
   static async createProject (projectName) {
+    console.log('createProject');
     const id = await PostgressStore.client.query({
       text: `INSERT INTO project(
         name, describe, slogan, image, identifier, validate, bankable, needs, position_id)
@@ -36,6 +37,26 @@ class Project {
     const result = await PostgressStore.client.query(
       `SELECT * FROM ${Project.tableName}`
     );
+    return result.rows;
+  }
+
+  static async getByName (name) {
+    const result = await PostgressStore.client.query({
+      text: `SELECT name FROM ${Project.tableName} WHERE name LIKE $1`,
+      values: [name]
+    });
+    return result.rows.length;
+  }
+
+  static async getBySemester (semesterId) {
+    const result = await PostgressStore.client.query({
+      text: `SELECT DISTINCT P.id, P.name, P.image AS logo 
+              FROM ${Project.tableName} P
+              JOIN student S
+              ON P.id = S.project_id
+              WHERE S.semester_id = $1`,
+      values: [semesterId]
+    });
     return result.rows;
   }
 }
