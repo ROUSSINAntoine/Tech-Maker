@@ -14,7 +14,6 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/teacher/:teacherId/techno', async function (req, res, next) {
-  console.log('panda');
   const semesters = await Semester.getSemesterByTeacher(req.params.teacherId);
 
   for (let i = 0; i < semesters.length; i++) {
@@ -49,7 +48,6 @@ router.get('/admin/techno', async function (req, res, next) {
     semesters,
     technologies
   };
-  console.log(response);
   res.send(response);
 });
 
@@ -66,7 +64,6 @@ router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
 
 router.post('/teacher/createProject', async function (req, res, next) {
   if (await Project.getByName(req.body.name) === 0) {
-    console.log(req.body);
     const projectId = await Project.createProject(req.body.name);
     for (let i = 0; i < req.body.membersId.length; i++) {
       await Student.addProject(projectId[0].id, req.body.membersId[i]);
@@ -171,7 +168,6 @@ router.get('/teacher/:teacherId/semesters', async function (req, res, next) {
 });
 
 router.get('/teacher/:teacherId/projects', async function (req, res, next) {
-  console.log('pute');
   const response = [];
   const semesters = await Semester.getSemesterByTeacher(req.params.teacherId);
 

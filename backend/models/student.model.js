@@ -81,7 +81,7 @@ class Student {
       }
       if (i !== csv.length - 1) inputs += ',';
     }
-    console.log(inputs);
+    // console.log(inputs);
     await PostgressStore.client.query(
       `INSERT INTO student(
         firstname, lastname, project_manager, user_id, semester_id, project_id)
