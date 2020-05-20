@@ -7,6 +7,7 @@ var Semester = require('../models/semester.model.js');
 var User = require('../models/user.model.js');
 var Student = require('../models/student.model.js');
 var Project = require('../models/project.model.js');
+var TechnoProject = require('../models/techno_project.model.js');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -191,6 +192,12 @@ router.get('/:semesterId/Students', async function (req, res, next) {
   const students = await Student.getStudentBySemesterId(req.params.semesterId);
   console.log(await Student.getStudentBySemesterId(req.params.semesterId));
   res.send(students);
+});
+
+router.delete('/admin/techno/:technoId/del', async function (req, res, next) {
+  TechnoProject.delete(req.params.technoId);
+  TechnologySemester.delete(req.params.technoId);
+  Technology.delete(req.params.technoId);
 });
 
 module.exports = router;

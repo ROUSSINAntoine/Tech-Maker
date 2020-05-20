@@ -1,4 +1,4 @@
-// const PostgressStore = require('../utils/PostgressStore');
+const PostgressStore = require('../utils/PostgressStore');
 class TechnoProject {
   static toSqlTable () {
     const Project = require('./project.model.js');
@@ -9,6 +9,14 @@ class TechnoProject {
             technology_id INT REFERENCES ${Technology.tableName},
             PRIMARY KEY(project_id, technology_id)
         )`;
+  }
+
+  static async delete (technoId) {
+    await PostgressStore.client.query({
+      text: `DELETE FROM ${TechnoProject.tableName}
+              WHERE technology_id = $1`,
+      values: [technoId]
+    });
   }
 }
 

@@ -65,7 +65,7 @@ export function updateTechnologyName (id, newName) {
  * @param {Number} id Technology'id
  */
 export function deleteTechnology (id) {
-  fetch(`${SERVER_URL}/techno/${id}`, {
+  fetch(`${SERVER_URL}/admin/techno/${id}/del`, {
     method: 'delete'
   });
 }

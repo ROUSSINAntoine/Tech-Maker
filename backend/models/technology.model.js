@@ -18,6 +18,14 @@ class Technology {
     return result.rows;
   }
 
+  static async delete (technoId) {
+    await PostgressStore.client.query({
+      text: `DELETE FROM ${Technology.tableName}
+              WHERE id = $1`,
+      values: [technoId]
+    });
+  }
+
   static async createTechno (name) {
     const response = await PostgressStore.client.query({
       text: `INSERT INTO technology(
