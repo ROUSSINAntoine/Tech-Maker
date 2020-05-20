@@ -51,7 +51,7 @@ export function setModifiedTechnologiesPerSemester (updateTechno) {
  * @param {String} newName New technology's name
  */
 export function updateTechnologyName (id, newName) {
-  fetch(`${SERVER_URL}/techno/${id}`, {
+  fetch(`${SERVER_URL}/admin/techno/${id}/rename`, {
     method: 'put',
     headers: {
       'Content-Type': 'application/json'

@@ -63,6 +63,11 @@ router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
   res.end('it worked');
 });
 
+router.put('/admin/techno/:technoId/rename', async function (req, res, next) {
+  Technology.rename(req.params.technoId, req.body.name);
+  res.end('it worked');
+});
+
 router.post('/teacher/createProject', async function (req, res, next) {
   if (await Project.getByName(req.body.name) === 0) {
     const projectId = await Project.createProject(req.body.name);
@@ -89,7 +94,8 @@ router.post('/admin/createTechno', async function (req, res, next) {
     if (req.body.name.toLowerCase() === techno[i].name.toLowerCase()) {
       res
         .status('403')
-        .send({ error: 'Already exist' });
+        .send({ error: 'Cette technologie existe déjà.' });
+      return;
     }
   }
 
@@ -161,6 +167,7 @@ router.post('/admin/StudentCSV', async function (req, res, next) {
     csv2[i].push(await User.getUserByEmail(csv2[i][9]));
   }
   await Student.createStudents(csv2);
+  res.send({ response: 'Les étudiants ont bien été ajouté à la base de donnée.' });
 });
 
 router.get('/teacher/:teacherId/semesters', async function (req, res, next) {
