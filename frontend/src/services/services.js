@@ -235,14 +235,17 @@ export function getAllSemestersName () {
 
 /**
  * Get Student CSV.
- * @param {string} Content of the csv
+ * @param {string} csv Content of the csv
+ * @returns {Promise<{response: string}>}
  */
 export function AddStudentCSV (csv) {
-  fetch(`${SERVER_URL}/admin/StudentCSV`, {
+  return fetch(`${SERVER_URL}/admin/StudentCSV`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(csv)
-  });
+  })
+    .then(resp => resp.json())
+    .then(data => data);
 }
