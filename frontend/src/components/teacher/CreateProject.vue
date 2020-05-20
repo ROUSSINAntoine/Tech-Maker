@@ -130,8 +130,9 @@ export default {
       } else {
         /** @type {{ id: Number, name: String, error?: String }} */
         const success = await createProject(this.projectName, this.members, this.projectManager)
-
+        console.log(success);
         if (success.error === undefined || success.error === null) {
+          console.log('created');
           this.$emit('created-project', { id: success.id, name: success.name, semesterId: this.semesterId });
           this.errorMessage = null;
           this.projectName = null;

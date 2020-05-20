@@ -153,6 +153,9 @@ export default {
 
       if (updateList.length > 0) {
         setModifiedTechnologiesPerSemester(updateList);
+        this.semesters.forEach(s => {
+          s.checkedIds = [ ...s.modifyIds ]
+        });
       }
     },
     /**
@@ -195,6 +198,8 @@ export default {
         this.cancelUpdateTechnology();
 
       } else {
+        this.technologies.find(techno => techno.id === this.selectedId).name = this.selectedName;
+        updateTechnologyName(this.selectedId, this.selectedName);
         this.cancelUpdateTechnology();
       }
     },

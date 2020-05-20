@@ -17,6 +17,34 @@ class Technology {
     );
     return result.rows;
   }
+
+  static async delete (technoId) {
+    await PostgressStore.client.query({
+      text: `DELETE FROM ${Technology.tableName}
+              WHERE id = $1`,
+      values: [technoId]
+    });
+  }
+
+  static async rename (technoId, name) {
+    await PostgressStore.client.query({
+      text: `UPDATE ${Technology.tableName}
+      SET name = $2
+      WHERE id = $1;`,
+      values: [technoId, name]
+    });
+  }
+
+  static async createTechno (name) {
+    const response = await PostgressStore.client.query({
+      text: `INSERT INTO technology(
+        name)
+        VALUES ($1)
+        RETURNING id`,
+      values: [name]
+    });
+    return response.rows;
+  }
 }
 
 /** @type {String} */

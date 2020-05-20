@@ -36,20 +36,19 @@ class TechnologySemester {
     return result.rows;
   }
 
+  static async delete (technoId) {
+    await PostgressStore.client.query({
+      text: `DELETE FROM ${TechnologySemester.tableName}
+              WHERE technology_id = $1`,
+      values: [technoId]
+    });
+  }
+
   static async add (semesterId, technoId) {
     await PostgressStore.client.query({
       text: `INSERT INTO technology_semester(
         semester_id, technology_id)
         VALUES ($1, $2)`,
-      values: [semesterId, technoId]
-    });
-  }
-
-  static async delete (semesterId, technoId) {
-    await PostgressStore.client.query({
-      text: `DELETE FROM technology_semester
-        WHERE semester_id = $1 
-        AND technology_id = $2;`,
       values: [semesterId, technoId]
     });
   }

@@ -11,6 +11,15 @@ class Semester {
       )`];
   }
 
+  static async getAllNamesIds () {
+    const result = await PostgressStore.client.query(
+      `SELECT id, name 
+        FROM ${Semester.tableName}
+        ORDER BY name`
+    );
+    return result.rows;
+  }
+
   static async getSemesterByTeacher (teacherId) {
     const result = await PostgressStore.client.query({
       text: `SELECT id, name

@@ -1,6 +1,6 @@
 // const SERVER_URL = 'https://localhost:8080';
 const fetch = require('node-fetch');
-const SERVER_URL = 'http://localhost:3001';
+const SERVER_URL = 'http://localhost:3000';
 
 /**
  * Get list of technologies per teacher's semesters.
@@ -51,7 +51,7 @@ export function setModifiedTechnologiesPerSemester (updateTechno) {
  * @param {String} newName New technology's name
  */
 export function updateTechnologyName (id, newName) {
-  fetch(`${SERVER_URL}/techno/${id}`, {
+  fetch(`${SERVER_URL}/admin/techno/${id}/rename`, {
     method: 'put',
     headers: {
       'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ export function updateTechnologyName (id, newName) {
  * @param {Number} id Technology'id
  */
 export function deleteTechnology (id) {
-  fetch(`${SERVER_URL}/techno/${id}`, {
+  fetch(`${SERVER_URL}/admin/techno/${id}/del`, {
     method: 'delete'
   });
 }
@@ -110,7 +110,7 @@ export function createTechnology (name) {
  * @returns {Promise<{ id: Number, name: String, error?: String }>}
  */
 export function createProject (name, membersId, projectManager) {
-  return fetch(`${SERVER_URL}/createProject`, {
+  return fetch(`${SERVER_URL}/teacher/createProject`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
@@ -138,7 +138,7 @@ export function getTechnologiesPerSemester (semesterId) {
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
 export function getStudentsPerSemester (semesterId) {
-  return fetch(`${SERVER_URL}/students/${semesterId}`)
+  return fetch(`${SERVER_URL}/${semesterId}/students`)
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -215,7 +215,7 @@ export function setModifiedprojectData (modifiedData) {
 /**
  * Get all semesters for the teacher.
  * @param {Number} teacherId Id of teacher
- * @returns {Promise<Array.<{ id: Number, name: String }>>} 
+ * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
 export function getSemestersPerTeacher (teacherId) {
   return fetch(`${SERVER_URL}/teacher/${teacherId}/semesters`)
@@ -228,7 +228,7 @@ export function getSemestersPerTeacher (teacherId) {
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
 export function getAllSemestersName () {
-  return fetch(`${SERVER_URL}/semestersName`)
+  return fetch(`${SERVER_URL}/admin/semestersName`)
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -238,7 +238,7 @@ export function getAllSemestersName () {
  * @param {string} Content of the csv
  */
 export function AddStudentCSV (csv) {
-  fetch(`${SERVER_URL}/StudentCSV`, {
+  fetch(`${SERVER_URL}/admin/StudentCSV`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'

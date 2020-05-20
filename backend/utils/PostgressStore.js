@@ -2,7 +2,7 @@ const pg = require('pg');
 const pgtools = require('pgtools');
 const config = require('../server.config.js');
 
-console.log(config);
+// console.log(config);
 // console.log(myfile)
 
 class PostgressStore {
