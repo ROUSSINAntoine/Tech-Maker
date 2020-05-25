@@ -1,4 +1,4 @@
-const PostgressStore = require('../utils/PostgressStore');
+const postgressStore = require('../utils/PostgressStore.js');
 
 class Users {
   static toSqlTable () {
@@ -11,6 +11,16 @@ class Users {
         type type_list NOT NULL
       )
     `];
+  }
+
+  static async init () {
+    await postgressStore.client.query(
+      `INSERT INTO users
+        (id, password, email, type)
+        VALUES 
+        (1, 'toto', 'teacher@teacher.com', 'teacher'),
+        (2, 'titi', 'teacher2@teacher.com', 'teacher')`
+    );
   }
 
   /**
@@ -31,7 +41,7 @@ class Users {
       if (i !== emails.length - 1) inputs += ',';
     }
     // console.log(inputs);
-    await PostgressStore.client.query(
+    await postgressStore.client.query(
       `INSERT INTO users
         (password, email, type)
         VALUES ${inputs}`
@@ -39,7 +49,7 @@ class Users {
   }
 
   static async getUserByEmail (email) {
-    const response = await PostgressStore.client.query({
+    const response = await postgressStore.client.query({
       text: `SELECT id FROM ${Users.tableName}
         WHERE email LIKE $1`,
       values: [email]
