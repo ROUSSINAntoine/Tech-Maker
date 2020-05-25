@@ -119,12 +119,15 @@
       v-on:click="submitForm()"
       type="submit"
     >Sauvegarder</button>
+    <button v-on:click='generatePDF()'>Générer le PDF</button> 
 
     <span v-if="errorMessage !== null">{{ errorMessage }}</span>
   </div>
 </template>
 
 <script>
+import jspdf from 'jspdf';
+
 import {
   getTechnologiesPerSemester,
   getStudentsPerSemesterNotOnProject,
@@ -340,7 +343,18 @@ export default {
       });
       copyModifiedItem.forEach(item => updateList.push({ id: item, add: true }));
       return updateList;
+    },
+
+    generatePDF() {
+      const project = getProjectData(this.projectId);
+      const doc = new jspdf();
+
+      doc.fromHTML(project.name,15,15, {
+        width:150
+      });
+      doc.save('Test.pdf');
     }
+
   }
 }
 </script>

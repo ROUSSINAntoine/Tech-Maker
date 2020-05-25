@@ -5,7 +5,7 @@
     <button v-on:click="sendData" type="submit">Envoyer</button>
     <p v-if="error !== null">{{ error }}</p>-->
     <router-link to='/admin/3'><button>Admin</button></router-link>
-    <router-link to='/teacher/2/technologies'><button>Teacher</button></router-link>
+    <router-link to='/teacher/424/technologies'><button>Teacher</button></router-link>
     <router-link to='/student/1'><button>Student</button></router-link>
   </div>
 </template>
