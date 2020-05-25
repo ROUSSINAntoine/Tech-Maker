@@ -25,4 +25,8 @@ router.get('/:semesterId/Students', async function (req, res, next) {
   res.send(students);
 });
 
+router.get('/:projectId/project', async function (req, res, next) {
+  res.send();
+});
+
 module.exports = router;
