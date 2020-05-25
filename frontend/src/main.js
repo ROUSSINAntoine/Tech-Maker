@@ -28,8 +28,8 @@ const routes = [
     ]
   },
   { path: '/student/:id', component: StudentHomepage },
-  { path: '/', component: Login },
-  { path: '/login', component: Login },
+  { path: '/', component: Login, meta: { token: ''} },
+  { path: '/login', component: Login, meta: { token: ''} },
   {
     path: '/teacher/:id',
     component: TeacherHomepage,
@@ -42,7 +42,8 @@ const routes = [
         props: (route) => ({ editable: true, projectId: Number(route.params.pid) })
       }
     ]
-  }
+  }/*,
+  { path: '*', component: }*/
 ];
 
 Vue.use(VueRouter);
@@ -51,6 +52,17 @@ Vue.config.productionTip = false;
 const router = new VueRouter({
   routes: routes,
   mode: 'history'
+});
+
+router.beforeEach((to, from, next) => {
+  console.log(from);
+  if (from.meta.token === undefined && (from.fullPath !== '/' || from.fullPath !== '/login')) {
+    console.log('1');
+    next('/login');
+  } else {
+    console.log('2');
+    next();
+  }
 });
 
 new Vue({

@@ -12,16 +12,6 @@
       <tbody>
         <tr v-for='technology in technologies' v-bind:key='technology.id'>
           <td class='technologyItem'>
-            <!--button
-              v-on:click='prepareUpdateTechnology(technology.id, technology.name)'
-              v-if='selectedId !== technology.id && isAdmin'
-              class='technologyAction'
-             >Modifier</button>
-             <button
-              v-on:click='deleteTechnology(technology.id)'
-              v-if='selectedId !== technology.id && isAdmin'
-              class='technologyAction'
-             >Supprimer</button-->
 
             <input
               type='text'

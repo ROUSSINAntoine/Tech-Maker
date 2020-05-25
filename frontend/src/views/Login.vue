@@ -6,7 +6,8 @@
     <p v-if="error !== null">{{ error }}</p>-->
     <router-link to='/admin/3'><button>Admin</button></router-link>
     <router-link to='/teacher/2/technologies'><button>Teacher</button></router-link>
-    <router-link to='/student/1'><button>Student</button></router-link>
+    <!--router-link to='/student/1'><button>Student</button></router-link-->
+    <button v-on:click="toStudent()">Student</button>
   </div>
 </template>
 
@@ -38,9 +39,13 @@ export default {
         console.log(3);
         this.error = "Le mot de passe doit être complété.";
 
-       } else {
+      } else {
         console.log(this.email, this.password);
       }
+    },
+    toStudent() {
+      this.$route.meta.name = 1;
+      this.$router.push(`/student/Delorme`);
     }
   }
 }
