@@ -64,4 +64,9 @@ router.get('/:teacherId/projects', async function (req, res, next) {
   res.send(response);
 });
 
+router.get('/test', async function (req, res, next) {
+  const semesters = await Technology.getAll();
+  res.send(semesters);
+});
+
 module.exports = router;

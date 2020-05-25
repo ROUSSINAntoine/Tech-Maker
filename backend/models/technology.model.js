@@ -29,8 +29,8 @@ class Technology {
   static async rename (technoId, name) {
     await PostgressStore.client.query({
       text: `UPDATE ${Technology.tableName}
-      SET name = $2
-      WHERE id = $1;`,
+        SET name = $2
+        WHERE id = $1;`,
       values: [technoId, name]
     });
   }

@@ -73,12 +73,8 @@ class Student {
   static async createStudents (csv) {
     let inputs = '';
     for (let i = 0; i < csv.length; i++) {
-      if (/* csv[i][7].match(/^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-\s]*$/gi) !== null && csv[i][8].match(/^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-\s]*$/gi) !== null */ true) {
-        inputs += `('${csv[i][8]}', '${csv[i][7]}', false, ${csv[i][10][0].id}, ${csv[i][6]}, null)`;
-      } else {
-        console.log(csv[i][7].match(/^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-\s]*$/gi), ' ', csv[i][8].match(/^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ-\s]*$/gi));
-        // throw new Error(`First or lastname : ${csv[i][7]}  ${csv[i][8]}`);
-      }
+      inputs += `('${csv[i][8]}', '${csv[i][7]}', false, ${csv[i][10][0].id}, ${csv[i][6]}, null)`;
+
       if (i !== csv.length - 1) inputs += ',';
     }
     // console.log(inputs);

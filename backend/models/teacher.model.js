@@ -1,4 +1,4 @@
-// const PostgressStore = require('../utils/PostgressStore');
+const PostgressStore = require('../utils/PostgressStore');
 class Teacher {
   static toSqlTable () {
     const User = require('./user.model.js');
@@ -12,6 +12,16 @@ class Teacher {
       )`,
     `ALTER TABLE ${Teacher.tableName} ADD UNIQUE (user_id)`
     ];
+  }
+
+  static async init () {
+    await PostgressStore.client.query(
+      `INSERT INTO ${this.tableName}
+        (firstname, lastname, invite, expiration, user_id)
+        VALUES 
+        ('Thomas', 'Kerbrat','zogzog', '2021-01-01', 1),
+        ('Antoine', 'Raquillet','zogog', '2021-01-01', 2)`
+    );
   }
 }
 
