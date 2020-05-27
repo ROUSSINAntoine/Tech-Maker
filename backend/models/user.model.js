@@ -18,10 +18,10 @@ class Users {
   static async init () {
     await postgressStore.client.query(
       `INSERT INTO users
-        (id, password, email, type)
+        (password, email, type)
         VALUES 
-        (1, 'toto', 'teacher@teacher.com', 'teacher'),
-        (2, 'titi', 'teacher2@teacher.com', 'teacher')`
+        ('toto', 'teacher@teacher.com', 'teacher'),
+        ('titi', 'teacher2@teacher.com', 'teacher')`
     );
   }
 

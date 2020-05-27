@@ -14,9 +14,10 @@ router.get('/:teacherId/techno', async function (req, res, next) {
     semesters[i].checkedIds = [];
 
     for (let j = 0; j < linkedTechno.length; j++) {
-      semesters[i].checkedIds.push(linkedTechno[j].technology_id);
+      semesters[i].checkedIds.push(linkedTechno[j].id);
     }
   }
+
   const technologies = await Technology.getAll();
   const response = {
     semesters,

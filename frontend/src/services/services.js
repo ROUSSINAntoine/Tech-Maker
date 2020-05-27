@@ -163,8 +163,8 @@ export function getStudentsPerSemester (semesterId) {
  * @param {Number} semesterId Id of the semester
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
-export function getStudentsPerSemesterNotOnProject (semesterId) {
-  return fetch(`${SERVER_URL}/studentsNoProject/${semesterId}`, {
+export function getStudentsPerSemesterNotOnProject (semesterId, projectId) {
+  return fetch(`${SERVER_URL}/${semesterId}/${projectId}/studentsNotOnProject`)
     credentials: 'include'
   })
     .then(resp => resp.json())
@@ -187,7 +187,7 @@ export function getStudentsPerSemesterNotOnProject (semesterId) {
  * }>}
  */
 export function getProjectData (projectId) {
-  return fetch(`${SERVER_URL}/project/${projectId}`, {
+  return fetch(`${SERVER_URL}/${projectId}/project`, {
     credentials: 'include'
   })
     .then(resp => resp.json())
@@ -225,7 +225,7 @@ export function getStudentData (studentId) {
  */
 export function setModifiedprojectData (modifiedData) {
   fetch(`${SERVER_URL}/modifiedProject`, {
-    method: 'post',
+    method: 'put',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
@@ -261,7 +261,7 @@ export function getAllSemestersName () {
 
 /**
  * Get Student CSV.
- * @param {string} csv Content of the csv
+ * @param {string} Content of the csv
  * @returns {Promise<{response: string}>}
  */
 export function AddStudentCSV (csv) {

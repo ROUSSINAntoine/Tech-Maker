@@ -49,6 +49,28 @@ class Student {
     return result.rows;
   }
 
+  static async getStudentBySemesterIdNotOnProject (semesteId, projectId) {
+    const result = await PostgressStore.client.query({
+      text: `SELECT CONCAT(lastname,' ', firstname) AS name, user_id AS id
+        FROM ${Student.tableName}
+        WHERE semester_id = $1
+        AND (project_id = $2 OR project_id IS NULL)
+        ORDER BY name`,
+      values: [semesteId, projectId]
+    });
+    return result.rows;
+  }
+
+  static async getByProject (projectId) {
+    const result = await PostgressStore.client.query({
+      text: `SELECT user_id AS id, project_manager, semester_id
+        FROM ${Student.tableName}
+        WHERE project_id = $1`,
+      values: [projectId]
+    });
+    return result.rows;
+  }
+
   static async addProject (projectId, studentId) {
     console.log('addProject');
     await PostgressStore.client.query({

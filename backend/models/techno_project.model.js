@@ -18,6 +18,17 @@ class TechnoProject {
       values: [technoId]
     });
   }
+
+  static async getByProjectId (projectId) {
+    const response = await PostgressStore.client.query({
+      text: `SELECT technology_id
+              FROM ${this.tableName}
+              WHERE project_id = $1`,
+      values: [projectId]
+    });
+
+    return response.rows;
+  }
 }
 
 /** @type {String} */

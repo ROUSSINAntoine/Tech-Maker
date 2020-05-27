@@ -204,7 +204,7 @@ export default {
     this.currentData = { ...this.oldData };
     this.currentData.technologies = [ ...this.oldData.technologies ];
     this.currentData.membersId = [ ...this.oldData.membersId ];
-    this.students = await getStudentsPerSemesterNotOnProject(this.currentData.semesterId);
+    this.students = await getStudentsPerSemesterNotOnProject(this.currentData.semesterId, this.oldData.id);
     this.technologies = await getTechnologiesPerSemester(this.currentData.semesterId);
     this.semesters = (this.userType === 'teacher')
       ? await getSemestersPerTeacher(this.$route.params.id)
