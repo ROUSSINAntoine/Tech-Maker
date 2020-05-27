@@ -84,6 +84,20 @@ class Student {
         VALUES ${inputs}`
     );
   }
+
+  static async getName (stdentId) {
+    const User = require('./user.model.js');
+    const result = await PostgressStore.client.query({
+      text: `
+        SELECT firstname, lastname
+        FROM ${Student.tableName}
+        JOIN ${User.tableName}
+        ON id = user_id
+        WHERE id = $1`,
+        values: [studentId]
+    });
+    return result.rows[0];
+  }
 }
 
 /** @type {String} */

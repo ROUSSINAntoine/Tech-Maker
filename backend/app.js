@@ -1,5 +1,5 @@
 var express = require('express');
-// var session = require('express-session');
+const session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -12,9 +12,27 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 PostgressStore.init();
 
+function getRandomString () {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+  for (let i = 0; i < 20; i++) {
+    result += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return result;
+}
+
+
 var app = express();
 app.use(bodyParser(bodyParser.json()));
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:8080'
+}));
+app.use(session({
+  secret: getRandomString(),
+  resave: false,
+  saveUninitialized: true
+}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

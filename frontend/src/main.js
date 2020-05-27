@@ -17,7 +17,10 @@ const routes = [
     path: '/admin/:id',
     component: AdminHomepage,
     children: [
-      { path: 'technologies', component: TechnologiesTable },
+      {
+        path: 'technologies',
+        component: TechnologiesTable
+      },
       {
         path: 'students',
         components: {
@@ -27,15 +30,30 @@ const routes = [
       }
     ]
   },
-  { path: '/student/:id', component: StudentHomepage },
-  { path: '/', component: Login, meta: { token: ''} },
-  { path: '/login', component: Login, meta: { token: ''} },
+  {
+    path: '/student/:id',
+    component: StudentHomepage
+  },
+  {
+    path: '/',
+    component: Login
+  },
+  {
+    path: '/login',
+    component: Login
+  },
   {
     path: '/teacher/:id',
     component: TeacherHomepage,
     children: [
-      { path: 'technologies', component: TechnologiesTable },
-      { path: 'projects', component: ProjectsCards },
+      {
+        path: 'technologies',
+        component: TechnologiesTable
+      },
+      {
+        path: 'projects',
+        component: ProjectsCards
+      },
       {
         path: 'project/:pid',
         component: ProjectForm,
@@ -43,7 +61,10 @@ const routes = [
       }
     ]
   }/*,
-  { path: '*', component: }*/
+  {
+    path: '*',
+    component: NotFound
+  }*/
 ];
 
 Vue.use(VueRouter);
@@ -53,7 +74,7 @@ const router = new VueRouter({
   routes: routes,
   mode: 'history'
 });
-
+/*
 router.beforeEach((to, from, next) => {
   console.log(from);
   if (from.meta.token === undefined && (from.fullPath !== '/' || from.fullPath !== '/login')) {
@@ -64,7 +85,7 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
-
+*/
 new Vue({
   router,
   render: h => h(App)

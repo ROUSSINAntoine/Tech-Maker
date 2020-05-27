@@ -8,6 +8,8 @@ var User = require('../models/user.model.js');
 var Student = require('../models/student.model.js');
 var TechnoProject = require('../models/techno_project.model.js');
 
+//TODO: router.use() pour vérifier si l'user à une session avec id et que c'est un admin
+
 router.get('/techno', async function (req, res, next) {
   const semesters = await Semester.getAllNamesIds();
 

@@ -1,4 +1,6 @@
 const postgressStore = require('../utils/PostgressStore.js');
+const Student = require('./student.model.js');
+const Teacher = require('./teacher.model.js');
 
 class Users {
   static toSqlTable () {
@@ -56,6 +58,19 @@ class Users {
     });
 
     return response.rows;
+  }
+
+  static async getUserByEmailPassword (email, password) {
+    const response = await postgressStore.client.query({
+      text: `
+        SELECT id, type
+        FROM ${Users.tableName}
+        WHERE email LIKE $1
+        AND password LIKE $2`,
+      values: [email, password]
+    });
+
+    return response.rows[0];
   }
 }
 
