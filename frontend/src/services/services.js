@@ -148,8 +148,8 @@ export function getStudentsPerSemester (semesterId) {
  * @param {Number} semesterId Id of the semester
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
-export function getStudentsPerSemesterNotOnProject (semesterId) {
-  return fetch(`${SERVER_URL}/studentsNoProject/${semesterId}`)
+export function getStudentsPerSemesterNotOnProject (semesterId, projectId) {
+  return fetch(`${SERVER_URL}/${semesterId}/${projectId}/studentsNotOnProject`)
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -170,7 +170,7 @@ export function getStudentsPerSemesterNotOnProject (semesterId) {
  * }>}
  */
 export function getProjectData (projectId) {
-  return fetch(`${SERVER_URL}/project/${projectId}`)
+  return fetch(`${SERVER_URL}/${projectId}/project`)
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -204,7 +204,7 @@ export function getStudentData (studentId) {
  */
 export function setModifiedprojectData (modifiedData) {
   fetch(`${SERVER_URL}/modifiedProject`, {
-    method: 'post',
+    method: 'put',
     headers: {
       'Content-Type': 'application/json'
     },

@@ -33,6 +33,16 @@ class Project {
     return id.rows;
   }
 
+  static async update (inputValues, updateValues) {
+    console.log(inputValues);
+    await PostgressStore.client.query({
+      text: `UPDATE project
+      SET ${updateValues}
+      WHERE id = $1;`,
+      values: [...inputValues]
+    });
+  }
+
   static async getAll () {
     const result = await PostgressStore.client.query(
       `SELECT * FROM ${Project.tableName}`
@@ -46,6 +56,17 @@ class Project {
       values: [name]
     });
     return result.rows.length;
+  }
+
+  static async getById (id) {
+    // console.log('getbyid', id);
+    const result = await PostgressStore.client.query({
+      text: `SELECT name, slogan, describe, needs 
+              FROM ${Project.tableName} 
+              WHERE id = $1`,
+      values: [id]
+    });
+    return result.rows;
   }
 
   static async getBySemester (semesterId) {

@@ -28,9 +28,11 @@ class TechnologySemester {
     // });
 
     const result = await PostgressStore.client.query({
-      text: `SELECT technology_id
-              FROM ${TechnologySemester.tableName}
-              WHERE semester_id = $1`,
+      text: `SELECT t.id, t.name 
+              FROM ${TechnologySemester.tableName} ts
+              JOIN technology t
+              ON t.id = ts.technology_id
+              WHERE ts.semester_id = $1`,
       values: [semesterID]
     });
     return result.rows;
