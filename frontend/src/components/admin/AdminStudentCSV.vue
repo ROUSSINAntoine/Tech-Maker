@@ -1,6 +1,8 @@
 <template>
   <div name='AdminStudentCSV'>
-    <h2>Entrer un CSV</h2>
+    <h1 class='text-center'>CSV étudiants</h1>
+      <v-file-input @change='onfileChange' accept='csv' id='InputCSV' multiple label="Entrer un CSV"></v-file-input>
+
       <input type="file" 
         @change='onfileChange' 
         accept='.csv'

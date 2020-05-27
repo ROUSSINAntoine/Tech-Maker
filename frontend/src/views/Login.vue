@@ -3,10 +3,12 @@
     <input v-model="email" type="email" placeholder="Mail" required />
     <input v-model="password" type="password" placeholder="Mot de passe" required />
     <button v-on:click="sendData" type="submit">Envoyer</button>
-    <p v-if="error !== null">{{ error }}</p>-->
-    <router-link to='/admin/3'><button>Admin</button></router-link>
-    <router-link to='/teacher/2/technologies'><button>Teacher</button></router-link>
-    <router-link to='/student/1'><button>Student</button></router-link>
+    <p v-if="error !== null">{{ error }}</p>--> 
+    <v-col class='text-center'>
+      <div class="mb-1"><router-link to='/admin/3'><v-btn small color='#85b864'>Administrateur</v-btn></router-link></div>
+      <div class="mb-1"><router-link to='/teacher/2/technologies'><v-btn small color='#85b864'>Professeur</v-btn></router-link></div>
+      <div class="mb-1"><router-link to='/student/1'><v-btn small color='#85b864'>Élève</v-btn></router-link></div>
+    </v-col>
   </div>
 </template>
 

@@ -1,4 +1,6 @@
 import Vue from 'vue';
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
 import App from './App.vue';
 import VueRouter from 'vue-router';
 
@@ -47,6 +49,7 @@ const routes = [
 
 Vue.use(VueRouter);
 Vue.config.productionTip = false;
+Vue.use(Vuetify);
 
 const router = new VueRouter({
   routes: routes,
@@ -55,5 +58,6 @@ const router = new VueRouter({
 
 new Vue({
   router,
+  vuetify: new Vuetify(),
   render: h => h(App)
 }).$mount('#app');
