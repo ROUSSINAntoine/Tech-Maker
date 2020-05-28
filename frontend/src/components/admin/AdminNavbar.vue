@@ -121,9 +121,7 @@
 export default {
   name: 'AdminNavbar',
   data: () => ({
-      drawer: null,
-      activeColor: 'white',
-      disabledColor: 'orange',
+      drawer: null
     })
 }
 </script>

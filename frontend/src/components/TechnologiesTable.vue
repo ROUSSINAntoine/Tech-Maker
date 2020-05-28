@@ -1,6 +1,24 @@
 <template>
   <div id='TechnologiesTable'>
-    <h1>Technologies utilisables par semestres</h1>
+    <h1 class='text-center'>Technologies par semestres</h1>
+
+        <v-simple-table fixed-header height="300px">
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">Name</th>
+                <th class="text-left">Calories</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>test</td>
+                <td>test</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+
     <table>
       <thead>
         <tr>

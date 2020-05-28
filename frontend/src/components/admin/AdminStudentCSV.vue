@@ -1,7 +1,13 @@
 <template>
   <div name='AdminStudentCSV'>
     <h1 class='text-center'>CSV étudiants</h1>
-      <v-file-input @change='onfileChange' accept='csv' id='InputCSV' multiple label="Entrer un CSV"></v-file-input>
+      <v-file-input 
+        @change='onfileChange' 
+        accept='csv'
+        id='InputCSV' 
+        label="Entrer un CSV"
+        style='margin-right:250px; margin-left:250px' 
+      ></v-file-input>
 
       <input type="file" 
         @change='onfileChange' 
