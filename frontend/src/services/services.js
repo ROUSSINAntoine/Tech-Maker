@@ -164,7 +164,7 @@ export function getStudentsPerSemester (semesterId) {
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
 export function getStudentsPerSemesterNotOnProject (semesterId, projectId) {
-  return fetch(`${SERVER_URL}/${semesterId}/${projectId}/studentsNotOnProject`)
+  return fetch(`${SERVER_URL}/${semesterId}/${projectId}/studentsNotOnProject`, {
     credentials: 'include'
   })
     .then(resp => resp.json())
@@ -278,24 +278,40 @@ export function AddStudentCSV (csv) {
 }
 
 /**
- * Send login identifier and get if connected
+ * Send login identifier and get if connected.
  * @param {String} email
  * @param {String} password
- * @returns {Promise<{
- *  error?: string,
- *  route?: 'admin' | 'teacher' | 'student',
- *  name?: string
- * }>}
+ * @returns {Promise<{ error: string } | { route: 'admin' | 'teacher' | 'student' }>}
  */
 export function postLogin (email, password) {
   return fetch(`${SERVER_URL}/login`, {
     method: 'post',
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password })
   })
     .then(resp => resp.json())
     .then(data => data);
+}
+
+/**
+ * Verify if user is connected with a session.
+ * @returns {Promise<{ connected: Boolean, userType?: 'admin' | 'teacher' | 'student' }>}
+ */
+export function isConnected () {
+  return fetch(`${SERVER_URL}/connected`, {
+    credentials: 'include'
+  })
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+/**
+ * Close user session.
+ */
+export function logout () {
+  fetch(`${SERVER_URL}/logout`, {
+    method: 'post',
+    credentials: 'include'
+  });
 }

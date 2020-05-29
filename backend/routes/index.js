@@ -1,12 +1,12 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 // var Technology = require('../models/technology.model.js');
-var TechnologySemester = require('../models/technology_semester.model.js');
-var Student = require('../models/student.model.js');
-var Teacher = require('../models/teacher.model.js');
-var User = require('../models/user.model.js');
-var Project = require('../models/project.model.js');
-var ProjectTechno = require('../models/techno_project.model.js');
+const TechnologySemester = require('../models/technology_semester.model.js');
+const Student = require('../models/student.model.js');
+const Teacher = require('../models/teacher.model.js');
+const User = require('../models/user.model.js');
+const Project = require('../models/project.model.js');
+const ProjectTechno = require('../models/techno_project.model.js');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -69,19 +69,32 @@ router.get('/:projectId/project', async function (req, res, next) {
 
 router.post('/login', async (req, res) => {
   const user = await User.getUserByEmailPassword(req.body.email, req.body.password);
-
   if (!user) {
-    res.send({ error: 'Idenfifiants invalides.'}).status(401);
+    res.status(401).send({ error: 'Idenfifiants invalides.'});
+
   } else {
     req.session.userId = user.id;
-    const resp = { route: user.type };
-    if (user.type !== 'admin') {
-      const data = user.type === 'teacher'
-        ? await Teacher.getName(user.id)
-        : await Student.getName(user.id);
-      resp.name = `${data.firstname} ${data.lastname}`.replace(/\s/g, '-');
-    }
-    res.send(resp);
+    req.session.userType = user.type;
+    res.status(200).send({ route: user.type });
+  }
+});
+
+router.post('/logout', (req, res) => {
+  if (req.session.userId) {
+    delete req.session.userId;
+    delete req.session.userType;
+    res.status(200).send('Disconnected');
+  } else {
+    res.status(401).send('Already disconnected');
+  }
+});
+
+router.get('/connected', (req, res) => {
+  if (req.session.userId) {
+    res.status(200).send({ connected: true, userType: req.session.userType });
+
+  } else {
+    res.status(401).send({ connected: false });
   }
 });
 

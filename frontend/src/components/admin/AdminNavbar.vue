@@ -11,14 +11,22 @@
         <li><router-link :to='"/admin/" + $route.params.id + "/rooms"'>Salles</router-link></li-->
       </ul>
       <button>Réinitialiser</button>
-      <router-link to='/login'><button>Déconnexion</button></router-link>
+      <button v-on:click='disconnect'>Déconnexion</button>
     </nav>
   </div>
 </template>
 
 <script>
+import { logout } from '../../services/services.js';
+
 export default {
-  name: 'AdminNavbar'
+  name: 'AdminNavbar',
+  methods: {
+    async disconnect () {
+      await logout();
+      this.$router.push('/login');
+    }
+  }
 }
 </script>
 

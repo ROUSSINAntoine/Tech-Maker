@@ -72,6 +72,17 @@ class Users {
 
     return response.rows[0];
   }
+
+  static async getTypeById (userId) {
+    const response = await postgressStore.client.query({
+      text: `SELECT type
+        FROM ${Users.tableName}
+        WHERE id = $1`,
+      values: [userId]
+    });
+
+    return response.rows;
+  }
 }
 
 /** @type {String} */
