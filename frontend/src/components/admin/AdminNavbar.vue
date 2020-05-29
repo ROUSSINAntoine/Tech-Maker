@@ -106,11 +106,10 @@
           </v-list-item>
 
 
-            <v-list-item-content>
-              <v-container fluid>
-                <v-switch v-model="switch1" :label="`Sombre`"></v-switch>
-              </v-container>
-            </v-list-item-content>
+          <v-container fluid>
+            <v-btn style='color:black; background-color: white' v-if="$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Clair</v-btn>
+            <v-btn style='color:white; background-color: black' v-if="!$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Sombre</v-btn>
+          </v-container>
 
 
       </v-list>
