@@ -4,9 +4,19 @@ var Technology = require('../models/technology.model.js');
 // var Teacher = require('../models/teacher.model.js');
 var TechnologySemester = require('../models/technology_semester.model.js');
 var Semester = require('../models/semester.model.js');
-var User = require('../models/user.model.js');
+var Users = require('../models/user.model.js');
 var Student = require('../models/student.model.js');
 var TechnoProject = require('../models/techno_project.model.js');
+
+//TODO: router.use() pour vérifier si l'user à une session avec id et que c'est un admin
+/*router.use(async (req, res, next) => {
+  if (req.session.userId) {
+    const user = await Users.getTypeById(req.session.userId);
+    if (user[0] && user[0].type === 'admin') {
+
+    }
+  }
+});*/
 
 router.get('/techno', async function (req, res, next) {
   const semesters = await Semester.getAllNamesIds();
@@ -107,9 +117,9 @@ router.post('/StudentCSV', async function (req, res, next) {
   for (let i = 0; i < csv2.length; i++) {
     emails.push(csv2[i][9]);
   }
-  await User.createStudentUser(emails);
+  await Users.createStudentUser(emails);
   for (let i = 0; i < csv2.length; i++) {
-    csv2[i].push(await User.getUserByEmail(csv2[i][9]));
+    csv2[i].push(await Users.getUserByEmail(csv2[i][9]));
   }
   await Student.createStudents(csv2);
   res.send({ response: 'Les étudiants ont bien été ajouté à la base de donnée.' });

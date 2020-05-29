@@ -1,6 +1,6 @@
 <template>
   <div class="StudentHomepage">
-    <router-link to="/login"><button>Déconnexion</button></router-link>
+    <button v-on:click='disconnect'>Déconnexion</button>
 
     <h1>Espace étudiant</h1>
 
@@ -12,6 +12,7 @@
 <script>
 import ProjectForm from '../components/ProjectForm.vue';
 import { getStudentData } from '../services/services.js';
+import { logout } from '../services/services.js';
 
 export default {
   name: 'StudentHomepage',
@@ -28,6 +29,12 @@ export default {
     const data = await getStudentData(this.$route.params.id);
     this.name = data.name;
     this.projectId = data.projectId;
+  },
+  methods: {
+    async disconnect () {
+      await logout();
+      this.$router.push('/login');
+    }
   }
 }
 </script>

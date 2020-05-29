@@ -23,6 +23,20 @@ class Teacher {
         ('Antoine', 'Raquillet','zogog', '2021-01-01', 2)`
     );
   }
+
+  static async getName (teacherId) {
+    const User = require('./user.model.js');
+    const result = await PostgressStore.client.query({
+      text: `
+        SELECT firstname, lastname
+        FROM ${Teacher.tableName}
+        JOIN ${User.tableName}
+        ON id = user_id
+        WHERE id = $1`,
+        values: [teacherId]
+    });
+    return result.rows[0];
+  }
 }
 
 /** @type {String} */

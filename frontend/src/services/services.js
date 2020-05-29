@@ -11,7 +11,9 @@ const SERVER_URL = 'http://localhost:3000';
  * }>}
  */
 export function getTechnologiesPerTeacher (teacherId) {
-  return fetch(`${SERVER_URL}/teacher/${teacherId}/techno`)
+  return fetch(`${SERVER_URL}/teacher/${teacherId}/techno`, {
+    credentials: 'include'
+  })
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -24,7 +26,9 @@ export function getTechnologiesPerTeacher (teacherId) {
  * }>}
  */
 export function getAllTechnologies () {
-  return fetch(`${SERVER_URL}/admin/techno`)
+  return fetch(`${SERVER_URL}/admin/techno`, {
+    credentials: 'include'
+  })
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -38,6 +42,7 @@ export function getAllTechnologies () {
 export function setModifiedTechnologiesPerSemester (updateTechno) {
   fetch(`${SERVER_URL}/modifiedTechnologiesPerSemester`, {
     method: 'put',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -53,6 +58,7 @@ export function setModifiedTechnologiesPerSemester (updateTechno) {
 export function updateTechnologyName (id, newName) {
   fetch(`${SERVER_URL}/admin/techno/${id}/rename`, {
     method: 'put',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -66,7 +72,8 @@ export function updateTechnologyName (id, newName) {
  */
 export function deleteTechnology (id) {
   fetch(`${SERVER_URL}/admin/techno/${id}/del`, {
-    method: 'delete'
+    method: 'delete',
+    credentials: 'include'
   });
 }
 
@@ -80,7 +87,9 @@ export function deleteTechnology (id) {
  * }>>}
  */
 export function getProjectsPerTeacher (id) {
-  return fetch(`${SERVER_URL}/teacher/${id}/projects`)
+  return fetch(`${SERVER_URL}/teacher/${id}/projects`, {
+    credentials: 'include'
+  })
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -93,6 +102,7 @@ export function getProjectsPerTeacher (id) {
 export function createTechnology (name) {
   return fetch(`${SERVER_URL}/admin/createTechno`, {
     method: 'post',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -112,6 +122,7 @@ export function createTechnology (name) {
 export function createProject (name, membersId, projectManager) {
   return fetch(`${SERVER_URL}/teacher/createProject`, {
     method: 'post',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -127,7 +138,9 @@ export function createProject (name, membersId, projectManager) {
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
 export function getTechnologiesPerSemester (semesterId) {
-  return fetch(`${SERVER_URL}/technologiesPerSemester/${semesterId}`)
+  return fetch(`${SERVER_URL}/technologiesPerSemester/${semesterId}`, {
+    credentials: 'include'
+  })
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -138,7 +151,9 @@ export function getTechnologiesPerSemester (semesterId) {
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
 export function getStudentsPerSemester (semesterId) {
-  return fetch(`${SERVER_URL}/${semesterId}/students`)
+  return fetch(`${SERVER_URL}/${semesterId}/students`, {
+    credentials: 'include'
+  })
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -149,7 +164,9 @@ export function getStudentsPerSemester (semesterId) {
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
 export function getStudentsPerSemesterNotOnProject (semesterId, projectId) {
-  return fetch(`${SERVER_URL}/${semesterId}/${projectId}/studentsNotOnProject`)
+  return fetch(`${SERVER_URL}/${semesterId}/${projectId}/studentsNotOnProject`, {
+    credentials: 'include'
+  })
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -170,7 +187,9 @@ export function getStudentsPerSemesterNotOnProject (semesterId, projectId) {
  * }>}
  */
 export function getProjectData (projectId) {
-  return fetch(`${SERVER_URL}/${projectId}/project`)
+  return fetch(`${SERVER_URL}/${projectId}/project`, {
+    credentials: 'include'
+  })
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -181,7 +200,9 @@ export function getProjectData (projectId) {
  * @returns {Promise<{ id: Number, name: String, projectId: (Number | null) }>}
  */
 export function getStudentData (studentId) {
-  return fetch(`${SERVER_URL}/student/${studentId}`)
+  return fetch(`${SERVER_URL}/student/${studentId}`, {
+    credentials: 'include'
+  })
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -205,6 +226,7 @@ export function getStudentData (studentId) {
 export function setModifiedprojectData (modifiedData) {
   fetch(`${SERVER_URL}/modifiedProject`, {
     method: 'put',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -218,7 +240,9 @@ export function setModifiedprojectData (modifiedData) {
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
 export function getSemestersPerTeacher (teacherId) {
-  return fetch(`${SERVER_URL}/teacher/${teacherId}/semesters`)
+  return fetch(`${SERVER_URL}/teacher/${teacherId}/semesters`, {
+    credentials: 'include'
+  })
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -228,7 +252,9 @@ export function getSemestersPerTeacher (teacherId) {
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
 export function getAllSemestersName () {
-  return fetch(`${SERVER_URL}/admin/semestersName`)
+  return fetch(`${SERVER_URL}/admin/semestersName`, {
+    credentials: 'include'
+  })
     .then(resp => resp.json())
     .then(data => data);
 }
@@ -236,13 +262,56 @@ export function getAllSemestersName () {
 /**
  * Get Student CSV.
  * @param {string} Content of the csv
+ * @returns {Promise<{response: string}>}
  */
 export function AddStudentCSV (csv) {
-  fetch(`${SERVER_URL}/admin/StudentCSV`, {
+  return fetch(`${SERVER_URL}/admin/StudentCSV`, {
     method: 'post',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(csv)
+  })
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+/**
+ * Send login identifier and get if connected.
+ * @param {String} email
+ * @param {String} password
+ * @returns {Promise<{ error: string } | { route: 'admin' | 'teacher' | 'student' }>}
+ */
+export function postLogin (email, password) {
+  return fetch(`${SERVER_URL}/login`, {
+    method: 'post',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  })
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+/**
+ * Verify if user is connected with a session.
+ * @returns {Promise<{ connected: Boolean, userType?: 'admin' | 'teacher' | 'student' }>}
+ */
+export function isConnected () {
+  return fetch(`${SERVER_URL}/connected`, {
+    credentials: 'include'
+  })
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+/**
+ * Close user session.
+ */
+export function logout () {
+  fetch(`${SERVER_URL}/logout`, {
+    method: 'post',
+    credentials: 'include'
   });
 }
