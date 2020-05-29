@@ -3,7 +3,6 @@ const router = express.Router();
 // var Technology = require('../models/technology.model.js');
 const TechnologySemester = require('../models/technology_semester.model.js');
 const Student = require('../models/student.model.js');
-const Teacher = require('../models/teacher.model.js');
 const User = require('../models/user.model.js');
 const Project = require('../models/project.model.js');
 const ProjectTechno = require('../models/techno_project.model.js');
@@ -68,8 +67,7 @@ router.get('/:projectId/project', async function (req, res, next) {
 router.post('/login', async (req, res) => {
   const user = await User.getUserByEmailPassword(req.body.email, req.body.password);
   if (!user) {
-    res.status(401).send({ error: 'Idenfifiants invalides.'});
-
+    res.status(401).send({ error: 'Idenfifiants invalides.' });
   } else {
     req.session.userId = user.id;
     req.session.userType = user.type;
@@ -90,7 +88,6 @@ router.post('/logout', (req, res) => {
 router.get('/connected', (req, res) => {
   if (req.session.userId) {
     res.status(200).send({ connected: true, userType: req.session.userType });
-
   } else {
     res.status(401).send({ connected: false });
   }

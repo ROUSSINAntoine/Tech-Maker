@@ -207,7 +207,7 @@ export default {
     this.students = await getStudentsPerSemesterNotOnProject(this.currentData.semesterId, this.oldData.id);
     this.technologies = await getTechnologiesPerSemester(this.currentData.semesterId);
     this.semesters = (this.userType === 'teacher')
-      ? await getSemestersPerTeacher(this.$route.params.id)
+      ? await getSemestersPerTeacher()
       : await getAllSemestersName();
   },
   methods: {
@@ -217,7 +217,7 @@ export default {
       this.currentData.technologies = this.currentData.technologies.filter(t => this.technologies.find(t2 => t2.id === t) !== undefined);
       this.currentData.membersId = [];
       this.semesters = (this.userType === 'teacher')
-        ? await getSemestersPerTeacher(this.$route.params.id)
+        ? await getSemestersPerTeacher()
         : await getAllSemestersName();
       this.currentData.projectManager = null;
     },

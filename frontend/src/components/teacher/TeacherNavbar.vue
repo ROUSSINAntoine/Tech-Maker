@@ -2,7 +2,7 @@
   <div id='TeacherNavbar'>
     <nav>
       <ul>
-        <!--li><router-link :to='"/teacher/" + $route.params.id +  "/students"'><button>Mes étudiants</button></router-link></li-->
+        <!--li><router-link :to='"/teacher/students"'><button>Mes étudiants</button></router-link></li-->
         <li><router-link :to='"/teacher/projects"'><button>Projets</button></router-link></li>
         <li><router-link :to='"/teacher/technologies"'><button>Technologies</button></router-link></li>
       </ul>

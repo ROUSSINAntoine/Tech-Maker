@@ -26,7 +26,7 @@ export default {
     }
   },
   async created() {
-    const data = await getStudentData(this.$route.params.id);
+    const data = await getStudentData();
     this.name = data.name;
     this.projectId = data.projectId;
   },

@@ -4,14 +4,13 @@ const SERVER_URL = 'http://localhost:3000';
 
 /**
  * Get list of technologies per teacher's semesters.
- * @param {Number} teacherId Teacher's Id
  * @returns {Promise<{
  *  semester: Array.<{ id: Number, name: String, ckeckedIds: Array.<Number> }>,
  *  technologies: Array.<{ id: Number, name: String }
  * }>}
  */
-export function getTechnologiesPerTeacher (teacherId) {
-  return fetch(`${SERVER_URL}/teacher/${teacherId}/techno`, {
+export function getTechnologiesPerTeacher () {
+  return fetch(`${SERVER_URL}/teacher/techno`, {
     credentials: 'include'
   })
     .then(resp => resp.json())
@@ -79,15 +78,14 @@ export function deleteTechnology (id) {
 
 /**
  * Get all projects for the teacher.
- * @param {Number} id Teacher's id
  * @returns {Promise<Array.<{
  *  id: Number,
  *  name: String,
  *  projects: Array.<{ id: Number, name: String, logo: String }
  * }>>}
  */
-export function getProjectsPerTeacher (id) {
-  return fetch(`${SERVER_URL}/teacher/${id}/projects`, {
+export function getProjectsPerTeacher () {
+  return fetch(`${SERVER_URL}/teacher/projects`, {
     credentials: 'include'
   })
     .then(resp => resp.json())
@@ -196,11 +194,10 @@ export function getProjectData (projectId) {
 
 /**
  * Get student data.
- * @param {Number} studentId Id of student
- * @returns {Promise<{ id: Number, name: String, projectId: (Number | null) }>}
+ * @returns {Promise<{ name: String, projectId: (Number | null) }>}
  */
-export function getStudentData (studentId) {
-  return fetch(`${SERVER_URL}/student/${studentId}`, {
+export function getStudentData () {
+  return fetch(`${SERVER_URL}/student`, {
     credentials: 'include'
   })
     .then(resp => resp.json())
@@ -236,11 +233,10 @@ export function setModifiedprojectData (modifiedData) {
 
 /**
  * Get all semesters for the teacher.
- * @param {Number} teacherId Id of teacher
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
-export function getSemestersPerTeacher (teacherId) {
-  return fetch(`${SERVER_URL}/teacher/${teacherId}/semesters`, {
+export function getSemestersPerTeacher () {
+  return fetch(`${SERVER_URL}/teacher/semesters`, {
     credentials: 'include'
   })
     .then(resp => resp.json())

@@ -98,7 +98,7 @@ export default {
     /** @type {String} */
     const userType = this.$route.path.split('/')[1];
     this.semesters = userType === 'teacher'
-      ? await getSemestersPerTeacher(this.$route.params.id)
+      ? await getSemestersPerTeacher()
       : await getAllSemestersName();
   },
   methods: {

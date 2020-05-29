@@ -123,7 +123,7 @@ export default {
      */
     const data = this.isAdmin
       ? await getAllTechnologies()
-      : await getTechnologiesPerTeacher(this.$route.params.id);
+      : await getTechnologiesPerTeacher();
 
     this.semesters = data.semesters.map(semester => {
       return { ...semester, modifyIds: [...semester.checkedIds] };
