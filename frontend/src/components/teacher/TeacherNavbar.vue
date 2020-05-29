@@ -2,18 +2,26 @@
   <div id='TeacherNavbar'>
     <nav>
       <ul>
-        <!--li><router-link :to='"/teacher/" + $route.params.id +  "/students"'><button>Mes étudiants</button></router-link></li-->
-        <li><router-link :to='"/teacher/" + $route.params.id +  "/projects"'><button>Projets</button></router-link></li>
-        <li><router-link :to='"/teacher/" + $route.params.id +  "/technologies"'><button>Technologies</button></router-link></li>
+        <!--li><router-link :to='"/teacher/students"'><button>Mes étudiants</button></router-link></li-->
+        <li><router-link :to='"/teacher/projects"'><button>Projets</button></router-link></li>
+        <li><router-link :to='"/teacher/technologies"'><button>Technologies</button></router-link></li>
       </ul>
-      <router-link to='/login'><button>Déconnexion</button></router-link>
+      <button v-on:click='disconnect'>Déconnexion</button>
     </nav>
   </div>
 </template>
 
 <script>
+import { logout } from '../../services/services.js';
+
 export default {
-  name: 'TeacherNavbar'
+  name: 'TeacherNavbar',
+  methods: {
+    async disconnect () {
+      await logout();
+      this.$router.push('/login');
+    }
+  }
 }
 </script>
 

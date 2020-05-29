@@ -6,8 +6,8 @@ var Semester = require('../models/semester.model.js');
 var Student = require('../models/student.model.js');
 var Project = require('../models/project.model.js');
 
-router.get('/:teacherId/techno', async function (req, res, next) {
-  const semesters = await Semester.getSemesterByTeacher(req.params.teacherId);
+router.get('/techno', async function (req, res, next) {
+  const semesters = await Semester.getSemesterByTeacher(req.session.userId);
 
   for (let i = 0; i < semesters.length; i++) {
     const linkedTechno = await TechnologySemester.getAssignedTechno(semesters[i].id);
@@ -45,14 +45,14 @@ router.post('/createProject', async function (req, res, next) {
   }
 });
 
-router.get('/:teacherId/semesters', async function (req, res, next) {
-  const semesters = await Semester.getSemesterByTeacher(req.params.teacherId);
+router.get('/semesters', async function (req, res, next) {
+  const semesters = await Semester.getSemesterByTeacher(req.session.userId);
   res.send(semesters);
 });
 
-router.get('/:teacherId/projects', async function (req, res, next) {
+router.get('/projects', async function (req, res, next) {
   const response = [];
-  const semesters = await Semester.getSemesterByTeacher(req.params.teacherId);
+  const semesters = await Semester.getSemesterByTeacher(req.session.userId);
 
   for (let i = 0; i < semesters.length; i++) {
     // TODO: changer les noms des ids

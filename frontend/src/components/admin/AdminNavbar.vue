@@ -12,7 +12,7 @@
     <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense>
 
-        <router-link :to='"/admin/" + $route.params.id + "/students"' class='routerlink'>
+        <router-link :to='"/admin/students"' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-account</v-icon>
@@ -34,7 +34,7 @@
           </v-list-item>
         <!-- </router-link> -->
 
-        <router-link :to='"/admin/" + $route.params.id + "/technologies"' class='routerlink'>
+        <router-link :to='"/admin/technologies"' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-xml</v-icon>
@@ -125,8 +125,16 @@
 </style>
 
 <script>
+import { logout } from '../../services/services.js';
+
 export default {
   name: 'AdminNavbar',
+  methods: {
+    async disconnect () {
+      await logout();
+      this.$router.push('/login');
+    }
+  },
   data: () => ({
     switch1: true,
       drawer: null
