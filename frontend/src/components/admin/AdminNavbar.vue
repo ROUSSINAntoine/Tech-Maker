@@ -1,7 +1,7 @@
 <template>
   <div id='AdminNavbar'>
 
-    <v-app-bar
+    <v-app-bar color='#75b658'
       app
       clipped-left
     >
@@ -105,6 +105,14 @@
             </v-list-item-content>
           </v-list-item>
 
+
+            <v-list-item-content>
+              <v-container fluid>
+                <v-switch v-model="switch1" :label="`Sombre`"></v-switch>
+              </v-container>
+            </v-list-item-content>
+
+
       </v-list>
     </v-navigation-drawer>
 
@@ -121,7 +129,8 @@
 export default {
   name: 'AdminNavbar',
   data: () => ({
+    switch1: true,
       drawer: null
-    })
+    }),
 }
 </script>

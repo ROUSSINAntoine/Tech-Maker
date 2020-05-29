@@ -1,34 +1,17 @@
 <template>
-  <div id='TechnologiesTable'>
+  <div id='TechnologiesTable' class='text-center' >
     <h1 class='text-center'>Technologies par semestres</h1>
 
-        <v-simple-table fixed-header height="300px">
-          <template v-slot:default>
-            <thead>
-              <tr>
-                <th class="text-left">Name</th>
-                <th class="text-left">Calories</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>test</td>
-                <td>test</td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
-
-    <table>
+    <table style="border:2px solid black; margin-left: auto; margin-right: auto;">
       <thead>
         <tr>
-          <th>Technologies</th>
-          <th v-for='semester in semesters' v-bind:key='semester.id'>{{ semester.name }}</th>
+          <th >Technologies</th>
+          <th v-for='semester in semesters' v-bind:key='semester.id' >{{ semester.name }}</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for='technology in technologies' v-bind:key='technology.id'>
-          <td class='technologyItem'>
+          <td class='technologyItem, text-center' >
             <span v-if='selectedId !== technology.id'>{{ technology.name }}</span>
             <button
               v-on:click='prepareUpdateTechnology(technology.id, technology.name)'
@@ -50,6 +33,7 @@
               required
             />
             
+
             <button
               v-if='selectedId === technology.id && isAdmin'
               v-on:click='updateTechnology()'
@@ -78,8 +62,8 @@
         </tr>
       </tbody>
     </table>
-    <button v-on:click='sendIds()'>Sauvegarder</button>
-
+    <v-btn v-on:click='sendIds()' color='#75b658' style='margin: 10px'>Sauvegarder</v-btn>
+    <v-divider style='margin: 20px'></v-divider>
     <CreateTechnology v-if="isAdmin" v-on:create-technology="addTechnology" />
   </div>
 </template>
@@ -126,7 +110,7 @@ export default {
     const data = this.isAdmin
       ? await getAllTechnologies()
       : await getTechnologiesPerTeacher(this.$route.params.id);
-
+    
     this.semesters = data.semesters.map(semester => {
       return { ...semester, modifyIds: [...semester.checkedIds] };
     });
@@ -140,7 +124,7 @@ export default {
      */
     sendIds () {
       this
-      /** @type {Array.<{ semesterId: Number, technologyId: Number, add: Boolean }>} */
+      /** @type {Array.<{   Id: Number, technologyId: Number, add: Boolean }>} */
       const updateList = [];
       /** @type {Array.<Number>} */
       let copyModifyIds;
@@ -253,7 +237,7 @@ table {
 th, td {
   border: 1px solid black;
   margin: 0px;
-  padding: 0px;
+  padding: 10px;
 }
 
 .cell {
@@ -286,6 +270,6 @@ th, td {
 }
 
 .technologySelector:checked + .checker {
-  background-color: #00aa00 !important;
+  background-color: #75b658 !important;
 }
 </style>

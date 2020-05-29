@@ -1,15 +1,22 @@
 <template>
   <div id='CreateTechnology'>
-    <input
-      v-model='technologyName'
-      type='text'
-      title='Nom de la technologie'
-      placeholder='Nom de la technologie'
-      required
-    />
-    <!--input v-model='technologyId' type='hidden' /-->
-    <button v-on:click='sendTechnology()'>Ajouter</button>
-    <label v-if='errorMessage'>{{ errorMessage }}</label>
+
+  <span>
+    <v-container>
+      <v-row>
+        <v-col cols="12" sm="5" md='4'>
+          <v-text-field
+            v-model="technologyName"
+            required
+            label="Nom de la technologie"
+            single-line
+          ></v-text-field>
+              <v-btn v-on:click='sendTechnology()' color='#75b658' style='margin: 10px'>Sauvegarder</v-btn><br>
+              <label v-if='errorMessage'>{{ errorMessage }}</label>
+        </v-col>
+      </v-row>
+    </v-container>
+  </span>
   </div>
 </template>
 
@@ -48,7 +55,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-input {
+/* input {
   padding: 10px;
   border-left: 1px solid black;
   border-top: 1px solid black;
@@ -65,5 +72,5 @@ button {
   border-left: 0px;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
-}
+} */
 </style>

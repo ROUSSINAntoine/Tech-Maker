@@ -3,6 +3,7 @@
 
     <v-content>
       <router-view style='margin: 20px'></router-view>
+      
     </v-content>
 
     <v-footer app>
@@ -15,6 +16,11 @@
   export default {
     props: {
       source: String,
+    },
+    data () {
+      return {
+        color: 'red'
+      }
     },
     created () {
       this.$vuetify.theme.dark = true
