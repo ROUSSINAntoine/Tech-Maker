@@ -81,8 +81,26 @@ class Student {
     });
   }
 
+  static async quitProject (studentId) {
+    await PostgressStore.client.query({
+      text: `UPDATE ${Student.name}
+              SET project_id = null
+              WHERE user_id = $1`,
+      values: [studentId]
+    });
+  }
+
   static async setProjectManager (studentId) {
-    console.log('setProjectManager');
+    const result = await PostgressStore.client.query({
+      text: `UPDATE ${Student.name}
+      SET project_manager = true
+      WHERE user_id = $1`,
+      values: [studentId]
+    });
+    return result.rows;
+  }
+
+  static async deassignProjectManager (studentId) {
     const result = await PostgressStore.client.query({
       text: `UPDATE ${Student.name}
       SET project_manager = true

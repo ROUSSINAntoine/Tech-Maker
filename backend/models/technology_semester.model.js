@@ -46,6 +46,15 @@ class TechnologySemester {
     });
   }
 
+  static async deasign (semesterId, technoId) {
+    await PostgressStore.client.query({
+      text: `DELETE FROM ${TechnologySemester.tableName}
+              WHERE technology_id = $1 
+              AND semester_id = $2`,
+      values: [technoId, semesterId]
+    });
+  }
+
   static async add (semesterId, technoId) {
     await PostgressStore.client.query({
       text: `INSERT INTO technology_semester(

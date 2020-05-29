@@ -126,4 +126,8 @@ router.delete('/techno/:technoId/del', async function (req, res, next) {
   Technology.delete(req.params.technoId);
 });
 
+router.delete('/reset', async function (req, res, next) {
+
+});
+
 module.exports = router;

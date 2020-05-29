@@ -199,7 +199,7 @@ export function getStudentData (studentId) {
  *  technologies?: Array.<{ id: Number, add: Boolean }>,
  *  members?: Array.<{ id: Number, add: Boolean }>,
  *  semesterId?: Number,
- * projectManager?: Number
+ *  projectManager?: Number
  * }} modifiedData
  */
 export function setModifiedprojectData (modifiedData) {

@@ -213,6 +213,7 @@ export default {
   methods: {
     async changeSemester () {
       this.technologies = await getTechnologiesPerSemester(this.currentData.semesterId);
+      this.students = await getStudentsPerSemesterNotOnProject(this.currentData.semesterId, this.oldData.id);
       this.currentData.technologies = this.currentData.technologies.filter(t => this.technologies.find(t2 => t2.id === t) !== undefined);
       this.currentData.membersId = [];
       this.semesters = (this.userType === 'teacher')
@@ -302,7 +303,7 @@ export default {
         this.oldData.semesterId = this.currentData.semesterId;
       }
       if (this.oldData.projectManager !== this.currentData.projectManager) {
-        modifiedData.projectManager = this.currentData.projectManager;
+        modifiedData.projectManager = { old: this.oldData.projectManager, new: this.currentData.projectManager };
         this.oldData.projectManager = this.currentData.projectManager;
       }
       let update = this.getUpdatedElement(this.oldData.technologies, this.currentData.technologies);

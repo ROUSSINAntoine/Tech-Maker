@@ -16,7 +16,7 @@ router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
   for (let i = 0; i < changes.length; i++) {
     changes[i].add
       ? await TechnologySemester.add(changes[i].semesterId, changes[i].technologyId)
-      : await TechnologySemester.delete(changes[i].semesterId, changes[i].technologyId);
+      : await TechnologySemester.deasign(changes[i].semesterId, changes[i].technologyId);
   }
 
   res.end('it worked');
@@ -30,7 +30,6 @@ router.get('/:semesterId/Students', async function (req, res, next) {
 
 router.get('/technologiesPerSemester/:semesterId', async function (req, res, next) {
   const technoSem = await TechnologySemester.getAssignedTechno(req.params.semesterId);
-  console.log(technoSem);
   res.send(technoSem);
 });
 
@@ -49,13 +48,12 @@ router.get('/:projectId/project', async function (req, res, next) {
   for (let i = 0; i < students.length; i++) {
     if (students[i].project_manager === true) projectManager = students[i].id;
   }
-
   const response = {
     id: req.params.projectId,
     name: project[0].name,
     slogan: project[0].slogan,
     describe: project[0].describe,
-    technologies: projectTechno.map(i => i.id),
+    technologies: projectTechno.map(i => i.technology_id),
     membersId: students.map(i => i.id),
     needs: project[0].needs,
     semesterId: students[0].semester_id,
@@ -66,25 +64,27 @@ router.get('/:projectId/project', async function (req, res, next) {
 });
 
 router.put('/modifiedProject', async function (req, res, next) {
-  console.log('toto');
   const project = {};
-
+  const student = [];
+  let logo;
+  let projectManager = {};
+  let techno = [];
   if (req.body.projectId) project.id = req.body.projectId;
   if (req.body.name) project.name = req.body.name;
   if (req.body.slogan) project.slogan = req.body.slogan;
   if (req.body.describe) project.describe = req.body.describe;
-  // if (req.body.logo) const logo = req.body.logo;
-  // if (req.body.technologies) const techno = req.body.technologies;
-  // if (req.body.members) const student = req.body.members;
+  if (req.body.logo) logo = req.body.logo;
+  if (req.body.technologies) techno = req.body.technologies;
+  if (req.body.membersId) student.push(...req.body.membersId);
+  if (req.body.projectManager) projectManager = req.body.projectManager;
 
-  if (Object.keys(project).length !== 0) {
+  if (Object.keys(project).length !== 1) {
     const validCollumn = ['id', 'name', 'describe', 'slogan', 'image'];
     const collumn = Object.keys(project);
     const inputValues = Object.values(project);
     let updateValues = '';
     for (let i = 1; i < collumn.length; i++) {
       if (validCollumn.indexOf(collumn[i]) === -1) {
-        console.log(collumn[i]);
         res.status('400').send('Bad Request');
         throw new Error('Invalide input');
       }
@@ -93,6 +93,30 @@ router.put('/modifiedProject', async function (req, res, next) {
     }
     Project.update(inputValues, updateValues);
   }
+
+  if (techno.length !== 0) {
+    console.log(techno);
+    for (let i = 0; i < techno.length; i++) {
+      techno[i].add
+        ? await ProjectTechno.add(project.id, techno[i].id)
+        : await ProjectTechno.deasign(project.id, techno[i].id);
+    }
+  }
+
+  if (student.length !== 0) {
+    for (let i = 0; i < student.length; i++) {
+      student[i].add
+        ? await Student.addProject(project.id, student[i].id)
+        : await Student.quitProject(student[i].id);
+    }
+  }
+
+  if (projectManager !== {}) {
+    Student.deassignProjectManager(projectManager.old);
+    Student.setProjectManager(projectManager.new);
+  }
+
+  console.log(logo);
 });
 
 module.exports = router;
