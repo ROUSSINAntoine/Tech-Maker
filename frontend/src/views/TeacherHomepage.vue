@@ -1,6 +1,6 @@
 <template>
   <div id='Teacher'>
-    <TeacherNavbar />
+    <TeacherNavbar/>
 
     <router-view></router-view>
   </div>

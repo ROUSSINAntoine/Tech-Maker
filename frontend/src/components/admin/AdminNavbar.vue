@@ -104,18 +104,8 @@
               <v-btn id='test'>Réinitialiser</v-btn>
             </v-list-item-content>
           </v-list-item>
-
-
-            <v-list-item-content>
-              <v-container fluid>
-                <v-switch v-model="switch1" :label="`Sombre`"></v-switch>
-              </v-container>
-            </v-list-item-content>
-
-
       </v-list>
     </v-navigation-drawer>
-
   </div>
 </template>
 

@@ -271,5 +271,6 @@ th, td {
 
 .technologySelector:checked + .checker {
   background-color: #75b658 !important;
+  border-radius: 5px;
 }
 </style>

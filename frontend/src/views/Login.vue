@@ -17,6 +17,7 @@ export default {
   name: 'Login',
   data() {
     return {
+      drawer: null,
       email: null,
       password: null,
       error: null

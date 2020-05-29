@@ -1,7 +1,25 @@
 <template>
   <div id='CreateProject'>
-    <h1>Créer un nouveau projet</h1>
+    <h1 class='text-center'>Créer un nouveau projet</h1>
 
+    <v-row>
+      <v-col cols="12" sm="5" md='4'>
+        <v-text-field
+          v-model="projectName"
+          required
+          label="Nom du projet"
+          single-line
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-radio-group v-model="radios" :mandatory="false">
+      <v-radio v-for='semester in semesters' v-bind:key='semester.id'
+      :label='semester.name'
+      v-model='semesterId'
+      name='semester'></v-radio>
+    </v-radio-group>
+    
     <input
       v-model='projectName'
       type='text'
