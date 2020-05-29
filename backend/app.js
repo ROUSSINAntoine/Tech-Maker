@@ -1,7 +1,6 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const PostgressStore = require('./utils/PostgressStore.js');
 const indexRouter = require('./routes/index');
@@ -11,7 +10,6 @@ const adminRouter = require('./routes/admin.js');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 PostgressStore.init();
-
 
 const app = express();
 

@@ -1,17 +1,28 @@
 <template>
-  <div id='TechnologiesTable'>
-    <h1>Technologies utilisables par semestres</h1>
-    <table>
+  <div id='TechnologiesTable' class='text-center' >
+    <h1 class='text-center'>Technologies par semestres</h1>
+
+    <table style="border:2px solid black; margin-left: auto; margin-right: auto;">
       <thead>
         <tr>
-          <th>Technologies</th>
-          <th v-for='semester in semesters' v-bind:key='semester.id'>{{ semester.name }}</th>
-          <th colspan="2">Action</th>
+          <th >Technologies</th>
+          <th v-for='semester in semesters' v-bind:key='semester.id' >{{ semester.name }}</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for='technology in technologies' v-bind:key='technology.id'>
-          <td class='technologyItem'>
+          <td class='technologyItem, text-center' >
+            <span v-if='selectedId !== technology.id'>{{ technology.name }}</span>
+            <button
+              v-on:click='prepareUpdateTechnology(technology.id, technology.name)'
+              v-if='selectedId !== technology.id && isAdmin'
+              class='technologyAction'
+            >Modifier</button>
+            <button
+              v-on:click='deleteTechnology(technology.id)'
+              v-if='selectedId !== technology.id && isAdmin'
+              class='technologyAction'
+            >Supprimer</button>
 
             <input
               type='text'
@@ -21,7 +32,19 @@
               placeholder='Nom de la technologie'
               required
             />
-            <span v-else>{{ technology.name }}</span>
+            
+
+            <button
+              v-if='selectedId === technology.id && isAdmin'
+              v-on:click='updateTechnology()'
+            >Sauvegarder</button>
+            
+            <button
+              v-if='selectedId === technology.id && isAdmin'
+              v-on:click='cancelUpdateTechnology()'
+            >Annuler</button>
+            
+            <span v-if='errorUpdateMessage !== null && selectedId === technology.id'>{{ errorUpdateMessage }}</span>
             
           </td>
           <td v-for='semester in semesters' v-bind:key='semester.id'>
@@ -72,8 +95,8 @@
       <button v-on:click="cancelUpdateOrDeleteTechnology()">Non</button>
     </div>
 
-    <button v-on:click='sendIds()'>Sauvegarder</button>
-
+    <v-btn v-on:click='sendIds()' color='#75b658' style='margin: 10px'>Sauvegarder</v-btn>
+    <v-divider style='margin: 20px'></v-divider>
     <CreateTechnology v-if="isAdmin" v-on:create-technology="addTechnology" />
   </div>
 </template>
@@ -138,7 +161,7 @@ export default {
      */
     sendIds () {
       this
-      /** @type {Array.<{ semesterId: Number, technologyId: Number, add: Boolean }>} */
+      /** @type {Array.<{   Id: Number, technologyId: Number, add: Boolean }>} */
       const updateList = [];
       /** @type {Array.<Number>} */
       let copyModifyIds;
@@ -258,7 +281,7 @@ table {
 th, td {
   border: 1px solid black;
   margin: 0px;
-  padding: 0px;
+  padding: 10px;
 }
 
 .cell {
@@ -291,6 +314,6 @@ th, td {
 }
 
 .technologySelector:checked + .checker {
-  background-color: #00aa00 !important;
+  background-color: #75b658 !important;
 }
 </style>

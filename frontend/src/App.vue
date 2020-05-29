@@ -1,15 +1,29 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+  <v-app id="app">
+
+    <v-content>
+      <router-view style='margin: 20px'></router-view>
+      
+    </v-content>
+
+    <v-footer app>
+      <span>&copy; 2020</span>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
-
-export default {
-  name: 'App',
-}
+  export default {
+    props: {
+      source: String,
+    },
+    data () {
+      return {
+        color: 'red'
+      }
+    },
+    created () {
+      this.$vuetify.theme.dark = true
+    },
+  }
 </script>
-
-<style>
-</style>

@@ -21,7 +21,8 @@ class Users {
         (password, email, type)
         VALUES 
         ('toto', 'teacher@teacher.com', 'teacher'),
-        ('titi', 'teacher2@teacher.com', 'teacher')`
+        ('titi', 'teacher2@teacher.com', 'teacher'),
+        ('root', 'root@root.com', 'admin')`
     );
   }
 
