@@ -12,7 +12,7 @@
     <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense>
 
-        <router-link :to='"/admin/" + $route.params.id + "/students"' class='routerlink'>
+        <router-link :to='"/admin/students"' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-account</v-icon>
@@ -34,7 +34,7 @@
           </v-list-item>
         <!-- </router-link> -->
 
-        <router-link :to='"/admin/" + $route.params.id + "/technologies"' class='routerlink'>
+        <router-link :to='"/admin/technologies"' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-xml</v-icon>
@@ -104,6 +104,13 @@
               <v-btn id='test'>Réinitialiser</v-btn>
             </v-list-item-content>
           </v-list-item>
+
+          <v-container fluid>
+            <v-btn style='color:black; background-color: white' v-if="$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Clair</v-btn>
+            <v-btn style='color:white; background-color: black' v-if="!$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Sombre</v-btn>
+          </v-container>
+
+
       </v-list>
     </v-navigation-drawer>
   </div>
@@ -116,8 +123,16 @@
 </style>
 
 <script>
+import { logout } from '../../services/services.js';
+
 export default {
   name: 'AdminNavbar',
+  methods: {
+    async disconnect () {
+      await logout();
+      this.$router.push('/login');
+    }
+  },
   data: () => ({
     switch1: true,
       drawer: null

@@ -25,5 +25,6 @@ const config = require('../server.config.js');
   await Users.init();
   await Teacher.init();
   await Semester.init();
+  await PostgressStore.close();
   console.log('Is ok');
 })();

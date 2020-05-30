@@ -48,12 +48,20 @@
 
 
 <script>
+import { logout } from '../../services/services.js';
+
 export default {
   name: 'TeacherNavbar',
   data: () => ({
     switch1: true,
       drawer: null
     }),
+  methods: {
+    async disconnect () {
+      await logout();
+      this.$router.push('/login');
+    }
+  }
 }
 </script>
 

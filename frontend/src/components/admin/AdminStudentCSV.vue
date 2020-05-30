@@ -18,8 +18,8 @@ import { AddStudentCSV } from '../../services/services';
 export default {
   name: 'AdminStudentCSV',
   data () {
-    return {
-      color: 'red',
+    return {  
+    Message: null,
       currdentData: {
         csv: null
       }
@@ -38,10 +38,17 @@ export default {
       };
       reader.readAsText(file);
     },
-    submitForm() {
+    async submitForm() {
       const data = { csv: this.currdentData.csv };
-      AddStudentCSV(data);
-      console.log(data);
+      const succes = await AddStudentCSV(data);
+      
+      if (succes.response !== null || succes.response !== undefined) {
+        console.log('added');
+        this.Message = succes.response;
+        this.csv = null;
+      } else {
+        this.Message = 'null'
+      }
     }
   }
 }

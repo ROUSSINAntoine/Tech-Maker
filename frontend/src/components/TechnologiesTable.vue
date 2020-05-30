@@ -7,45 +7,22 @@
         <tr>
           <th >Technologies</th>
           <th v-for='semester in semesters' v-bind:key='semester.id' >{{ semester.name }}</th>
+          <th colspan="2" v-if='isAdmin'>Action</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for='technology in technologies' v-bind:key='technology.id'>
           <td class='technologyItem, text-center' >
             <span v-if='selectedId !== technology.id'>{{ technology.name }}</span>
-            <button
-              v-on:click='prepareUpdateTechnology(technology.id, technology.name)'
-              v-if='selectedId !== technology.id && isAdmin'
-              class='technologyAction'
-            >Modifier</button>
-            <button
-              v-on:click='deleteTechnology(technology.id)'
-              v-if='selectedId !== technology.id && isAdmin'
-              class='technologyAction'
-            >Supprimer</button>
 
             <input
               type='text'
               v-model='selectedName'
-              v-if='selectedId === technology.id && isAdmin'
+              v-if='selectedId === technology.id && isAdmin && updateOrDelete'
               title='Nom de la technologie'
               placeholder='Nom de la technologie'
               required
             />
-            
-
-            <button
-              v-if='selectedId === technology.id && isAdmin'
-              v-on:click='updateTechnology()'
-            >Sauvegarder</button>
-            
-            <button
-              v-if='selectedId === technology.id && isAdmin'
-              v-on:click='cancelUpdateTechnology()'
-            >Annuler</button>
-            
-            <span v-if='errorUpdateMessage !== null && selectedId === technology.id'>{{ errorUpdateMessage }}</span>
-            
           </td>
           <td v-for='semester in semesters' v-bind:key='semester.id'>
             <div class='cell'>
@@ -59,9 +36,42 @@
               <label :for='semester.id + "-" + technology.id' class="checker">a</label>
             </div>
           </td>
+
+          <td v-if='isAdmin'>
+            <button
+              v-on:click="prepareUpdateTechnology(technology.id, technology.name)"
+              v-if='selectedId !== technology.id'
+            >Modifier</button>
+
+            <button
+              v-if='selectedId === technology.id && updateOrDelete'
+              v-on:click='updateTechnology()'
+            >Sauvegarder</button>
+          </td>
+          <td v-if='isAdmin'>
+            <button
+              v-on:click="prepareDeleteTechnology(technology.id, technology.name)"
+              v-if='selectedId !== technology.id'
+            >Supprimer</button>
+
+            <button
+              v-if='selectedId === technology.id'
+              v-on:click='cancelUpdateOrDeleteTechnology()'
+            >Annuler</button>
+          </td>
+
         </tr>
       </tbody>
     </table>
+    
+    <span v-if='errorUpdateMessage !== null && selectedId !== null'>{{ errorUpdateMessage }}</span>
+
+    <div  v-if="!updateOrDelete && selectedId !== null">
+      <span>Êtes-vous sûr de vouloir supprimer la technologie: {{ selectedName }}</span>
+      <button v-on:click="deleteTechnology()">Oui</button>
+      <button v-on:click="cancelUpdateOrDeleteTechnology()">Non</button>
+    </div>
+
     <v-btn v-on:click='sendIds()' color='#75b658' style='margin: 10px'>Sauvegarder</v-btn>
     <v-divider style='margin: 20px'></v-divider>
     <CreateTechnology v-if="isAdmin" v-on:create-technology="addTechnology" />
@@ -94,6 +104,10 @@ export default {
       selectedId: null,
       /** @type {String} */
       selectedName: null,
+      /**
+       * If `true` is update mode, if `false` is delete mode.
+       */
+      updateOrDelete: true,
       /** @type {String} */
       errorUpdateMessage: null,
       isAdmin: false
@@ -109,8 +123,8 @@ export default {
      */
     const data = this.isAdmin
       ? await getAllTechnologies()
-      : await getTechnologiesPerTeacher(this.$route.params.id);
-    
+      : await getTechnologiesPerTeacher();
+
     this.semesters = data.semesters.map(semester => {
       return { ...semester, modifyIds: [...semester.checkedIds] };
     });
@@ -168,20 +182,27 @@ export default {
     prepareUpdateTechnology (id, name) {
       this.selectedId = id;
       this.selectedName = name;
+      this.updateOrDelete = true;
+    },
+    prepareDeleteTechnology (id, name) {
+      this.selectedId = id;
+      this.selectedName = name;
+      this.updateOrDelete = false;
     },
     /**
      * Send technology's id to delete.
      * Emit data format is id: String
      */
-    deleteTechnology (id) {
-      deleteTechnology(id);
-      this.technologies = this.technologies.filter(techno => techno.id !== id);
+    deleteTechnology () {
+      deleteTechnology(this.selectedId);
+      this.technologies = this.technologies.filter(techno => techno.id !== this.selectedId);
       this.semesters.forEach(semester => {
-        semester.checkedIds = semester.checkedIds.filter(technoId => technoId !== id);
-        semester.modifyIds = semester.modifyIds.filter(technoId => technoId !== id);
+        semester.checkedIds = semester.checkedIds.filter(technoId => technoId !== this.selectedId);
+        semester.modifyIds = semester.modifyIds.filter(technoId => technoId !== this.selectedId);
       });
+      this.cancelUpdateOrDeleteTechnology();
     },
-    cancelUpdateTechnology () {
+    cancelUpdateOrDeleteTechnology () {
       this.selectedId = null;
       this.selectedName = null;
       this.errorUpdateMessage = null;
@@ -197,16 +218,16 @@ export default {
       } else if (this.technologies.find(techno => techno.id === this.selectedId).name !== name){
         updateTechnologyName(this.selectedId, name);
         this.technologies.find(techno => techno.id === this.selectedId).name = name;
-        this.cancelUpdateTechnology();
+        this.cancelUpdateOrDeleteTechnology();
 
       } else {
         this.technologies.find(techno => techno.id === this.selectedId).name = this.selectedName;
         updateTechnologyName(this.selectedId, this.selectedName);
-        this.cancelUpdateTechnology();
+        this.cancelUpdateOrDeleteTechnology();
       }
     },
     /**
-     * Add new technolgy from the technology list.
+     * Add new technology from the technology list.
      * @param {{ id: Number, name: String }} techno New technology data
      */
     addTechnology (techno) {

@@ -59,7 +59,7 @@ export default {
     };
   },
   async created() {
-    this.semesters = await getProjectsPerTeacher(this.$route.params.id);
+    this.semesters = await getProjectsPerTeacher();
   },
   methods: {
     /**
