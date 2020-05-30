@@ -1,13 +1,27 @@
 <template>
   <div id='CreateProject'>
-    <h1>Créer un nouveau projet</h1>
+    <h1 class='text-center'>Créer un nouveau projet</h1>
 
-    <input
-      v-model='projectName'
-      type='text'
-      placeholder='Nom du projet'
-      required
-    />
+    <v-row>
+      <v-col cols="12" sm="5" md='4'>
+        <v-text-field
+          v-model="projectName"
+          required
+          label="Nom du projet"
+          single-line
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
+    <!-- <v-radio-group >
+      <v-radio v-for='semester in semesters' v-bind:key='semester.id' 
+      v-model='semesterId'
+      v-on:change='changeSemester()'
+      name='semester'
+      :value='semester.id'
+      :label='semester.name'
+      ></v-radio>
+    </v-radio-group> -->
 
     <h2>Semestres</h2>
     <ul v-for='semester in semesters' v-bind:key='semester.id' >

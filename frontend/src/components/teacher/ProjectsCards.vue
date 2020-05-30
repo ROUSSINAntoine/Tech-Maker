@@ -1,24 +1,39 @@
 <template>
   <div id="ProjectsCards">
-    <ul v-for="semester in semesters" v-bind:key="semester.name">
-      <li>
-        <h2>Projet des {{ semester.name }}</h2>
-        <ul v-for="project in semester.projects" v-bind:key="project.id">
-          <router-link :to="'project/' + project.id" :projectId="project.id">
-            <li>
-              <img
-                :src="project.logo ? project.logo : 'https://s.ytimg.com/yts/img/favicon_144-vfliLAfaB.png' /* DEDAULT LOGO */" 
-                :alt="'Logo du projet ' + project.name"
-              />
-              <span>{{ project.name }}</span>
-            </li>
-          </router-link>
-        </ul>
-      </li>
-    </ul>
+    <h1 class='text-center'>Projets</h1>
+    
+    <v-row justify="center">
+      <v-expansion-panels popout>
+        <v-expansion-panel
+          v-for="semester in semesters" v-bind:key="semester.name">
+          <v-expansion-panel-header>{{semester.name}}</v-expansion-panel-header>
+            <v-expansion-panel-content
+              v-for="project in semester.projects" v-bind:key="project.id"
+            >
+            <v-row>
+              <v-col cols="12" sm="5">
+                    <h2>{{project.name}}</h2><br>
+                    <img
+                    style='width: 50px;'
+                      :src="project.logo ? project.logo : 'https://www.intechinfo.fr/wp-content/uploads/2019/09/logo-intechinfo-sans-baseline-retina.png' /* DEDAULT LOGO */" 
+                      :alt="'Logo du projet ' + project.name"
+                    /><br>
+                    <v-btn style='margin:5px'><router-link :to="'project/' + project.id" :projectId="project.id" class='routerlink' style='color:white;'>Modifier</router-link></v-btn>
+              </v-col>
+              <v-col cols="12" sm="5">
+                {{ project.describe}}
+              </v-col>
+            </v-row>
+                <v-divider style='margin:5px'></v-divider>
+            </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </v-row>
+    
     <div>
       <CreateProject v-on:created-project="addProject" />
-    </div>
+    </div> 
+    
   </div>
 </template>
 
