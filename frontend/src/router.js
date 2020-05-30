@@ -58,9 +58,9 @@ const routes = [
         component: ProjectsCards
       },
       {
-        path: 'project/:projectName',
+        path: 'project/:projectId',
         component: ProjectForm,
-        props: (route) => ({ editable: true, projectName: Number(route.params.projectName) })
+        props: (route) => ({ editable: true, projectId: Number(route.params.projectId) })
       }
     ]
   },

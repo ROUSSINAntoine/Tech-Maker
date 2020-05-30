@@ -1,4 +1,4 @@
-// const PostgressStore = require('../utils/PostgressStore');
+const PostgressStore = require('../utils/PostgressStore');
 class Jury {
   static toSqlTable () {
     return [`
@@ -8,6 +8,12 @@ class Jury {
         project_type project_type_list NOT NULL,
         vip BOOL NOT NULL
     )`];
+  }
+
+  static async empty () {
+    PostgressStore.client.query(
+      `DELETE FROM ${this.tableName}`
+    );
   }
 }
 

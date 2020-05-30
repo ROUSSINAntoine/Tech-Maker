@@ -7,7 +7,12 @@ var Semester = require('../models/semester.model.js');
 var Users = require('../models/user.model.js');
 var Student = require('../models/student.model.js');
 var TechnoProject = require('../models/techno_project.model.js');
-
+var Position = require('../models/position.model.js');
+var JuryProject = require('../models/jury_project.model.js');
+var StudentJudge = require('../models/student_judge.model.js');
+var Judge = require('../models/judge.model.js');
+var Jury = require('../models/jury.model');
+var Project = require('../models/project.model.js');
 // TODO: router.use() pour vérifier si l'user à une session avec id et que c'est un admin
 /* router.use(async (req, res, next) => {
   if (req.session.userId) {
@@ -137,7 +142,16 @@ router.delete('/techno/:technoId/del', async function (req, res, next) {
 });
 
 router.delete('/reset', async function (req, res, next) {
-
+  console.log('reset');
+  await Position.empty();
+  await TechnoProject.empty();
+  await JuryProject.empty();
+  await StudentJudge.empty();
+  await Student.empty();
+  await Users.emptyStudent();
+  await Judge.empty();
+  await Jury.empty();
+  await Project.empty();
 });
 
 module.exports = router;

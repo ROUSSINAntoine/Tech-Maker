@@ -32,6 +32,12 @@ export function getAllTechnologies () {
     .then(data => data);
 }
 
+export function reset () {
+  return fetch(`${SERVER_URL}/admin/reset`, {
+    method: 'delete'
+  });
+}
+
 /**
  * Send technologies added or deleted from the semesters.
  * If add is `true`, technologie is added,

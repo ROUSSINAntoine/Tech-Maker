@@ -1,4 +1,4 @@
-// const PostgressStore = require('../utils/PostgressStore');
+const PostgressStore = require('../utils/PostgressStore');
 class JuryProject {
   static toSqlTable () {
     const Jury = require('./jury.model.js');
@@ -10,6 +10,12 @@ class JuryProject {
         passage INT NOT NULL,
         PRIMARY KEY(jury_id, project_id)
     )`;
+  }
+
+  static async empty () {
+    PostgressStore.client.query(
+      `DELETE FROM ${this.tableName}`
+    );
   }
 }
 

@@ -1,4 +1,5 @@
 /* eslint no-tabs: ["error", { allowIndentationTabs: true }] */
+const PostgressStore = require('../utils/PostgressStore');
 class Judge {
   static toSqlTable () {
     const Jury = require('./jury.model.js');
@@ -12,6 +13,12 @@ class Judge {
 			)`,
 			`ALTER TABLE ${Judge.tableName} ADD UNIQUE(jury_id)`
     ];
+  }
+
+  static async empty () {
+    PostgressStore.client.query(
+      `DELETE FROM ${this.tableName}`
+    );
   }
 }
 

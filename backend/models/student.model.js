@@ -49,6 +49,16 @@ class Student {
     return result.rows;
   }
 
+  static async getStudentData (userId) {
+    const result = await PostgressStore.client.query({
+      text: `SELECT CONCAT(lastname,' ', firstname) AS name, project_id AS projectId 
+        FROM ${Student.tableName}
+        WHERE user_id = $1`,
+      values: [userId]
+    });
+    return result.rows;
+  }
+
   static async getStudentBySemesterIdNotOnProject (semesteId, projectId) {
     const result = await PostgressStore.client.query({
       text: `SELECT CONCAT(lastname,' ', firstname) AS name, user_id AS id
@@ -125,7 +135,7 @@ class Student {
     );
   }
 
-  static async getName (stdentId) {
+  static async getName (studentId) {
     const User = require('./user.model.js');
     const result = await PostgressStore.client.query({
       text: `
@@ -134,9 +144,15 @@ class Student {
         JOIN ${User.tableName}
         ON id = user_id
         WHERE id = $1`,
-        values: [studentId]
+      values: [studentId]
     });
     return result.rows[0];
+  }
+
+  static async empty () {
+    PostgressStore.client.query(
+      `DELETE FROM ${this.tableName}`
+    );
   }
 }
 

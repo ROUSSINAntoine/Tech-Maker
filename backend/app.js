@@ -23,7 +23,10 @@ app.use(cors({
 app.use(session({
   secret: require('./server.config.js').secret,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 1
+  }
 }));
 
 app.use(logger('dev'));

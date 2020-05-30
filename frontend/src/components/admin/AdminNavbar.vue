@@ -101,7 +101,7 @@
           <v-list-item link>
             <v-list-item-action></v-list-item-action>
             <v-list-item-content>
-              <v-btn id='test'>Réinitialiser</v-btn>
+              <v-btn id='test' v-on:click="resetData()">Réinitialiser</v-btn>
             </v-list-item-content>
           </v-list-item>
 
@@ -126,7 +126,7 @@
 </style>
 
 <script>
-import { logout } from '../../services/services.js';
+import { logout, reset } from '../../services/services.js';
 
 export default {
   name: 'AdminNavbar',
@@ -134,11 +134,15 @@ export default {
     async disconnect () {
       await logout();
       this.$router.push('/login');
+    },
+    async resetData () {
+      await reset();
     }
   },
   data: () => ({
     switch1: true,
       drawer: null
-    }),
+  }),
+
 }
 </script>

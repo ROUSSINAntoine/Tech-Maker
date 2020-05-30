@@ -27,8 +27,9 @@ export default {
   },
   async created() {
     const data = await getStudentData();
+    console.log('data', data)
     this.name = data.name;
-    this.projectId = data.projectId;
+    this.projectId = data.projectid;
   },
   methods: {
     async disconnect () {

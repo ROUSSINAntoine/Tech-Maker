@@ -199,6 +199,7 @@ export default {
   },
   async created () {
     // get user type (admin, teacher or student)
+    console.log('project id', this.projectId)
     this.userType = this.$route.path.split('/')[1];
     this.oldData = await getProjectData(Number(this.projectId));
     this.currentData = { ...this.oldData };

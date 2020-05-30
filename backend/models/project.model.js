@@ -80,6 +80,12 @@ class Project {
     });
     return result.rows;
   }
+
+  static async empty () {
+    PostgressStore.client.query(
+      `DELETE FROM ${this.tableName}`
+    );
+  }
 }
 
 /** @type {String} */

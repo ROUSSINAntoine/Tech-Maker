@@ -1,6 +1,4 @@
 const postgressStore = require('../utils/PostgressStore.js');
-const Student = require('./student.model.js');
-const Teacher = require('./teacher.model.js');
 
 class Users {
   static toSqlTable () {
@@ -83,6 +81,13 @@ class Users {
     });
 
     return response.rows;
+  }
+
+  static async emptyStudent () {
+    postgressStore.client.query(
+      `DELETE FROM ${this.tableName}
+        WHERE type = 'student'`
+    );
   }
 }
 

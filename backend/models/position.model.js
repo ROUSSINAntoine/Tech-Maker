@@ -1,4 +1,4 @@
-// const PostgressStore = require('../utils/PostgressStore');
+const PostgressStore = require('../utils/PostgressStore');
 class Position {
   static toSqlTable () {
     const Room = require('./room.model.js');
@@ -9,6 +9,12 @@ class Position {
     )`,
     `ALTER TABLE ${Position.tableName} ADD UNIQUE (room_id)`
     ];
+  }
+
+  static async empty () {
+    PostgressStore.client.query(
+      `DELETE FROM ${this.tableName}`
+    );
   }
 }
 
