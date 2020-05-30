@@ -1,9 +1,38 @@
 <template>
   <div id="login">
-    <input v-model="email" type="email" placeholder="Mail" required />
-    <input v-model="password" type="password" placeholder="Mot de passe" required />
-    <button v-on:click="sendData" type="submit">Envoyer</button>
-    <p v-if="error !== null">{{ error }}</p>
+    <div style='margin-left: 400px; margin-right: 400px'>
+      <v-alert color='#75b658'>
+        <h1 style='margin-bottom:30px' class='text-center'>Connexion</h1>
+        <v-flex class="text-xs-center">
+          <v-text-field
+            color='white'
+            v-model='email'
+            dense
+            label="Adresse mail"
+            required
+            ></v-text-field>
+
+            <v-text-field
+              color='white'
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show1 ? 'text' : 'password'"
+              @click:append="show1 = !show1"
+              v-model='password'
+              dense
+              label='Mot de passe'
+              required
+            ></v-text-field>
+            <v-divider style='margin:10px'></v-divider>
+            <v-row justify="center" align="center">
+              <v-btn v-on:click="sendData" >Se connecter</v-btn>
+
+              <v-alert style='margin:10px' v-if="error !== null" type="error">
+                {{error}}
+              </v-alert>
+            </v-row>
+        </v-flex>
+      </v-alert>
+    </div>
   </div>
 </template>
 
@@ -14,6 +43,7 @@ export default {
   name: 'Login',
   data() {
     return {
+      show1: false,
       drawer: null,
       email: null,
       password: null,

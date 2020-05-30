@@ -13,19 +13,15 @@
       </v-col>
     </v-row>
 
-    <v-radio-group v-model="radios" :mandatory="false">
-      <v-radio v-for='semester in semesters' v-bind:key='semester.id'
-      :label='semester.name'
+    <!-- <v-radio-group >
+      <v-radio v-for='semester in semesters' v-bind:key='semester.id' 
       v-model='semesterId'
-      name='semester'></v-radio>
-    </v-radio-group>
-    
-    <input
-      v-model='projectName'
-      type='text'
-      placeholder='Nom du projet'
-      required
-    />
+      v-on:change='changeSemester()'
+      name='semester'
+      :value='semester.id'
+      :label='semester.name'
+      ></v-radio>
+    </v-radio-group> -->
 
     <h2>Semestres</h2>
     <ul v-for='semester in semesters' v-bind:key='semester.id' >

@@ -12,7 +12,7 @@
     <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense>
 
-        <router-link :to='"/teacher/" + $route.params.id +  "/projects"' class='routerlink'>
+        <router-link :to='"/teacher/projects"' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-laptop</v-icon>
@@ -23,7 +23,7 @@
           </v-list-item>
         </router-link>
 
-        <router-link :to='"/teacher/" + $route.params.id +  "/technologies"' class='routerlink'>
+        <router-link :to='"/teacher/technologies"' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-xml</v-icon>
