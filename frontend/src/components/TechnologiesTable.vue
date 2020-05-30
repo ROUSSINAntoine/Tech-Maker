@@ -7,22 +7,13 @@
         <tr>
           <th >Technologies</th>
           <th v-for='semester in semesters' v-bind:key='semester.id' >{{ semester.name }}</th>
+          <th colspan="2" v-if='isAdmin'>Action</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for='technology in technologies' v-bind:key='technology.id'>
           <td class='technologyItem, text-center' >
             <span v-if='selectedId !== technology.id'>{{ technology.name }}</span>
-            <button
-              v-on:click='prepareUpdateTechnology(technology.id, technology.name)'
-              v-if='selectedId !== technology.id && isAdmin'
-              class='technologyAction'
-            >Modifier</button>
-            <button
-              v-on:click='deleteTechnology(technology.id)'
-              v-if='selectedId !== technology.id && isAdmin'
-              class='technologyAction'
-            >Supprimer</button>
 
             <input
               type='text'
@@ -32,20 +23,6 @@
               placeholder='Nom de la technologie'
               required
             />
-            
-
-            <button
-              v-if='selectedId === technology.id && isAdmin'
-              v-on:click='updateTechnology()'
-            >Sauvegarder</button>
-            
-            <button
-              v-if='selectedId === technology.id && isAdmin'
-              v-on:click='cancelUpdateTechnology()'
-            >Annuler</button>
-            
-            <span v-if='errorUpdateMessage !== null && selectedId === technology.id'>{{ errorUpdateMessage }}</span>
-            
           </td>
           <td v-for='semester in semesters' v-bind:key='semester.id'>
             <div class='cell'>
@@ -60,25 +37,25 @@
             </div>
           </td>
 
-          <td>
+          <td v-if='isAdmin'>
             <button
               v-on:click="prepareUpdateTechnology(technology.id, technology.name)"
-              v-if='selectedId !== technology.id && isAdmin'
+              v-if='selectedId !== technology.id'
             >Modifier</button>
 
             <button
-              v-if='selectedId === technology.id && isAdmin && updateOrDelete'
+              v-if='selectedId === technology.id && updateOrDelete'
               v-on:click='updateTechnology()'
             >Sauvegarder</button>
           </td>
-          <td>
+          <td v-if='isAdmin'>
             <button
               v-on:click="prepareDeleteTechnology(technology.id, technology.name)"
-              v-if='selectedId !== technology.id && isAdmin'
+              v-if='selectedId !== technology.id'
             >Supprimer</button>
 
             <button
-              v-if='selectedId === technology.id && isAdmin'
+              v-if='selectedId === technology.id'
               v-on:click='cancelUpdateOrDeleteTechnology()'
             >Annuler</button>
           </td>
