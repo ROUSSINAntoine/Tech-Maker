@@ -26,7 +26,7 @@ class Project {
     const id = await PostgressStore.client.query({
       text: `INSERT INTO project(
         name, describe, slogan, image, identifier, validate, bankable, needs, position_id)
-        VALUES ($1, null, null, null, null, 'waiting', false, null, null)
+        VALUES ($1, null, null, null, null, 'no', false, null, null)
         RETURNING id;`,
       values: [projectName]
     });
@@ -71,7 +71,7 @@ class Project {
 
   static async getBySemester (semesterId) {
     const result = await PostgressStore.client.query({
-      text: `SELECT DISTINCT P.id, P.name, P.image AS logo 
+      text: `SELECT DISTINCT P.id, P.name, P.image AS logo, validate as status
               FROM ${Project.tableName} P
               JOIN student S
               ON P.id = S.project_id
@@ -85,6 +85,20 @@ class Project {
     PostgressStore.client.query(
       `DELETE FROM ${this.tableName}`
     );
+  }
+
+  /**
+   * @param {number} projectId
+   * @param {'yes' |'waiting' | 'no'} validate
+   */
+  static setValidate (projectId, validate) {
+    PostgressStore.client.query({
+      text: `
+        UPDATE ${Project.tableName}
+        SET validate = $1
+        WHERE id = $2;`,
+      values: [validate, projectId]
+    });
   }
 }
 

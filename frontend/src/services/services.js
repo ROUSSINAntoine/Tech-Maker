@@ -87,7 +87,7 @@ export function deleteTechnology (id) {
  * @returns {Promise<Array.<{
  *  id: Number,
  *  name: String,
- *  projects: Array.<{ id: Number, name: String, logo: String }
+ *  projects: Array.<{ id: Number, name?: String, logo: String, status: string }
  * }>>}
  */
 export function getProjectsPerTeacher () {
