@@ -1,4 +1,5 @@
-// const PostgressStore = require('../utils/PostgressStore');
+const PostgressStore = require('../utils/PostgressStore');
+
 /* eslint no-tabs: ["error", { allowIndentationTabs: true }] */
 class Room {
   static toSqlTable () {
@@ -13,7 +14,24 @@ class Room {
 				usable BOOL NOT NULL
 			)
 		`;
-  }
+	}
+	
+	static async getAllRooms () {
+		const result = await PostgressStore.client.query(
+			`SELECT * FROM ${Room.tableName} ORDER BY name`
+		);
+		return result.rows;
+	}
+
+	static async update (params, values) {
+		await PostgressStore.client.query({
+			text: `
+				UPDATE ${Room.tableName}
+				SET ${params}
+				WHERE id = $1`,
+			values: [ ...values ]
+		});
+	}
 }
 
 /** @type {String} */

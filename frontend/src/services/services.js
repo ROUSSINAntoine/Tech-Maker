@@ -317,3 +317,46 @@ export function logout () {
     credentials: 'include'
   });
 }
+
+/**
+ * @returns {Promise<Array.<{
+ *  id: number,
+ *  name: string,
+ *  students: number,
+ *  projects: number,
+ *  studentPerProject: number,
+ *  color: string,
+ *  usable: boolean
+ * }>>}
+ */
+export function getRooms () {
+  return fetch(`${SERVER_URL}/admin/rooms`, {
+    credentials: 'include'
+  })
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+/**
+ * Send modified data from the rooms.
+ * @param {Array.<{
+ *  id: number,
+ *  name? string,
+ *  student?: string,
+ *  projects?: number,
+ *  studentPerProject?: number,
+ * color?: string,
+ * usable?: boolean
+ * }>} data Modified data.
+ * @returns {Promise<{ message: string, error: boolean }>} Response for the operation.
+ */
+export function updateRoomsData (data) {
+  return fetch(`${SERVER_URL}/admin/rooms/update`, {
+    method: 'put',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+    .then(resp => resp.json())
+    .then(data => data);
+}
