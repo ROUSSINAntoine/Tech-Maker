@@ -5,7 +5,7 @@
     <label for="name"><h2>Nom du projet</h2></label>
     <input
       v-if="editable"
-      v-model="currentData.name"
+      v-model.trim="currentData.name"
       type="text"
       id="name"
       placeholder="Entrer le nom du projet"
@@ -37,7 +37,7 @@
     <label for="slogan"><h2>Slogan</h2></label>
     <input
       v-if="editable"
-      v-model="currentData.slogan"
+      v-model.trim="currentData.slogan"
       type="text"
       id="slogan"
       placeholder="Entrer votre slogan"
@@ -47,7 +47,7 @@
     <label for="describe"><h2>Description</h2></label>
     <textarea
       v-if="editable"
-      v-model="currentData.describe"
+      v-model.trim="currentData.describe"
       id="describe"
       placeholder="Description du projet..."
     ></textarea>
@@ -284,14 +284,26 @@ export default {
       }
       const modifiedData = { projectId: Number(this.projectId) };
       if (this.oldData.name !== this.currentData.name) {
+        if (!this.currentData.name) {
+          this.errorMessage = 'Le nom du projet ne doit pas être laissé vide.';
+          return;
+        }
         modifiedData.name = this.currentData.name;
         this.oldData.name = this.currentData.name;
       }
       if (this.oldData.slogan !== this.currentData.slogan) {
+        if (!this.currentData.slogan) {
+          this.errorMessage = 'Le slogant ne doit pas être laissé vide.';
+          return;
+        }
         modifiedData.slogan = this.currentData.slogan;
         this.oldData.slogan = this.currentData.slogan;
       }
       if (this.oldData.describe !== this.currentData.describe) {
+        if (!this.currentData.describe) {
+          this.errorMessage = 'La description ne doit pas être laissée vide.';
+          return;
+        }
         modifiedData.describe = this.currentData.describe;
         this.oldData.describe = this.currentData.describe;
       }

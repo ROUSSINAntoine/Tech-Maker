@@ -12,16 +12,17 @@
             >
             <v-row>
               <v-col cols="12" sm="5">
-                    <h2>{{project.name}}</h2><br>
-                    <img
-                    style='width: 50px;'
-                      :src="project.logo ? project.logo : 'https://www.intechinfo.fr/wp-content/uploads/2019/09/logo-intechinfo-sans-baseline-retina.png' /* DEDAULT LOGO */" 
-                      :alt="'Logo du projet ' + project.name"
-                    /><br>
-                    <v-btn style='margin:5px'><router-link :to="'project/' + project.id" :projectId="project.id" class='routerlink' style='color:white;'>Modifier</router-link></v-btn>
+                <h2>{{project.name}}</h2><br>
+                <img
+                style='width: 50px;'
+                  :src="project.logo ? project.logo : 'https://www.intechinfo.fr/wp-content/uploads/2019/09/logo-intechinfo-sans-baseline-retina.png' /* DEDAULT LOGO */" 
+                  :alt="'Logo du projet ' + project.name"
+                /><br>
+                <v-btn style='margin:5px'><router-link :to="'project/' + project.id" :projectId="project.id" class='routerlink' style='color:white;'>Modifier</router-link></v-btn>
               </v-col>
               <v-col cols="12" sm="5">
-                {{ project.describe}}
+                <span v-if="project.status === 'waiting'"><v-icon>update</v-icon></span>
+                <!--{{ project.describe }}-->
               </v-col>
             </v-row>
                 <v-divider style='margin:5px'></v-divider>
@@ -52,7 +53,7 @@ export default {
        * @type {Array.<{
        *  id: Number,
        *  name: String,
-       *  projects: Array.<{ id: Number, name: String, logo: String }
+       *  projects: Array.<{ id: Number, name: String, logo: String, status: string }
        * }>}
        */
       semesters: []
@@ -70,7 +71,7 @@ export default {
       /** @type {{
        *  id: Number,
        *  name: String,
-       *  projects: Array.<{ id: Number, name: String, logo: String }>
+       *  projects: Array.<{ id: Number, name: String, logo: String, status: string }>
        * }}
        */
       const semester = this.semesters.find(semester => semester.id === data.semesterId);
