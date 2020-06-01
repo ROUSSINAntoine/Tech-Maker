@@ -75,7 +75,8 @@ class Project {
               FROM ${Project.tableName} P
               JOIN student S
               ON P.id = S.project_id
-              WHERE S.semester_id = $1`,
+              WHERE S.semester_id = $1
+              ORDER BY P.name`,
       values: [semesterId]
     });
     return result.rows;
