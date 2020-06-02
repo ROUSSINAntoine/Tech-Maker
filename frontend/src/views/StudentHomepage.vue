@@ -1,11 +1,36 @@
 <template>
   <div class="StudentHomepage">
-    <button v-on:click='disconnect'>Déconnexion</button>
+    <v-app-bar 
+      color='#75b658'
+      app
+      clipped-left
+    >
+      <v-toolbar-title>Étudiant</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn v-on:click='disconnect' color='red' justify='center'>Déconnexion</v-btn>
+    </v-app-bar>
 
-    <h1>Espace étudiant</h1>
+    <h1 class='text-center'>Espace étudiant</h1>
 
-    <ProjectForm :editable="true" :projectId="projectId" v-if="projectId !== null" />
-    <h2 v-else>Vous n'avez aucun projet</h2>
+    <div v-if="projectId !== null" style='display:flex; justify-content:center'>
+      <ProjectForm :editable="true" :projectId="projectId"/>
+    </div>
+
+    <v-container fill-height fluid v-else >
+    <v-row>
+      <v-col cols="12">
+        <v-row
+          align="center"
+          justify="center"
+          style="height: 300px;"
+        >
+    <v-alert type='error'>Vous n'avez aucun projet</v-alert>
+    <!-- <h2 v-else>Vous n'avez aucun projet</h2> -->
+        </v-row>
+      </v-col>
+    </v-row>
+    </v-container>
+
   </div>
 </template>
 
@@ -22,7 +47,7 @@ export default {
   data() {
     return {
       name: null,
-      projectId: null
+      projectId: null,
     }
   },
   async created() {

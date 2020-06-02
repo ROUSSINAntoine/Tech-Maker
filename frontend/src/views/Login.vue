@@ -1,9 +1,14 @@
 <template>
-  <div id="login">
-    <div style='margin-left: 400px; margin-right: 400px'>
-      <v-alert color='#75b658'>
-        <h1 style='margin-bottom:30px' class='text-center'>Connexion</h1>
-        <v-flex class="text-xs-center">
+  <v-container fill-height fluid>
+    <v-row>
+      <v-col cols="12">
+        <v-row
+          align="center"
+          justify="center"
+          style="height: 300px;"
+        >
+          <v-alert color='#75b658' style='width:350px'>
+          <h1 style='margin-bottom:30px' class='text-center'>Connexion</h1>
           <v-text-field
             color='white'
             v-model='email'
@@ -30,10 +35,11 @@
                 {{error}}
               </v-alert>
             </v-row>
-        </v-flex>
-      </v-alert>
-    </div>
-  </div>
+          </v-alert>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
