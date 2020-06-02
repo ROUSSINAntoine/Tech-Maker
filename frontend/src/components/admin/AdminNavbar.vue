@@ -34,7 +34,7 @@
           </v-list-item>
         <!-- </router-link> -->
 
-        <router-link :to='"/admin/technologies"' class='routerlink'>
+        <router-link to='/admin/technologies' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-xml</v-icon>
@@ -78,7 +78,7 @@
           </v-list-item>
         <!-- </router-link> -->
 
-        <!-- <router-link :to='"/admin/" + $route.params.id + "/rooms"' class='routerlink'> -->
+        <router-link to='/admin/rooms' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-google-classroom</v-icon>
@@ -87,14 +87,14 @@
               <v-list-item-title>Salles</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        <!-- </router-link> -->
+        </router-link>
 
         <v-spacer class=''></v-spacer>
 
           <v-list-item link>
             <v-list-item-action></v-list-item-action>
             <v-list-item-content>
-              <router-link to='/login' class='routerlink'><v-btn color='red'>Déconnexion</v-btn></router-link>
+              <v-btn color="red" v-on:click='disconnect'>Déconnexion</v-btn>
             </v-list-item-content>
           </v-list-item>
 

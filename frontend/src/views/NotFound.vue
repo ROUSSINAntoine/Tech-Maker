@@ -1,8 +1,11 @@
 <template>
   <div class="NotFound">
-    <h1>404 NotFound</h1>
+    <v-img :src="imgSrc" max-width="300" style="margin: auto;" />
+    <v-alert color="red" style="text-align: center;">
+      <h1>404 Not Found</h1>
+    </v-alert>
 
-    <button v-on:click="disconnect">Retourner au login</button>
+    <v-btn v-on:click="disconnect">Retourner au login</v-btn>
   </div>
 </template>
 
@@ -11,6 +14,11 @@ import { logout } from '../services/services.js';
 
 export default {
   name: 'NotFound',
+  data () {
+    return {
+      imgSrc: require('../assets/cirno_shrug.png')
+    }
+  },
   methods: {
     async disconnect () {
       await logout();

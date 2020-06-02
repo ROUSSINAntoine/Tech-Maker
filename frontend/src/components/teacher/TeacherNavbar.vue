@@ -36,7 +36,7 @@
           <v-list-item link>
             <v-list-item-action></v-list-item-action>
             <v-list-item-content>
-              <router-link to='/login' class='routerlink'><v-btn color='red'>Déconnexion</v-btn></router-link>
+              <v-btn color="red" v-on:click="disconnect">Déconnexion</v-btn>
             </v-list-item-content>
           </v-list-item>
           
