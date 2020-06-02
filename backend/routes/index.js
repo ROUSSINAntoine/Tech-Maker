@@ -45,6 +45,10 @@ router.get('/:projectId/project', async function (req, res, next) {
   const students = await Student.getByProject(req.params.projectId);
   const projectTechno = await ProjectTechno.getByProjectId(req.params.projectId);
 
+  if (req.session.userType !== 'student') {
+    Project.setValidate(req.params.projectId, 'yes');
+  }
+
   let projectManager = null;
   for (let i = 0; i < students.length; i++) {
     if (students[i].project_manager === true) projectManager = students[i].id;
@@ -67,7 +71,7 @@ router.get('/:projectId/project', async function (req, res, next) {
 router.post('/login', async (req, res) => {
   const user = await User.getUserByEmailPassword(req.body.email, req.body.password);
   if (!user) {
-    res.status(401).send({ error: 'Idenfifiants invalides.' });
+    res.status(401).send({ error: 'Identifiants invalides.' });
   } else {
     req.session.userId = user.id;
     req.session.userType = user.type;
@@ -107,11 +111,12 @@ router.put('/modifiedProject', async function (req, res, next) {
   if (req.body.technologies) techno = req.body.technologies;
   if (req.body.membersId) student.push(...req.body.membersId);
   if (req.body.projectManager) projectManager = req.body.projectManager;
+  project.validate = req.session.userType === 'student' ? 'waiting' : 'yes';
 
   console.log(req.body);
 
   if (Object.keys(project).length !== 1) {
-    const validCollumn = ['id', 'name', 'describe', 'slogan', 'image'];
+    const validCollumn = ['id', 'name', 'describe', 'slogan', 'image', 'validate'];
     const collumn = Object.keys(project);
     const inputValues = Object.values(project);
     let updateValues = '';
@@ -148,7 +153,7 @@ router.put('/modifiedProject', async function (req, res, next) {
     if (projectManager.new !== null) Student.setProjectManager(projectManager.new);
   }
 
-  console.log(logo);
+  console.log('logo', logo);
 });
 
 module.exports = router;
