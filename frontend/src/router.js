@@ -10,6 +10,7 @@ import ProjectForm from './components/ProjectForm.vue';
 import AdminStudentCSV from './components/admin/AdminStudentCSV.vue';
 import AdminStudentTable from './components/admin/AdminStudentTable.vue';
 import NotFound from './views/NotFound.vue';
+import RoomTable from './components/admin/RoomTable.vue';
 
 async function beforeEnter (to, from, next) {
   const resp = await isConnected();
@@ -36,6 +37,10 @@ const routes = [
           default: AdminStudentTable,
           AdminStudentCSV: AdminStudentCSV
         }
+      },
+      {
+        path: 'rooms',
+        component: RoomTable
       }
     ]
   },

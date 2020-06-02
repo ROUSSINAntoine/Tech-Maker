@@ -1,27 +1,33 @@
-var express = require('express');
-var router = express.Router();
-var Technology = require('../models/technology.model.js');
+const express = require('express');
+const router = express.Router();
+const Technology = require('../models/technology.model.js');
 // var Teacher = require('../models/teacher.model.js');
-var TechnologySemester = require('../models/technology_semester.model.js');
-var Semester = require('../models/semester.model.js');
-var Users = require('../models/user.model.js');
-var Student = require('../models/student.model.js');
-var TechnoProject = require('../models/techno_project.model.js');
-var Position = require('../models/position.model.js');
-var JuryProject = require('../models/jury_project.model.js');
-var StudentJudge = require('../models/student_judge.model.js');
-var Judge = require('../models/judge.model.js');
-var Jury = require('../models/jury.model');
-var Project = require('../models/project.model.js');
-// TODO: router.use() pour vérifier si l'user à une session avec id et que c'est un admin
-/* router.use(async (req, res, next) => {
+const TechnologySemester = require('../models/technology_semester.model.js');
+const Semester = require('../models/semester.model.js');
+const Users = require('../models/user.model.js');
+const Student = require('../models/student.model.js');
+const TechnoProject = require('../models/techno_project.model.js');
+const Position = require('../models/position.model.js');
+const JuryProject = require('../models/jury_project.model.js');
+const StudentJudge = require('../models/student_judge.model.js');
+const Judge = require('../models/judge.model.js');
+const Jury = require('../models/jury.model');
+const Project = require('../models/project.model.js');
+const Room = require('../models/room.model.js');
+
+router.use(async (req, res, next) => {
+  console.log(req.session.userId, req.session.userType);
   if (req.session.userId) {
     const user = await Users.getTypeById(req.session.userId);
     if (user[0] && user[0].type === 'admin') {
-
+      next();
+    } else {
+      res.status(403).send({ message: "Vous n'avez pas l'autorisation d'accéder à ces données."});
     }
+  } else {
+    res.status(403).send({ message: "Vous n'avez pas l'autorisation d'accéder à ces données."});
   }
-}); */
+});
 
 router.get('/techno', async function (req, res, next) {
   const semesters = await Semester.getAllNamesIds();
@@ -152,6 +158,35 @@ router.delete('/reset', async function (req, res, next) {
   await Judge.empty();
   await Jury.empty();
   await Project.empty();
+});
+
+router.get('/rooms', async (req, res) => {
+  const rooms = await Room.getAllRooms();
+  res.status(200).send(rooms);
+});
+
+router.put('/rooms/update', async (req, res) => {
+  if (req.session.userType !== 'admin') {
+    res.status(403).send({ error: true, message: "Vous n'avez pas l'autorisation de modification des salles." });
+    return;
+  }
+
+  const avalible_columns = ['name', 'max_student', 'max_project', 'max_student_per_project', 'color', 'usable'];
+
+  for (let i = 0; i < req.body.length; i++) {
+    const params = [];
+    const values = [req.body[i].id ];
+    for (let j = 0; j < avalible_columns.length; j++) {
+      if (req.body[i][avalible_columns[j]] !== undefined) {
+        values.push(req.body[i][avalible_columns[j]]);
+        params.push(`${avalible_columns[j]} = $${values.length}`);
+      }
+    }
+    console.log(`UPDATE ${Room.tableName} SET ${params.join(', ')} WHERE id = $1`, values);
+    await Room.update(params.join(', '), values);
+  }
+
+  res.status(200).send({ error: false, message: "Opération effectuée avec succès." });
 });
 
 module.exports = router;
