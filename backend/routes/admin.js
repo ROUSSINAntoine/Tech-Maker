@@ -128,9 +128,9 @@ router.post('/StudentCSV', async function (req, res, next) {
   for (let i = 0; i < csv2.length; i++) {
     emails.push(csv2[i][9]);
   }
-  await Users.createStudentUser(emails);
+  await Users.createStudentUsers(emails);
   for (let i = 0; i < csv2.length; i++) {
-    csv2[i].push(await Users.getUserByEmail(csv2[i][9]));
+    csv2[i].push(await Users.getUsersByEmail(csv2[i][9]));
   }
   await Student.createStudents(csv2);
   res.send({ response: 'Les étudiants ont bien été ajouté à la base de donnée.' });

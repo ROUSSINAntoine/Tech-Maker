@@ -5,6 +5,7 @@ const TechnologySemester = require('../models/technology_semester.model.js');
 const Semester = require('../models/semester.model.js');
 const Student = require('../models/student.model.js');
 const Project = require('../models/project.model.js');
+const Users = require('../models/user.model.js');
 
 router.use(async (req, res, next) => {
   console.log(req.session.userId, req.session.userType);

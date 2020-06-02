@@ -1,4 +1,4 @@
-const PostgressStore = require('../utils/PostgressStore');
+const PostgressStore = require('../utils/PostgressStore.js');
 
 class Project {
   static toSqlTable () {
