@@ -108,6 +108,8 @@ router.put('/modifiedProject', async function (req, res, next) {
   if (req.body.membersId) student.push(...req.body.membersId);
   if (req.body.projectManager) projectManager = req.body.projectManager;
 
+  console.log(req.body);
+
   if (Object.keys(project).length !== 1) {
     const validCollumn = ['id', 'name', 'describe', 'slogan', 'image'];
     const collumn = Object.keys(project);
@@ -125,7 +127,6 @@ router.put('/modifiedProject', async function (req, res, next) {
   }
 
   if (techno.length !== 0) {
-    console.log(techno);
     for (let i = 0; i < techno.length; i++) {
       techno[i].add
         ? await ProjectTechno.add(project.id, techno[i].id)
@@ -142,8 +143,9 @@ router.put('/modifiedProject', async function (req, res, next) {
   }
 
   if (projectManager !== {}) {
+    console.log(projectManager);
     Student.deassignProjectManager(projectManager.old);
-    Student.setProjectManager(projectManager.new);
+    if (projectManager.new !== null) Student.setProjectManager(projectManager.new);
   }
 
   console.log(logo);

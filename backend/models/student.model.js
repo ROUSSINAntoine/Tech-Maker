@@ -113,7 +113,7 @@ class Student {
   static async deassignProjectManager (studentId) {
     const result = await PostgressStore.client.query({
       text: `UPDATE ${Student.name}
-      SET project_manager = true
+      SET project_manager = false
       WHERE user_id = $1`,
       values: [studentId]
     });
