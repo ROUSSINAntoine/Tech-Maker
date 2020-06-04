@@ -2,20 +2,25 @@
   <div id='CreateTechnology'>
 
   <span>
-    <v-container>
-      <v-row>
-        <v-col cols="12" sm="5" md='4'>
-          <v-text-field
-            v-model="technologyName"
-            required
-            label="Nom de la technologie"
-            single-line
-          ></v-text-field>
-              <v-btn v-on:click='sendTechnology()' color='#75b658' style='margin: 10px'>Sauvegarder</v-btn><br>
-              <label v-if='errorMessage'>{{ errorMessage }}</label>
-        </v-col>
-      </v-row>
-    </v-container>
+    <v-card class="mx-auto" max-width="500px">
+      <v-card-title style='background-color:#75b658'>Ajouter une technologie</v-card-title>
+        <v-text-field
+        style='margin:20px'
+          v-model="technologyName"
+          required
+          label="Nom de la technologie"
+          dense
+        ></v-text-field>
+        <v-divider style='margin-left:30px; margin-right:30px'></v-divider>
+        <v-card-actions>
+          <v-row
+          align="center"
+          justify="center">
+            <v-btn v-on:click='sendTechnology()' color='#75b658' style='margin: 10px'>Sauvegarder</v-btn><br>
+            <label v-if='errorMessage'>{{ errorMessage }}</label>
+          </v-row>
+        </v-card-actions>
+    </v-card>
   </span>
   </div>
 </template>
