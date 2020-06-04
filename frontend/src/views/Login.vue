@@ -9,7 +9,7 @@
         >
           <v-card style='width:350px'>
             <v-card-title style='background-color:#75b658'>Connexion</v-card-title>
-            <div style='margin:10px'>
+            <div style='margin:20px'>
               <v-text-field
                 color='white'
                 v-model='email'

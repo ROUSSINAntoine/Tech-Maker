@@ -15,7 +15,7 @@
     <h1 class='text-center'>Espace étudiant</h1>
 
     <div v-if="projectId !== null" style='display:flex; justify-content:center'>
-      <ProjectForm :editable="false" :projectId="projectId"/>
+      <ProjectForm :editable="true" :projectId="projectId"/>
     </div>
 
     <v-container fill-height fluid v-else >
