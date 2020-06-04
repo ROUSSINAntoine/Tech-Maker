@@ -15,20 +15,6 @@ const Jury = require('../models/jury.model');
 const Project = require('../models/project.model.js');
 const Room = require('../models/room.model.js');
 
-router.use(async (req, res, next) => {
-  console.log(req.session.userId, req.session.userType);
-  if (req.session.userId) {
-    const user = await Users.getTypeById(req.session.userId);
-    if (user[0] && user[0].type === 'admin') {
-      next();
-    } else {
-      res.status(403).send({ message: "Vous n'avez pas l'autorisation d'accéder à ces données."});
-    }
-  } else {
-    res.status(403).send({ message: "Vous n'avez pas l'autorisation d'accéder à ces données."});
-  }
-});
-
 router.get('/techno', async function (req, res, next) {
   const semesters = await Semester.getAllNamesIds();
 

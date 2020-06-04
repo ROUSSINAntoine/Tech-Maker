@@ -7,13 +7,15 @@
     >
       <v-toolbar-title>Étudiant</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn style='margin:10px; color:black; background-color: white' v-if="$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Clair</v-btn>
+      <v-btn style='margin:10px; color:white; background-color: black' v-if="!$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Sombre</v-btn>
       <v-btn v-on:click='disconnect' color='red' justify='center'>Déconnexion</v-btn>
     </v-app-bar>
 
     <h1 class='text-center'>Espace étudiant</h1>
 
     <div v-if="projectId !== null" style='display:flex; justify-content:center'>
-      <ProjectForm :editable="true" :projectId="projectId"/>
+      <ProjectForm :editable="false" :projectId="projectId"/>
     </div>
 
     <v-container fill-height fluid v-else >

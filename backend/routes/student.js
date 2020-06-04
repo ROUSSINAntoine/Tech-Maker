@@ -7,21 +7,7 @@ const router = express.Router();
 const Users = require('../models/user.model.js');
 const Student = require('../models/student.model.js');
 // var Project = require('../models/project.model.js');
-// var TechnoProject = require('../models/techno_project.model.js');
-
-router.use(async (req, res, next) => {
-  console.log(req.session.userId, req.session.userType);
-  if (req.session.userId) {
-    const user = await Users.getTypeById(req.session.userId);
-    if (user[0] && user[0].type === 'student') {
-      next();
-    } else {
-      res.status(403).send({ message: "Vous n'avez pas l'autorisation d'accéder à ces données."});
-    }
-  } else {
-    res.status(403).send({ message: "Vous n'avez pas l'autorisation d'accéder à ces données."});
-  }
-}); 
+// var TechnoProject = require('../models/techno_project.model.js'); 
 
 router.get('/', async function (req, res, next) {
   const students = await Student.getStudentData(req.session.userId);
