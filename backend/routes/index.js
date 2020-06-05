@@ -26,6 +26,8 @@ router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
 router.get('/:semesterId/Students', async function (req, res, next) {
   const students = await Student.getStudentBySemesterId(req.params.semesterId);
   // console.log(await Student.getStudentBySemesterId(req.params.semesterId));
+  console.log(req.params.semesterId);
+  console.log(students);
   res.send(students);
 });
 

@@ -33,10 +33,10 @@
         <v-card-title>Membres</v-card-title>
       </v-card-actions>
       <v-card-action>
-        <v-list-item-group v-model="item" color="primary">
+        <v-list-item-group color="primary">
           <div v-if="students.length > 0">
             <v-list-item 
-              inactive='true' 
+              :inactive='true' 
               style='cursor:pointer'
               v-for="student in students.filter(s => members.includes(s.id))" v-bind:key="student.name"
             >
@@ -78,7 +78,7 @@
         <v-dialog
           v-model="dialog"
           max-width="400"
-        >
+        > 
           <v-card>
             <v-card-title class="headline">Liste des étudiants</v-card-title>
             <v-card-text v-for="student in students" v-bind:key="student.id">
@@ -105,7 +105,7 @@
       <div v-if="errorMessage == null" class="text-center">
         <v-snackbar
           v-model="snackbar"
-          timeout=5000
+          :timeout=timeout
         >
         Le projet a bien été sauvegardé
         </v-snackbar>
@@ -143,6 +143,7 @@ export default {
       selectStudent: false,
       dialog: false,
       snackbar: false,
+      timeout: 5000,
       /** @type {Number} */
       projectManager: null
     };
@@ -169,6 +170,7 @@ export default {
       this.students = await getStudentsPerSemester(this.semesterId);
       this.projectManager = null;
       this.members = [];
+      console.log(this.semesterId);
     },
     async saveProject () {
       if (this.projectName === null || this.projectName === '') {
