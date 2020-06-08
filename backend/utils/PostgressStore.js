@@ -1,11 +1,10 @@
 const pg = require('pg');
-const pgtools = require('pgtools');
 const config = require('../server.config.js');
 
-console.log(config);
+// console.log(config);
 // console.log(myfile)
 
-class PostgresStore {
+class PostgressStore {
   async init () {
     this.pool = new pg.Pool(config.postgres);
     this.client = await this.pool.connect();
@@ -15,27 +14,6 @@ class PostgresStore {
     // @ts-ignore
     if (this.client) this.client.release();
     this.client = null;
-  }
-
-  async reset () {
-    // const Todo = require('../models/todo.model.js');
-    const conf = {
-      user: config.postgres.user,
-      host: config.postgres.host,
-      password: config.postgres.password
-    };
-
-    try {
-      await pgtools.dropdb(conf, config.postgres.database);
-    } catch (error) {
-      console.log('error but is ok', error);
-    }
-
-    await pgtools.createdb(conf, config.postgres.database);
-    await this.init();
-    await this.buildTables();
-
-    console.log('Is ok');
   }
 
   async buildTables () {
@@ -55,4 +33,4 @@ class PostgresStore {
   }
 }
 
-module.exports = new PostgresStore();
+module.exports = new PostgressStore();

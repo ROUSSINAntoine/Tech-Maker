@@ -1,28 +1,29 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app id="app">
+
+    <v-content>
+      <router-view style='margin: 20px'></router-view>
+      
+    </v-content>
+
+    <v-footer app>
+      <span>&copy; 2020 - Tech'Maker</span>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  export default {
+    props: {
+      source: String,
+    },
+    data () {
+      return {
+        color: 'red'
+      }
+    },
+    created () {
+      this.$vuetify.theme.dark = false
+    },
   }
-}
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
