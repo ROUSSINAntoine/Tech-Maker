@@ -153,7 +153,6 @@ router.put('/modifiedProject', async function (req, res, next) {
     if (projectManager.new !== null) Student.setProjectManager(projectManager.new);
   }
 
-  console.log('logo', logo);
 });
 
 module.exports = router;
