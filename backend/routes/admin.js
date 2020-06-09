@@ -15,20 +15,6 @@ const Jury = require('../models/jury.model');
 const Project = require('../models/project.model.js');
 const Room = require('../models/room.model.js');
 
-router.use(async (req, res, next) => {
-  console.log(req.session.userId, req.session.userType);
-  if (req.session.userId) {
-    const user = await Users.getTypeById(req.session.userId);
-    if (user[0] && user[0].type === 'admin') {
-      next();
-    } else {
-      res.status(403).send({ message: "Vous n'avez pas l'autorisation d'accéder à ces données."});
-    }
-  } else {
-    res.status(403).send({ message: "Vous n'avez pas l'autorisation d'accéder à ces données."});
-  }
-});
-
 router.get('/techno', async function (req, res, next) {
   const semesters = await Semester.getAllNamesIds();
 
@@ -128,9 +114,9 @@ router.post('/StudentCSV', async function (req, res, next) {
   for (let i = 0; i < csv2.length; i++) {
     emails.push(csv2[i][9]);
   }
-  await Users.createStudentUser(emails);
+  await Users.createStudentUsers(emails);
   for (let i = 0; i < csv2.length; i++) {
-    csv2[i].push(await Users.getUserByEmail(csv2[i][9]));
+    csv2[i].push(await Users.getUsersByEmail(csv2[i][9]));
   }
   await Student.createStudents(csv2);
   res.send({ response: 'Les étudiants ont bien été ajouté à la base de donnée.' });

@@ -1,125 +1,202 @@
 <template>
   <div class="ProjectForm">
-    <h2>Fiche projet</h2>
+    <h2 class='text-center'>Fiche projet</h2>
 
-    <label for="name"><h2>Nom du projet</h2></label>
-    <input
-      v-if="editable"
-      v-model.trim="currentData.name"
-      type="text"
-      id="name"
-      placeholder="Entrer le nom du projet"
-      required
-    />
-    <span v-else>{{ currentData.name }}</span>
+    <v-form>
+      <v-container>
+        <v-row>
+          <v-col cols="12" sm="6">
+            <v-card class="mx-auto">
+              <v-card-title style='background-color:#75b658'>Nom</v-card-title>
+              <v-spacer></v-spacer>
+              <v-card-text>
+                <v-text-field
+                  v-if="editable"
+                  v-model.trim="currentData.name"
+                  id="name"
+                  required
+                  label="Nom du projet"
+                  dense
+                ></v-text-field>
 
-    <h2>Semestre</h2>
-    <div v-if="userType === 'admin' || (userType === 'teacher' && editable)">
-      <ul v-for="semester in semesters" v-bind:key="semester.name">
-        <li>
-          <input
-            type="radio"
-            name="semester"
-            v-model="currentData.semesterId"
-            :id="'semester' + semester.id"
-            :value="semester.id"
-            required
-            v-on:change="changeSemester()"
-          />
-          <label :for="'semester' + semester.id">{{ semester.name }}</label>
-        </li>
-      </ul>
-    </div>
-    <span v-else-if="semesters.find(s => s.id === currentData.semesterId)">
-      Projet de {{ semesters.find(s => s.id === currentData.semesterId).name }}
-    </span>
+                <span v-else>{{ currentData.name }}</span>
+              </v-card-text>
+            </v-card>
+          </v-col>
 
-    <label for="slogan"><h2>Slogan</h2></label>
-    <input
-      v-if="editable"
-      v-model.trim="currentData.slogan"
-      type="text"
-      id="slogan"
-      placeholder="Entrer votre slogan"
-    />
-    <span v-else>{{ currentData.slogan }}</span>
+          <v-col cols="12" sm="6">
+            <v-card class="mx-auto">
+              <v-card-title style='background-color:#75b658'>Slogan</v-card-title>
+              <v-spacer></v-spacer>
+              <v-card-text>
+                <v-text-field
+                  v-if="editable"
+                  v-model.trim="currentData.slogan"
+                  id="slogan"
+                  label="Slogan"
+                  dense
+                ></v-text-field>
 
-    <label for="describe"><h2>Description</h2></label>
-    <textarea
-      v-if="editable"
-      v-model.trim="currentData.describe"
-      id="describe"
-      placeholder="Description du projet..."
-    ></textarea>
-    <p v-else>{{ currentData.describe }}</p>
+                <span v-else>{{ currentData.slogan }}</span>
+              </v-card-text>
+            </v-card>
+          </v-col>
 
-    <h2>Logo du projet</h2>
-    <div>
-      <div v-if="!currentData.logo && editable">
-        <input type="file" @change="onFileChange" accept="image/png"  id="inputImage" />
-      </div>
-      <div v-else>
-        <img :src="currentData.logo" />
-        <button @click="removeImage" v-if="editable">Supprimer l'image</button>
-      </div>
-      <span v-if="imageError">{{ imageError }}</span>
-    </div>
+          <v-col cols="12" sm="6">
+            <v-card class="mx-auto">
+            <v-card-title style='background-color:#75b658'>Technologies</v-card-title>
+              <v-card-text>
+                <v-checkbox
+                  :disabled='!editable' 
+                  v-for="technology in technologies" v-bind:key="technology.id"
+                  v-model='currentData.technologies'
+                  :value="technology.id"
+                  :label='technology.name'></v-checkbox>
+              </v-card-text>
+            </v-card>
+          </v-col>
 
-    <h2>Technologie(s) utilisée(s)</h2>
-    <ul v-for="technology in technologies" v-bind:key="technology.id">
-      <li>
-        <input
-          v-if="editable"
-          v-model="currentData.technologies"
-          type="checkbox"
-          :value="technology.id"
-          :id="'techno' + technology.id"
-        />
-        <label :for="'techno' + technology.id">{{ technology.name }}</label>
-      </li>
-    </ul>
+          <v-col cols="12" sm="6">
+            <v-card class="mx-auto">
+              <v-card-title style='background-color:#75b658'>Semestre</v-card-title>
+              <v-spacer></v-spacer>
+              <v-card-text>
+                <v-radio-group 
+                v-if="userType === 'admin' || (userType === 'teacher' && editable)" 
+                v-model="currentData.semesterId"
+                v-on:change="changeSemester()"
+                >
+                  <v-radio 
+                  v-for="semester in semesters" v-bind:key="semester.name" 
+                  name="semester" 
+                  :label="semester.name" 
+                  :value="semester.id"
+                  ></v-radio>
+                </v-radio-group>
 
-    <h2>Membres</h2>
-    <ul v-for="student in students" v-bind:key="student.name">
-      <li v-if="currentData.membersId.includes(student.id)">
-        <span>{{ student.name }}</span>
-        <span v-if="currentData.projectManager === student.id">(Chef)</span>
-        <button
-          v-if="(userType === 'teacher' && editable) || userType === 'admin'"
-          v-on:click="removeMember(student.id)"
-        >Retirer</button>
-        
-        <button
-          v-if="currentData.projectManager !== student.id"
-          v-on:click="currentData.projectManager = student.id"
-        >Chef de projet</button>
+                <span v-else-if="semesters.find(s => s.id === currentData.semesterId)">
+                  Projet de {{ semesters.find(s => s.id === currentData.semesterId).name }}
+                </span>
+              </v-card-text>
+            </v-card>
+          </v-col>
 
-        <button
-          v-if="currentData.projectManager === student.id"
-          v-on:click="currentData.projectManager = null"
-        >Retirer chef</button>
-      </li>
-    </ul>
+          <v-col cols="12" sm="6">
+            <v-card class="mx-auto">
+              <v-card-title style='background-color:#75b658'>Description</v-card-title>
+              <v-spacer></v-spacer>
+              <v-card-text>
+                <v-textarea
+                  v-if="editable"
+                  v-model.trim="currentData.describe"
+                  id="describe"
+                  label="Description"
+                ></v-textarea>
 
-    <div v-if="(userType === 'teacher' && editable) || userType === 'admin'">
-      <button v-if="!selectStudent" v-on:click="selectStudent = true">Ajouter un étudiant au projet</button>
-      <div v-else>
-        <h3>Liste des étudiants</h3>
-        <ul v-for="student in students" v-bind:key="student.id">
-          <li v-if="!currentData.membersId.includes(student.id)">
-            <button v-on:click="addMember(student.id)">{{ student.name }}</button>
-          </li>
-        </ul>
-        <button v-on:click="selectStudent = false">Annuler</button>
-      </div>
-    </div>
+                <p v-else>{{ currentData.describe }}</p>
+              </v-card-text>
+            </v-card>
+          </v-col>
 
-    <button
-      v-if="editable || userType === 'admin'"
-      v-on:click="submitForm()"
-      type="submit"
-    >Sauvegarder</button>
+          <v-col cols="12" sm="6">
+            <v-card class="mx-auto">
+              <v-card-title style='background-color:#75b658'>Logo</v-card-title>
+              <v-card-text>
+                <v-file-input
+                  v-if="!currentData.logo && editable"
+                  label="Logo"
+                  @change="onFileChange"
+                  accept="image/png"  
+                  id="inputImage"
+                ></v-file-input>
 
+                <div v-else>
+                  <div v-if="currentData.logo">
+                    <img:src="currentData.logo" alt=""/>
+                    <v-alert type='error' v-if="imageError">{{ imageError }}</v-alert>
+                    <v-btn @click="removeImage" v-if="editable">Supprimer l'image</v-btn>
+                    </div>
+                    <v-alert style='margin:10px' v-else type='error'>Aucune image à charger</v-alert>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" sm="6">
+            <v-card class="mx-auto">
+              <v-card-title style='background-color:#75b658'>Membres</v-card-title>
+              <v-list>
+                <v-list-item-group v-model="item" color="primary">
+                  <v-list-item inactive='true' style='cursor:pointer'
+                    v-for="student in students.filter(s => currentData.membersId.includes(s.id))" v-bind:key="student.name">
+
+                    <v-list-item-icon v-if="userType === 'admin' || (userType === 'teacher' && editable)">
+                      <v-btn
+                        v-on:click="currentData.projectManager = student.id" 
+                        v-if="currentData.projectManager !== student.id" 
+                        text
+                      ><v-icon>star</v-icon>
+                      </v-btn>
+                      <v-btn
+                        v-else
+                        v-on:click="currentData.projectManager = null" text
+                      ><v-icon color='yellow'>star</v-icon></v-btn>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                      <div>
+                        <v-list-item-title 
+                          v-text="student.name"
+                        ></v-list-item-title>
+                        <h5 v-if="currentData.projectManager === student.id">Chef de projet</h5>
+                        <h5 v-else>Membre</h5>
+                      </div>
+                    </v-list-item-content>
+                    <v-list-item-avatar>
+                      <v-btn text 
+                        v-if="(userType === 'teacher' && editable) || userType === 'admin'"
+                        v-on:click="removeMember(student.id)"><v-icon>close</v-icon></v-btn>
+                    </v-list-item-avatar>
+                  </v-list-item>
+                </v-list-item-group>
+                <div v-if="(userType === 'teacher' && editable) || userType === 'admin'">
+                  <v-btn v-if="!selectStudent" @click.stop="dialog = true" style='margin:10px'>Ajouter un membre</v-btn>
+                  <v-dialog
+                    v-model="dialog"
+                    max-width="400"
+                  >
+                    <v-card>
+                      <v-card-title class="headline">Liste des étudiants</v-card-title>
+                      <v-card-text v-for="student in students" v-bind:key="student.id">
+                          <v-btn 
+                            v-on:click="addMember(student.id)"
+                            @click.stop="dialog = false" text> {{ student.name }} </v-btn>
+                      </v-card-text>
+                    </v-card>
+                  </v-dialog>
+                </div>
+              </v-list>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" sm="12">
+            <v-btn
+              v-if="editable || userType === 'admin'"
+              v-on:click="submitForm()"
+              @click="snackbar = true"
+              >Sauvegarder</v-btn>
+          </v-col>
+
+          <div class="text-center">
+            <v-snackbar
+              v-model="snackbar"
+              timeout=5000
+            >
+            Le projet a bien été sauvegardé
+            </v-snackbar>
+          </div>
+        </v-row>
+      </v-container>
+    </v-form>
     <span v-if="errorMessage !== null">{{ errorMessage }}</span>
   </div>
 </template>
@@ -145,6 +222,8 @@ export default {
   },
   data () {
     return {
+      snackbar: false,
+      dialog: false,
       selectStudent: false,
       /** @type {{
        *  name: String,
@@ -240,18 +319,14 @@ export default {
       this.currentData.membersId.push(studentId);
       this.selectStudent = false;
     },
-    onFileChange(e) {
-      var files = e.target.files;
-      if (!files.length) {
-        return;
-      }
-      if (files[0].type !== 'image/png') {
+    onFileChange(file) {
+      if (file.type !== 'image/png') {
         document.getElementById('inputImage').value = '';
         this.removeImage();
         this.imageError = "L'image doit être au format PNG."; 
         return;
       }
-      this.createImage(files[0]);
+      this.createImage(file);
     },
     createImage(file) {
       const reader = new FileReader();

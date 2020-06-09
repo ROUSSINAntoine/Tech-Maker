@@ -1,39 +1,45 @@
 <template>
-  <div id="login">
-    <div style='margin-left: 400px; margin-right: 400px'>
-      <v-alert color='#75b658'>
-        <h1 style='margin-bottom:30px' class='text-center'>Connexion</h1>
-        <v-flex class="text-xs-center">
-          <v-text-field
-            color='white'
-            v-model='email'
-            dense
-            label="Adresse mail"
-            required
-            ></v-text-field>
+  <v-container fill-height fluid>
+    <v-row>
+      <v-col cols="12">
+        <v-row
+          align="center"
+          justify="center"
+          style="height: 300px;"
+        >
+          <v-card style='width:350px'>
+            <v-card-title style='background-color:#75b658'>Connexion</v-card-title>
+            <div style='margin:20px'>
+              <v-text-field
+                v-model='email'
+                dense
+                label="Adresse mail"
+                required
+                ></v-text-field>
 
-            <v-text-field
-              color='white'
-              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show1 ? 'text' : 'password'"
-              @click:append="show1 = !show1"
-              v-model='password'
-              dense
-              label='Mot de passe'
-              required
-            ></v-text-field>
-            <v-divider style='margin:10px'></v-divider>
-            <v-row justify="center" align="center">
-              <v-btn v-on:click="sendData" >Se connecter</v-btn>
+                <v-text-field
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'"
+                  @click:append="show1 = !show1"
+                  v-model='password'
+                  dense
+                  label='Mot de passe'
+                  required
+                ></v-text-field>
+                <v-divider style='margin:10px'></v-divider>
+                <v-row justify="center" align="center">
+                  <v-btn color='#75b658' v-on:click="sendData" >Se connecter</v-btn>
 
-              <v-alert style='margin:10px' v-if="error !== null" type="error">
-                {{error}}
-              </v-alert>
-            </v-row>
-        </v-flex>
-      </v-alert>
-    </div>
-  </div>
+                  <v-alert style='margin:10px' v-if="error !== null" type="error">
+                    {{error}}
+                  </v-alert>
+                </v-row>
+              </div>
+          </v-card>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

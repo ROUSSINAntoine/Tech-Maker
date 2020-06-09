@@ -18,7 +18,7 @@
                   :src="project.logo ? project.logo : 'https://www.intechinfo.fr/wp-content/uploads/2019/09/logo-intechinfo-sans-baseline-retina.png' /* DEDAULT LOGO */" 
                   :alt="'Logo du projet ' + project.name"
                 /><br>
-                <v-btn style='margin:5px'><router-link :to="'project/' + project.id" :projectId="project.id" class='routerlink' style='color:white;'>Modifier</router-link></v-btn>
+                <v-btn style='margin:5px'><router-link :to="'project/' + project.id" :projectId="project.id" class='routerlink'>Modifier</router-link></v-btn>
               </v-col>
               <v-col cols="12" sm="5">
                 <span v-if="project.status === 'waiting'"><v-icon>update</v-icon></span>

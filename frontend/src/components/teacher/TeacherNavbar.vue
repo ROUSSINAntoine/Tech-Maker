@@ -32,15 +32,12 @@
               <v-list-item-title>Technologies</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-
-          <v-list-item link>
-            <v-list-item-action></v-list-item-action>
-            <v-list-item-content>
-              <v-btn color="red" v-on:click="disconnect">Déconnexion</v-btn>
-            </v-list-item-content>
-          </v-list-item>
-          
         </router-link>
+         <v-btn style='margin:10px' color="red" v-on:click="disconnect">Déconnexion</v-btn><br>
+
+              <v-btn style='width:100px; height:35px; margin:10px; color:black; background-color: white' v-if="$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Clair</v-btn>
+              <v-btn style='width:100px; height:35px; margin:10px; color:white; background-color: black' v-if="!$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Sombre</v-btn>
+      
       </v-list>
     </v-navigation-drawer>
   </div>

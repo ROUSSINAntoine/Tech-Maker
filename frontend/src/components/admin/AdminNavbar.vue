@@ -91,24 +91,11 @@
 
         <v-spacer class=''></v-spacer>
 
-          <v-list-item link>
-            <v-list-item-action></v-list-item-action>
-            <v-list-item-content>
-              <v-btn color="red" v-on:click='disconnect'>Déconnexion</v-btn>
-            </v-list-item-content>
-          </v-list-item>
+        <v-btn style='margin:10px' color="red" v-on:click='disconnect'>Déconnexion</v-btn><br>
+        <v-btn style='margin:10px' id='test' v-on:click="resetData()">Réinitialiser</v-btn><br>
 
-          <v-list-item link>
-            <v-list-item-action></v-list-item-action>
-            <v-list-item-content>
-              <v-btn id='test' v-on:click="resetData()">Réinitialiser</v-btn>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-container fluid>
-            <v-btn style='color:black; background-color: white' v-if="$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Clair</v-btn>
-            <v-btn style='color:white; background-color: black' v-if="!$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Sombre</v-btn>
-          </v-container>
+        <v-btn style='width:100px; height:35px; margin:10px; color:black; background-color: white' v-if="$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Clair</v-btn>
+        <v-btn style='width:100px; height:35px; margin:10px; color:white; background-color: black' v-if="!$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Sombre</v-btn>
 
 
       </v-list>
