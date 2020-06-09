@@ -1,30 +1,67 @@
 <template>
   <div class="RoomTable">
-    <table>
-      <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Couleur</th>
-          <th>Étudiants max</th>
-          <th>Projets max</th>
-          <th>Étudiants par projet</th>
-          <th>Utilisable</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="room in roomsSettings" v-bind:key="room.id">
-          <td><input type="text" v-model.trim="room.name" required @change="owo" /></td>
-          <td><input type="color" v-model="room.color" required /></td>
-          <td><input type="number" v-model.number="room.max_student" min="1" required /></td>
-          <td><input type="number" v-model.number="room.max_project" min="1" required /></td>
-          <td><input type="number" v-model.number="room.max_student_per_project" min="1" required /></td>
-          <td><input type="checkbox" v-model="room.usable" /></td>
-        </tr>
-      </tbody>
-    </table>
-    <span v-if="errorMessage">{{ errorMessage }}</span>
-    <span v-if="notification">{{ notification }}</span>
-    <button v-on:click="send">Sauvegarder</button>
+    <h1 class="text-center">Salles</h1>
+    <v-expansion-panels>
+      <v-expansion-panel v-for="room in roomsSettings" v-bind:key="room.id">
+        <v-expansion-panel-header> {{ room.name }} </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-row>
+            <v-col cols="12" sm="6" md="2">
+              <v-text-field
+                v-model.trim="room.name"
+                label="Nom"
+                :value="room.name"
+                required
+                filled rounded dense
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6" md="2">
+              <v-text-field
+                v-model.number="room.max_student"
+                label="max étudiants"
+                :value="room.max_student"
+                min="1" required 
+                filled rounded dense
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6" md="2">
+              <v-text-field
+                v-model.number="room.max_project"
+                label="max projets"
+                :value="room.max_project"
+                min="1" required 
+                filled rounded dense
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6" md="2">
+              <v-text-field
+                v-model.number="room.max_student_per_project"
+                label="étudiants/projets"
+                :value="room.max_student_per_project"
+                min="1" required 
+                filled rounded dense
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6" md="2">
+              <v-switch v-model="room.usable" label="Utilisable" ></v-switch>
+            </v-col>
+          </v-row>
+          
+          <v-color-picker v-model="room.color"></v-color-picker>
+
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-btn v-on:click="send" style='margin-top:20px; margin-bottom:20px; background-color: #75b658'>Sauvegarder</v-btn>
+    </v-expansion-panels>
+    
+      <v-alert v-if="notification" dismissible style="width: 400px; margin:auto" type="success">
+        {{notification}}
+      </v-alert>
+      <v-alert v-if="errorMessage" dismissible style='width: 400px; margin:auto' type='error'></v-alert>
   </div>
 </template>
 
