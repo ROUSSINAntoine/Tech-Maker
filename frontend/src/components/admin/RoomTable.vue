@@ -1,6 +1,6 @@
 <template>
   <div class="RoomTable">
-
+    <h1 class="text-center">Salles</h1>
     <v-expansion-panels>
       <v-expansion-panel v-for="room in roomsSettings" v-bind:key="room.id">
         <v-expansion-panel-header> {{ room.name }} </v-expansion-panel-header>
@@ -62,33 +62,6 @@
         {{notification}}
       </v-alert>
       <v-alert v-if="errorMessage" dismissible style='width: 400px; margin:auto' type='error'></v-alert>
-
-
-    <table>
-      <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Couleur</th>
-          <th>Étudiants max</th>
-          <th>Projets max</th>
-          <th>Étudiants par projet</th>
-          <th>Utilisable</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="room in roomsSettings" v-bind:key="room.id">
-          <td><input type="text" v-model.trim="room.name" required @change="owo" /></td>
-          <td><input type="color" v-model="room.color" required /></td>
-          <td><input type="number" v-model.number="room.max_student" min="1" required /></td>
-          <td><input type="number" v-model.number="room.max_project" min="1" required /></td>
-          <td><input type="number" v-model.number="room.max_student_per_project" min="1" required /></td>
-          <td><input type="checkbox" v-model="room.usable" /></td>
-        </tr>
-      </tbody>
-    </table>
-    <span v-if="errorMessage">{{ errorMessage }}</span>
-    <span v-if="notification">{{ notification }}</span>
-    <button v-on:click="send">Sauvegarder</button>
   </div>
 </template>
 
