@@ -230,10 +230,7 @@ export function setModifiedprojectData (modifiedData) {
   fetch(`${SERVER_URL}/modifiedProject`, {
     method: 'put',
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(modifiedData)
+    body: modifiedData
   });
 }
 

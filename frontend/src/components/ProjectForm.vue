@@ -126,7 +126,7 @@
             <v-card class="mx-auto">
               <v-card-title style='background-color:#75b658'>Membres</v-card-title>
               <v-list>
-                <v-list-item-group v-model="item" color="primary">
+                <v-list-item-group color="primary">
                   <v-list-item inactive='true' style='cursor:pointer'
                     v-for="student in students.filter(s => currentData.membersId.includes(s.id))" v-bind:key="student.name">
 
@@ -357,13 +357,13 @@ export default {
         this.errorMessage = 'Il doit y avoir au moins un membre dans le projet.';
         return;
       }
-      const modifiedData = { projectId: Number(this.projectId) };
+      const form = new FormData('projectId', Number(this.projectId));
       if (this.oldData.name !== this.currentData.name) {
         if (!this.currentData.name) {
           this.errorMessage = 'Le nom du projet ne doit pas être laissé vide.';
           return;
         }
-        modifiedData.name = this.currentData.name;
+        form.append("name", this.currentData.name);
         this.oldData.name = this.currentData.name;
       }
       if (this.oldData.slogan !== this.currentData.slogan) {
@@ -371,7 +371,7 @@ export default {
           this.errorMessage = 'Le slogant ne doit pas être laissé vide.';
           return;
         }
-        modifiedData.slogan = this.currentData.slogan;
+        form.append('slogan' , this.currentData.slogan);
         this.oldData.slogan = this.currentData.slogan;
       }
       if (this.oldData.describe !== this.currentData.describe) {
@@ -379,35 +379,36 @@ export default {
           this.errorMessage = 'La description ne doit pas être laissée vide.';
           return;
         }
-        modifiedData.describe = this.currentData.describe;
+        form.append('describe', this.currentData.describe);
         this.oldData.describe = this.currentData.describe;
       }
       if (this.oldData.logo !== this.currentData.logo) {
-        modifiedData.logo = this.currentData.logo;
+        form.append('logo', this.currentData.logo);
         this.oldData.logo = this.currentData.logo;
       }
       if (this.oldData.semesterId !== this.currentData.semesterId) {
-        modifiedData.semesterId = this.currentData.semesterId;
+        form.append('semesterId', this.currentData.semesterId);
         this.oldData.semesterId = this.currentData.semesterId;
       }
       if (this.oldData.projectManager !== this.currentData.projectManager) {
-        modifiedData.projectManager = { old: this.oldData.projectManager, new: this.currentData.projectManager };
+        form.append('projectManager', { old: this.oldData.projectManager, new: this.currentData.projectManager });
         this.oldData.projectManager = this.currentData.projectManager;
       }
       let update = this.getUpdatedElement(this.oldData.technologies, this.currentData.technologies);
       if (update.length > 0) {
-        modifiedData.technologies = update;
+        form.append('technologies', update);
         this.oldData.technologies = [ ...this.currentData.technologies ];
       }
       update = this.getUpdatedElement(this.oldData.membersId, this.currentData.membersId);
       if (update.length > 0) {
-        modifiedData.membersId = update;
+        form.append('membersId', update);
         this.oldData.membersId = [ ...this.currentData.membersId ];
       }
-      if (Object.keys(modifiedData).length > 1) {
-        setModifiedprojectData(modifiedData);
+      // var res = [...form.entries()]
+      // if (res.length > 1) {
+        setModifiedprojectData(form);
         this.errorMessage = null;
-      }
+      // }
     },
     /**
      * Get list with the deleted or added element from the currentList.

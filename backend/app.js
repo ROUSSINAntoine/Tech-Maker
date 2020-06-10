@@ -9,6 +9,7 @@ const studentRouter = require('./routes/student.js');
 const adminRouter = require('./routes/admin.js');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+
 PostgressStore.init();
 
 const app = express();

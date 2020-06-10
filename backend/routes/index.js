@@ -6,6 +6,8 @@ const Student = require('../models/student.model.js');
 const User = require('../models/user.model.js');
 const Project = require('../models/project.model.js');
 const ProjectTechno = require('../models/techno_project.model.js');
+const multer = require('multer');
+const upload = multer({ dest: '../logos' });
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -97,10 +99,11 @@ router.get('/connected', (req, res) => {
   }
 });
 
-router.put('/modifiedProject', async function (req, res, next) {
+router.put('/modifiedProject', upload.single('logo'), async function (req, res, next) {
+  console.log(req.file);
   const project = {};
   const student = [];
-  let logo;
+  let logo = '';
   let projectManager = {};
   let techno = [];
   if (req.body.projectId) project.id = req.body.projectId;
@@ -112,8 +115,6 @@ router.put('/modifiedProject', async function (req, res, next) {
   if (req.body.membersId) student.push(...req.body.membersId);
   if (req.body.projectManager) projectManager = req.body.projectManager;
   project.validate = req.session.userType === 'student' ? 'waiting' : 'yes';
-
-  console.log(req.body);
 
   if (Object.keys(project).length !== 1) {
     const validCollumn = ['id', 'name', 'describe', 'slogan', 'image', 'validate'];
@@ -148,11 +149,10 @@ router.put('/modifiedProject', async function (req, res, next) {
   }
 
   if (projectManager !== {}) {
-    console.log(projectManager);
     Student.deassignProjectManager(projectManager.old);
     if (projectManager.new !== null) Student.setProjectManager(projectManager.new);
   }
-
+  console.log('panda');
 });
 
 module.exports = router;

@@ -161,7 +161,7 @@ router.put('/rooms/update', async (req, res) => {
 
   for (let i = 0; i < req.body.length; i++) {
     const params = [];
-    const values = [req.body[i].id ];
+    const values = [req.body[i].id];
     for (let j = 0; j < avalible_columns.length; j++) {
       if (req.body[i][avalible_columns[j]] !== undefined) {
         values.push(req.body[i][avalible_columns[j]]);
@@ -172,7 +172,7 @@ router.put('/rooms/update', async (req, res) => {
     await Room.update(params.join(', '), values);
   }
 
-  res.status(200).send({ error: false, message: "Opération effectuée avec succès." });
+  res.status(200).send({ error: false, message: 'Opération effectuée avec succès.' });
 });
 
 module.exports = router;
