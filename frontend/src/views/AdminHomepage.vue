@@ -1,7 +1,7 @@
 <template>
   <div name='AdminHomepage'>
     <AdminNavbar/>
-    <router-view name='AdminStudentCSV'>Étudiants</router-view>
+    <router-view name='AdminCSV'>Étudiants</router-view>
 
     <router-view></router-view>
   </div>
@@ -19,6 +19,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+<!-- Add "scoped" attribute to limit CSS to this comnent only -->
 <style scoped>
 </style>

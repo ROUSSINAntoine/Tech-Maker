@@ -126,7 +126,7 @@
             <v-card class="mx-auto">
               <v-card-title style='background-color:#75b658'>Membres</v-card-title>
               <v-list>
-                <v-list-item-group v-model="item" color="primary">
+                <v-list-item-group color="primary">
                   <v-list-item :inactive='true' style='cursor:pointer'
                     v-for="student in students.filter(s => currentData.membersId.includes(s.id))" v-bind:key="student.name">
 
@@ -279,7 +279,6 @@ export default {
   },
   async created () {
     // get user type (admin, teacher or student)
-    console.log('project id', this.projectId)
     this.userType = this.$route.path.split('/')[1];
     this.oldData = await getProjectData(Number(this.projectId));
     this.currentData = { ...this.oldData };

@@ -1,6 +1,6 @@
 <template>
-  <div class='text-center' name='AdminStudentCSV'>
-    <h1>CSV étudiants</h1>
+  <div class='text-center' name='AdminCSV'>
+    <h1>{{ this.title }}</h1>
       <v-file-input 
         @change='onfileChange' 
         accept='csv'
@@ -15,15 +15,31 @@
 
 <script>
 import { AddStudentCSV } from '../../services/services';
+
 export default {
-  name: 'AdminStudentCSV',
+  name: 'AdminCSV',
+  watch:{
+    $route (to, from) {
+      from;
+      this.userType = to.path.split('/')[2] === 'studentCSV' ? 'studentCSV' : 'juryCSV';
+        if (this.userType === 'studentCSV') this.title = 'CSV étudiants';
+        else this.title = 'CSV jurys';
+    }
+}, 
   data () {
-    return {  
-    Message: null,
+    return {
+      title: null,
+      userType: null,  
+      Message: null,
       currdentData: {
-        csv: null
+      csv: null
       }
     }
+  },
+  created () {
+    this.userType = this.$route.path.split('/')[2];
+    if (this.userType === 'studentCSV') this.title = 'CSV étudiants';
+    else this.title = 'CSV jurys';
   },
   methods: {
     onfileChange(files) {
@@ -40,10 +56,10 @@ export default {
     },
     async submitForm() {
       const data = { csv: this.currdentData.csv };
-      const succes = await AddStudentCSV(data);
+      console.log(this.userType);
+      const succes = await AddStudentCSV(data, this.userType);
       
       if (succes.response !== null || succes.response !== undefined) {
-        console.log('added');
         this.Message = succes.response;
         this.csv = null;
       } else {

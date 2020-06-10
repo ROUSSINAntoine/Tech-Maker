@@ -7,7 +7,7 @@ import TeacherHomepage from './views/TeacherHomepage.vue';
 import TechnologiesTable from './components/TechnologiesTable.vue';
 import ProjectsCards from './components/teacher/ProjectsCards.vue';
 import ProjectForm from './components/ProjectForm.vue';
-import AdminStudentCSV from './components/admin/AdminStudentCSV.vue';
+import AdminCSV from './components/admin/AdminCSV.vue';
 import AdminStudentTable from './components/admin/AdminStudentTable.vue';
 import NotFound from './views/NotFound.vue';
 import RoomTable from './components/admin/RoomTable.vue';
@@ -32,11 +32,15 @@ const routes = [
         component: TechnologiesTable
       },
       {
-        path: 'students',
+        path: 'studentCSV',
         components: {
           default: AdminStudentTable,
-          AdminStudentCSV: AdminStudentCSV
+          AdminCSV: AdminCSV
         }
+      },
+      {
+        path: 'juryCSV',
+        component: AdminCSV
       },
       {
         path: 'rooms',

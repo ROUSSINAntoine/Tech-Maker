@@ -266,8 +266,8 @@ export function getAllSemestersName () {
  * @param {string} Content of the csv
  * @returns {Promise<{response: string}>}
  */
-export function AddStudentCSV (csv) {
-  return fetch(`${SERVER_URL}/admin/StudentCSV`, {
+export function AddStudentCSV (csv, userType) {
+  return fetch(`${SERVER_URL}/admin/${userType}`, {
     method: 'post',
     credentials: 'include',
     headers: {

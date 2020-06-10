@@ -12,7 +12,7 @@
     <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense>
 
-        <router-link :to='"/admin/students"' class='routerlink'>
+        <router-link :to='"/admin/studentCSV"' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-account</v-icon>
@@ -56,7 +56,7 @@
           </v-list-item>
         <!-- </router-link> -->
 
-        <!-- <router-link :to='"/admin/" + $route.params.id + "/jury"' class='routerlink'> -->
+        <router-link :to='"/admin/juryCSV"' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-account-group</v-icon>
@@ -65,7 +65,7 @@
               <v-list-item-title>Jurys</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        <!-- </router-link> -->
+        </router-link>
 
         <!-- <router-link :to='"/admin/" + $route.params.id + "/enseignants"' class='routerlink'> -->
           <v-list-item link>
