@@ -50,13 +50,55 @@
               <v-switch v-model="room.usable" label="Utilisable" ></v-switch>
             </v-col>
           </v-row>
-          
           <v-color-picker v-model="room.color"></v-color-picker>
-
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-btn v-on:click="send" style='margin-top:20px; margin-bottom:20px; background-color: #75b658'>Sauvegarder</v-btn>
     </v-expansion-panels>
+
+    <v-card class="mx-auto" max-width="500">
+      <v-card-title style="background-color:#75b658">Créer une salle</v-card-title>
+      <v-cards-action>
+        <v-row style='margin:auto'>
+          <v-col cols="12" sm="6" md="5">
+            <v-text-field
+              label="Nom"
+              v-model="name"
+              required
+              filled rounded dense
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6" md="5">
+              <v-text-field
+                label="max étudiants"
+                v-model="max_student"
+                min="1" required 
+                filled rounded dense
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6" md="5">
+              <v-text-field
+                label="max projets"
+                v-model="max_project"
+                min="1" required 
+                filled rounded dense
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6" md="5">
+              <v-text-field
+                label="étudiants/projets"
+                v-model="max_student_per_project"
+                min="1" required 
+                filled rounded dense
+              ></v-text-field>
+            </v-col>
+        </v-row>
+        <v-color-picker style='margin:auto'></v-color-picker>
+        <v-btn color='#75b658' style='margin:20px'>Sauvegarder</v-btn>
+      </v-cards-action>
+    </v-card>
     
       <v-alert v-if="notification" dismissible style="width: 400px; margin:auto" type="success">
         {{notification}}
@@ -66,12 +108,21 @@
 </template>
 
 <script>
-import { getRooms, updateRoomsData } from '../../services/services.js';
+import { getRooms, updateRoomsData, createRoom } from '../../services/services.js';
 
 export default {
   name: 'RoomTable',
   data () {
     return {
+      /** @type {String} */
+      name: null,
+      /** @type {Number} */
+      max_student: null,
+      /** @type {Number} */
+      max_project: null,
+      /** @type {Number} */
+      max_student_per_project: null,
+
       /** @type {Array.<{
        *  id: number,
        *  name: string,
@@ -101,7 +152,29 @@ export default {
     this.roomsSettings = this.oldRoomsSettings.map(room => { return { ...room }; });
   },
   methods: {
-    owo () { console.log('owo'); },
+    async createRoom () {
+      if (this.name === null || this.name === '') {
+        this.errorMessage = 'Le nom de la salle ne doit pas être laissée vide.';
+      } else if (this.max_student === null || this.max_student === '') {
+        this.errorMessage = 'Le champ max étudiants ne doit pas être laissé vide.';
+      } else if (this.max_project === null || this.max_project === '') {
+        this.errorMessage = 'Le champ max projets ne doit pas être laissé vide.';
+      } else if (this.max_student_per_project === null || this.max_student_per_project === '') {
+        this.errorMessage = 'Le champ étudiants/projets ne doit pas être laissé vide.';
+      } else {
+        const success = await createRoom(this.name, this.max_student, this.max_project, this.max_student_per_project);
+        
+        if (success.error === undefined || success.error === null) {
+          console.log('created');
+          this.name = null;
+          this.max_student = null;
+          this.max_project = null;
+          this.max_student_per_project = null;
+        } else {
+          this.errorMessage = success.error;
+        }
+      }
+    },
     async send () {
       const sendData = [];
       
