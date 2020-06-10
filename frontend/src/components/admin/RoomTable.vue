@@ -96,7 +96,7 @@
             </v-col>
         </v-row>
         <v-color-picker style='margin:auto'></v-color-picker>
-        <v-btn color='#75b658' style='margin:20px'>Sauvegarder</v-btn>
+        <v-btn v-on:click='createRoom()' color='#75b658' style='margin:20px'>Sauvegarder</v-btn>
       </v-cards-action>
     </v-card>
     
