@@ -7,7 +7,16 @@ const User = require('../models/user.model.js');
 const Project = require('../models/project.model.js');
 const ProjectTechno = require('../models/techno_project.model.js');
 const multer = require('multer');
-const upload = multer({ dest: '../logos' });
+const upload = multer({
+  dest: `${__dirname}/../logos`,
+  fileFilter: function pngonly (req, file, callback) {
+    if (file.mimetype === 'image/png') {
+      callback(null, true);
+    } else {
+      callback(new Error('Invalide file'), false);
+    }
+  }
+});
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -47,19 +56,17 @@ router.get('/:projectId/project', async function (req, res, next) {
   const students = await Student.getByProject(req.params.projectId);
   const projectTechno = await ProjectTechno.getByProjectId(req.params.projectId);
 
-  if (req.session.userType !== 'student') {
-    Project.setValidate(req.params.projectId, 'yes');
-  }
-
   let projectManager = null;
   for (let i = 0; i < students.length; i++) {
     if (students[i].project_manager === true) projectManager = students[i].id;
   }
+
   const response = {
     id: req.params.projectId,
     name: project[0].name,
     slogan: project[0].slogan,
     describe: project[0].describe,
+    image: project[0].image,
     technologies: projectTechno.map(i => i.technology_id),
     membersId: students.map(i => i.id),
     needs: project[0].needs,
@@ -103,14 +110,13 @@ router.put('/modifiedProject', upload.single('logo'), async function (req, res, 
   console.log(req.file);
   const project = {};
   const student = [];
-  let logo = '';
   let projectManager = {};
   let techno = [];
   if (req.body.projectId) project.id = req.body.projectId;
   if (req.body.name) project.name = req.body.name;
   if (req.body.slogan) project.slogan = req.body.slogan;
   if (req.body.describe) project.describe = req.body.describe;
-  if (req.body.logo) logo = req.body.logo;
+  if (req.file.fieldname) project.image = req.file.filename;
   if (req.body.technologies) techno = req.body.technologies;
   if (req.body.membersId) student.push(...req.body.membersId);
   if (req.body.projectManager) projectManager = req.body.projectManager;

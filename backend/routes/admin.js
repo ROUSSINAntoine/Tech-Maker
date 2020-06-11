@@ -114,9 +114,9 @@ router.post('/StudentCSV', async function (req, res, next) {
   for (let i = 0; i < csv2.length; i++) {
     emails.push(csv2[i][9]);
   }
-  await Users.createStudentUsers(emails);
+  await Users.createStudentUser(emails);
   for (let i = 0; i < csv2.length; i++) {
-    csv2[i].push(await Users.getUsersByEmail(csv2[i][9]));
+    csv2[i].push(await Users.getUserByEmail(csv2[i][9]));
   }
   await Student.createStudents(csv2);
   res.send({ response: 'Les étudiants ont bien été ajouté à la base de donnée.' });
@@ -157,15 +157,15 @@ router.put('/rooms/update', async (req, res) => {
     return;
   }
 
-  const avalible_columns = ['name', 'max_student', 'max_project', 'max_student_per_project', 'color', 'usable'];
+  const avalibleColumns = ['name', 'max_student', 'max_project', 'max_student_per_project', 'color', 'usable'];
 
   for (let i = 0; i < req.body.length; i++) {
     const params = [];
     const values = [req.body[i].id];
-    for (let j = 0; j < avalible_columns.length; j++) {
-      if (req.body[i][avalible_columns[j]] !== undefined) {
-        values.push(req.body[i][avalible_columns[j]]);
-        params.push(`${avalible_columns[j]} = $${values.length}`);
+    for (let j = 0; j < avalibleColumns.length; j++) {
+      if (req.body[i][avalibleColumns[j]] !== undefined) {
+        values.push(req.body[i][avalibleColumns[j]]);
+        params.push(`${avalibleColumns[j]} = $${values.length}`);
       }
     }
     console.log(`UPDATE ${Room.tableName} SET ${params.join(', ')} WHERE id = $1`, values);

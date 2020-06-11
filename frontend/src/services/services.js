@@ -227,6 +227,8 @@ export function getStudentData () {
  * }} modifiedData
  */
 export function setModifiedprojectData (modifiedData) {
+  console.log(modifiedData);
+
   fetch(`${SERVER_URL}/modifiedProject`, {
     method: 'put',
     credentials: 'include',

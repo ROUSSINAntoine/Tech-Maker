@@ -102,6 +102,7 @@
             <v-card class="mx-auto">
               <v-card-title style='background-color:#75b658'>Logo</v-card-title>
               <v-card-text>
+                <img v-if='oldData.log !== null' :src="oldData.logo"/>
                 <v-file-input
                   v-if="!currentData.logo && editable"
                   label="Logo"
@@ -112,7 +113,7 @@
 
                 <div v-else>
                   <div v-if="currentData.logo">
-                    <img:src="currentData.logo" alt=""/>
+                    <img v-if='oldData.log !== null' :src="oldData.logo"/>
                     <v-alert type='error' v-if="imageError">{{ imageError }}</v-alert>
                     <v-btn @click="removeImage" v-if="editable">Supprimer l'image</v-btn>
                     </div>
@@ -329,25 +330,9 @@ export default {
       this.createImage(file);
     },
     createImage(file) {
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        const img = new Image();
-
-        img.onload = () => {
-          if (img.width < this.imageMinSize.width || img.height < this.imageMinSize.height) {
-            document.getElementById('inputImage').value = '';
-            this.imageError = `L'image doit avoir un format minimum de ${this.imageMinSize.width} x ${this.imageMinSize.height}.`;
-            this.removeImage();
-          } else {
-            this.currentData.logo = e.target.result;
-            this.imageError = null;
-          }
-        };
-        img.src = e.target.result;
-        
-      };
-      reader.readAsDataURL(file);
+      this.currentData.logoFile = file;
+      console.log(this.currentData.logoFile)
+      this.currentData.logo = 'sdfgsdf';
     },
     removeImage () {
       this.currentData.logo = '';
@@ -357,7 +342,8 @@ export default {
         this.errorMessage = 'Il doit y avoir au moins un membre dans le projet.';
         return;
       }
-      const form = new FormData('projectId', Number(this.projectId));
+      const form = new FormData();
+      form.append('projectId', Number(this.projectId))
       if (this.oldData.name !== this.currentData.name) {
         if (!this.currentData.name) {
           this.errorMessage = 'Le nom du projet ne doit pas être laissé vide.';
@@ -383,7 +369,7 @@ export default {
         this.oldData.describe = this.currentData.describe;
       }
       if (this.oldData.logo !== this.currentData.logo) {
-        form.append('logo', this.currentData.logo);
+        form.append('logo', this.currentData.logoFile);
         this.oldData.logo = this.currentData.logo;
       }
       if (this.oldData.semesterId !== this.currentData.semesterId) {

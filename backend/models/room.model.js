@@ -14,24 +14,33 @@ class Room {
 				usable BOOL NOT NULL
 			)
 		`;
-	}
-	
-	static async getAllRooms () {
-		const result = await PostgressStore.client.query(
-			`SELECT * FROM ${Room.tableName} ORDER BY name`
-		);
-		return result.rows;
-	}
+  }
 
-	static async update (params, values) {
-		await PostgressStore.client.query({
-			text: `
+  static async getAllRooms () {
+    const result = await PostgressStore.client.query(
+			`SELECT * FROM ${Room.tableName} ORDER BY name`
+    );
+    return result.rows;
+  }
+
+  static async init () {
+    const result = await PostgressStore.client.query(
+			`INSERT INTO ${this.tableName}
+				(name, max_student, max_project, max_student_per_project, color, usable)
+				VALUES ('E01', 0, 0, 0, '#000001', false), ('E02', 0, 0, 0, '#000002', false), ('E03', 0, 0, 0, '#000003', false);`
+    );
+    return result.rows;
+  }
+
+  static async update (params, values) {
+    await PostgressStore.client.query({
+      text: `
 				UPDATE ${Room.tableName}
 				SET ${params}
 				WHERE id = $1`,
-			values: [ ...values ]
-		});
-	}
+      values: [...values]
+    });
+  }
 }
 
 /** @type {String} */
