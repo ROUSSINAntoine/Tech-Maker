@@ -81,8 +81,10 @@
         > 
           <v-card>
             <v-card-title class="headline">Liste des étudiants</v-card-title>
-            <v-card-text v-for="student in students" v-bind:key="student.id">
-                <v-btn 
+            <v-card-text v-if="!students[0]"><v-alert type='error'>Pas d'étudiants</v-alert></v-card-text>
+            <v-card-text v-else v-for="student in students" v-bind:key="student.id">
+                <v-alert v-if="students.length == 0">test</v-alert>
+                <v-btn v-else
                   v-on:click="addMember(student.id)"
                   @click.stop="dialog = false" text> {{ student.name }} </v-btn>
             </v-card-text>

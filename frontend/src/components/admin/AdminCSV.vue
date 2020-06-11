@@ -9,7 +9,9 @@
         style='margin-right:250px; margin-left:250px' 
       ></v-file-input>
       <v-btn v-on:click='submitForm()' type='submit' color='#75b658'>Envoyer</v-btn>
-      <!-- <button v-on:click='submitForm()' type='submit'>Envoyer</button> -->
+      <v-snackbar v-model="snackbar" :timeout="timeout">
+        {{ Message }}
+      </v-snackbar>
   </div>
 </template>
 
@@ -28,6 +30,8 @@ export default {
 }, 
   data () {
     return {
+      snackbar: false,
+      timeout: 5000,
       title: null,
       userType: null,  
       Message: null,
@@ -43,7 +47,6 @@ export default {
   },
   methods: {
     onfileChange(files) {
-      
       if(files instanceof Array) { this.createInput(files[0]); }
       else { this.createInput(files); } 
     },
@@ -52,15 +55,15 @@ export default {
       reader.onload = e => {
         this.currdentData.csv = e.target.result;
       };
-      reader.readAsText(file);
+      if (file) reader.readAsText(file);
     },
     async submitForm() {
       const data = { csv: this.currdentData.csv };
-      console.log(this.userType);
       const succes = await AddStudentCSV(data, this.userType);
       
       if (succes.response !== null || succes.response !== undefined) {
         this.Message = succes.response;
+        this.snackbar = true;
         this.csv = null;
       } else {
         this.Message = 'null'
