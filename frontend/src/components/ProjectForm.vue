@@ -186,6 +186,16 @@
               >Sauvegarder</v-btn>
           </v-col>
 
+          <router-link :to='"/student/createPDF"' class='routerlink'>
+            <v-col cols="12" sm="12">
+              <v-btn
+                v-if="editable || userType === 'admin'"
+                v-on:click="submitForm()"
+                @click="snackbar = true"
+                >Générer PDF</v-btn>
+            </v-col>
+          </router-link>
+
           <div class="text-center">
             <v-snackbar
               v-model="snackbar"
