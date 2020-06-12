@@ -187,6 +187,15 @@
               >Sauvegarder</v-btn>
           </v-col>
 
+          <v-btn v-on:click="testPDF()">Test PDF</v-btn>
+
+          <router-link :to='"/student/createPDF/" + this.projectId' class='routerlink'>
+            <v-col cols="12" sm="12">
+              <v-btn
+                >Générer PDF</v-btn>
+            </v-col>
+          </router-link>
+
           <div class="text-center">
             <v-snackbar
               v-model="snackbar"
@@ -290,6 +299,11 @@ export default {
     this.semesters = (this.userType === 'teacher')
       ? await getSemestersPerTeacher()
       : await getAllSemestersName();
+  },
+
+  testPDF () {
+    const RenderPDF = require('chrome-headless-render-pdf');
+    RenderPDF.generateSinglePdf('http://google.com', 'outputPdf.pdf');
   },
   methods: {
     async changeSemester () {

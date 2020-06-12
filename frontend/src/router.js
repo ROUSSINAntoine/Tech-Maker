@@ -11,6 +11,7 @@ import AdminCSV from './components/admin/AdminCSV.vue';
 import AdminStudentTable from './components/admin/AdminStudentTable.vue';
 import NotFound from './views/NotFound.vue';
 import RoomTable from './components/admin/RoomTable.vue';
+import projectPDF from './components/projectPDF.vue'
 
 async function beforeEnter (to, from, next) {
   const resp = await isConnected();
@@ -39,6 +40,10 @@ const routes = [
         }
       },
       {
+        path: 'projectPDF',
+        component: projectPDF
+      },
+      {
         path: 'juryCSV',
         component: AdminCSV
       },
@@ -52,6 +57,11 @@ const routes = [
     path: '/student',
     component: StudentHomepage,
     beforeEnter
+  },
+  {
+    path: '/student/createPDF/:projectId',
+    component: projectPDF,
+    props: (route) => ({projectId: Number(route.params.projectId)})
   },
   {
     path: '/teacher',
