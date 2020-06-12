@@ -4,7 +4,7 @@
       <div class='image'>
         <img style='width: 50px;' src="../assets/logo_mini_blanc.png">
       </div>
-      <h1>Tech'Maker</h1>
+      <h1>{{data.name}}</h1>
       <div class="headInformation">
         <div class='colorGrey'><span>N°1</span> - <span>E09</span><br></div>
         <span>Semestre 1</span>
@@ -13,18 +13,15 @@
     </div>
     <div class='body'>
       <img src="" alt="">
-      <h2 class='slogan'>CECI EST UN SLOGAN</h2>
-      <p class="description">je suis une description qui dure longtemps mais comme je n'ai pas d'inspiration, j'écris sans réellement savoir ce que je fais. Peut-être se moqueront-ils de moi, peut-être pas. En attendant, je déteste faire du HTML et du CSS parce que les flx box c'est vraiment pas très convivial.</p>
+      <h2 class='slogan'>{{data.slogan}}</h2>
+      <p class="description">{{data.describe}}</p>
       <br>
       <div>
         <div class='titleTechnology'>
           <h3>TECHNOLOGIES</h3>
         </div>
-        <ul class='technologies'>
-          <li>Node.js</li>
-          <li>Vue.js</li>
-          <li>HTML</li>
-          <li>CSS</li>
+        <ul class='technologies' v-for="technology in data.technologies" v-bind:key="technology">
+          <li>{{technology}}</li>
         </ul>
       </div>
     </div>
@@ -34,6 +31,31 @@
     </div>
   </div>
 </template>
+
+<script>
+import { getProjectData, getAllTechnologies } from '../services/services.js';
+
+export default {
+  props: {
+    projectId: Number
+  },
+  async created () {
+    this.data = await getProjectData(this.projectId);
+    const technologies = (await getAllTechnologies()).technologies;
+    const projectTechnologiesName = this.data.technologies.map(t => technologies.find(i => i.id === t).name);
+    this.data.technologies = projectTechnologiesName;
+    
+    console.log(projectTechnologiesName);
+    
+  },
+  data () {
+    return {
+      data: {}
+    }
+  },
+}
+
+</script>
 
 <style>
   @font-face {

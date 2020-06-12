@@ -59,6 +59,11 @@ const routes = [
     beforeEnter
   },
   {
+    path: '/student/createPDF/:projectId',
+    component: projectPDF,
+    props: (route) => ({projectId: Number(route.params.projectId)})
+  },
+  {
     path: '/teacher',
     component: TeacherHomepage,
     beforeEnter,

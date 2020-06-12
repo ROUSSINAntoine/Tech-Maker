@@ -54,7 +54,6 @@ export default {
   },
   async created() {
     const data = await getStudentData();
-    console.log('data', data)
     this.name = data.name;
     this.projectId = data.projectid;
   },
