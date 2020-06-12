@@ -12,7 +12,7 @@
     <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense>
 
-        <router-link :to='"/admin/students"' class='routerlink'>
+        <router-link :to='"/admin/studentCSV"' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-account</v-icon>
@@ -56,7 +56,7 @@
           </v-list-item>
         <!-- </router-link> -->
 
-        <!-- <router-link :to='"/admin/" + $route.params.id + "/jury"' class='routerlink'> -->
+        <router-link :to='"/admin/juryCSV"' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-account-group</v-icon>
@@ -65,7 +65,7 @@
               <v-list-item-title>Jurys</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        <!-- </router-link> -->
+        </router-link>
 
         <!-- <router-link :to='"/admin/" + $route.params.id + "/enseignants"' class='routerlink'> -->
           <v-list-item link>
@@ -92,7 +92,7 @@
         <v-spacer class=''></v-spacer>
 
         <v-btn style='margin:10px' color="red" v-on:click='disconnect'>Déconnexion</v-btn><br>
-        <v-btn style='margin:10px' id='test' v-on:click="resetData()">Réinitialiser</v-btn><br>
+        <v-btn style='margin:10px' id='test' @click="snackbar = true" v-on:click="resetData()">Réinitialiser</v-btn><br>
 
         <v-btn style='width:100px; height:35px; margin:10px; color:black; background-color: white' v-if="$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Clair</v-btn>
         <v-btn style='width:100px; height:35px; margin:10px; color:white; background-color: black' v-if="!$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Sombre</v-btn>
@@ -100,6 +100,10 @@
 
       </v-list>
     </v-navigation-drawer>
+    
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+      La base de donnée a bien été réinitialisée.
+    </v-snackbar>
   </div>
 </template>
 
@@ -124,8 +128,10 @@ export default {
     }
   },
   data: () => ({
+    snackbar: false,
+    timeout: 5000,
     switch1: true,
-      drawer: null
+    drawer: null
   }),
 
 }

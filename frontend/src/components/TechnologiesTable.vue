@@ -75,6 +75,10 @@
     <v-btn v-on:click='sendIds()' color='#75b658' style='margin: 10px'>Sauvegarder</v-btn>
     <v-divider style='margin: 20px'></v-divider>
     <CreateTechnology v-if="isAdmin" v-on:create-technology="addTechnology" />
+
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+      Vos technologies ont bien été enregistrées.
+    </v-snackbar>
   </div>
 </template>
 
@@ -96,6 +100,8 @@ export default {
   },
   data() {
     return {
+      snackbar: false,
+      timeout: 5000,
       /** @type {Array.<{ id: Number, name: String, checkedIds: Array.<Number>, modifyIds: Array.<Number> }>} */
       semesters: [],
       /** @type {Array.<{ id: Number, name: String }>} */
@@ -168,6 +174,7 @@ export default {
       }
 
       if (updateList.length > 0) {
+        this.snackbar = true;
         setModifiedTechnologiesPerSemester(updateList);
         this.semesters.forEach(s => {
           s.checkedIds = [ ...s.modifyIds ]

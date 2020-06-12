@@ -136,6 +136,19 @@ export function createProject (name, membersId, projectManager) {
     .then(data => data);
 }
 
+export function createRoom (name, max_student, max_project, max_student_per_project) {
+  return fetch(`${SERVER_URL}/admin/createRoom`, {
+    method: 'post',
+    credentialds: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({name, max_student, max_project, max_student_per_project})
+  })
+  .then(resp => resp.json())
+  .then(data => data);
+}
+
 /**
  * Get all technologies of the semester.
  * @param {Number} semesterId Id of semester
@@ -265,8 +278,8 @@ export function getAllSemestersName () {
  * @param {string} Content of the csv
  * @returns {Promise<{response: string}>}
  */
-export function AddStudentCSV (csv) {
-  return fetch(`${SERVER_URL}/admin/StudentCSV`, {
+export function AddStudentCSV (csv, userType) {
+  return fetch(`${SERVER_URL}/admin/${userType}`, {
     method: 'post',
     credentials: 'include',
     headers: {

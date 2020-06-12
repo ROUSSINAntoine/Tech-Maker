@@ -1,6 +1,6 @@
 <template>
-  <div class='text-center' name='AdminStudentCSV'>
-    <h1>CSV étudiants</h1>
+  <div class='text-center' name='AdminCSV'>
+    <h1>{{ this.title }}</h1>
       <v-file-input 
         @change='onfileChange' 
         accept='csv'
@@ -9,25 +9,44 @@
         style='margin-right:250px; margin-left:250px' 
       ></v-file-input>
       <v-btn v-on:click='submitForm()' type='submit' color='#75b658'>Envoyer</v-btn>
-      <!-- <button v-on:click='submitForm()' type='submit'>Envoyer</button> -->
+      <v-snackbar v-model="snackbar" :timeout="timeout">
+        {{ Message }}
+      </v-snackbar>
   </div>
 </template>
 
 <script>
 import { AddStudentCSV } from '../../services/services';
+
 export default {
-  name: 'AdminStudentCSV',
+  name: 'AdminCSV',
+  watch:{
+    $route (to, from) {
+      from;
+      this.userType = to.path.split('/')[2] === 'studentCSV' ? 'studentCSV' : 'juryCSV';
+        if (this.userType === 'studentCSV') this.title = 'CSV étudiants';
+        else this.title = 'CSV jurys';
+    }
+}, 
   data () {
-    return {  
-    Message: null,
+    return {
+      snackbar: false,
+      timeout: 5000,
+      title: null,
+      userType: null,  
+      Message: null,
       currdentData: {
-        csv: null
+      csv: null
       }
     }
   },
+  created () {
+    this.userType = this.$route.path.split('/')[2];
+    if (this.userType === 'studentCSV') this.title = 'CSV étudiants';
+    else this.title = 'CSV jurys';
+  },
   methods: {
     onfileChange(files) {
-      
       if(files instanceof Array) { this.createInput(files[0]); }
       else { this.createInput(files); } 
     },
@@ -36,15 +55,15 @@ export default {
       reader.onload = e => {
         this.currdentData.csv = e.target.result;
       };
-      reader.readAsText(file);
+      if (file) reader.readAsText(file);
     },
     async submitForm() {
       const data = { csv: this.currdentData.csv };
-      const succes = await AddStudentCSV(data);
+      const succes = await AddStudentCSV(data, this.userType);
       
       if (succes.response !== null || succes.response !== undefined) {
-        console.log('added');
         this.Message = succes.response;
+        this.snackbar = true;
         this.csv = null;
       } else {
         this.Message = 'null'

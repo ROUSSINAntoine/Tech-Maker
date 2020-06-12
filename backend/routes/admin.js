@@ -59,7 +59,7 @@ router.post('/createTechno', async function (req, res, next) {
   res.send(response);
 });
 
-router.post('/StudentCSV', async function (req, res, next) {
+router.post('/studentCSV', async function (req, res, next) {
   let csv0 = req.body.csv.replace(/(\r\n)/g, ';');
   csv0 = csv0.replace(/\s/g, '');
   const csv1 = csv0.split(';');
