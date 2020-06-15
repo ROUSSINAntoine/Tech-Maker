@@ -101,6 +101,31 @@ class Project {
       values: [validate, projectId]
     });
   }
+
+  static async getData () {
+    const Student = require('./student.model.js'); 
+    const Position = require('./position.model.js');
+    const result = await PostgressStore.client.query(
+      `SELECT p.id, p.name, COUNT(s.user_id) AS nbstudents, po.room_id
+       FROM ${Project.tableName} AS p
+       LEFT JOIN ${Student.tableName} AS s
+       ON p.id = s.project_id
+       LEFT JOIN ${Position.tableName} AS po
+       ON p.position_id = po.id
+       GROUP BY p.id, po.room_id
+       ORDER BY name`
+    );
+    return result.rows;
+  }
+
+  static async updateRoom (projectId, roomId) {
+    await PostgressStore.client.query({
+      text: `
+        UPDATE ${Project.tableName}
+        SET `,
+        values: [projectId, roomId]
+    });
+  }
 }
 
 /** @type {String} */

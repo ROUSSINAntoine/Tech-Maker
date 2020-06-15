@@ -25,14 +25,20 @@
     <span v-if="errorMessage">{{ errorMessage }}</span>
     <span v-if="notification">{{ notification }}</span>
     <button v-on:click="send">Sauvegarder</button>
+
+    <ProjectsTable :rooms="oldRoomsSettings" />
   </div>
 </template>
 
 <script>
 import { getRooms, updateRoomsData } from '../../services/services.js';
+import ProjectsTable from './ProjectsTable.vue';
 
 export default {
   name: 'RoomTable',
+  components: {
+    ProjectsTable
+  },
   data () {
     return {
       /** @type {Array.<{

@@ -175,4 +175,23 @@ router.put('/rooms/update', async (req, res) => {
   res.status(200).send({ error: false, message: "Opération effectuée avec succès." });
 });
 
+router.get('/projectShortData', async (req, res) => {
+  const result = await Project.getData();
+  res.status(200).send(result.map(r => {
+    return {
+      id: r.id,
+      name: r.name,
+      nbStudents: Number(r.nbstudents),
+      roomId: r.room_id
+    }
+  }));
+});
+
+router.put('/updateProjectsRoom'), (async (req, res) => {
+  for (const project in req.body) {
+    await Project.updateRoom(project.projectId, project.roomId);
+  }
+  res.status(200).send({ error: false, message: 'Opération effectuée avec succès.'});
+});
+
 module.exports = router;
