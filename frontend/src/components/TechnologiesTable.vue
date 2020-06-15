@@ -64,8 +64,7 @@
       </tbody>
     </table>
     
-    <span v-if='errorUpdateMessage !== null && selectedId !== null'>{{ errorUpdateMessage }}</span>
-
+    <v-alert style='margin: 10px' type='error' v-if='errorUpdateMessage !== null && selectedId !== null'>{{ errorUpdateMessage }}</v-alert>
 
     <v-row justify="center">
     <!--   <v-btn
@@ -106,13 +105,6 @@
         </v-card>
     </v-dialog>
   </v-row>
-
-
-    <div  v-if="!updateOrDelete && selectedId !== null">
-      <span>Êtes-vous sûr de vouloir supprimer la technologie: {{ selectedName }}</span>
-      <button v-on:click="deleteTechnology()">Oui</button>
-      <button v-on:click="cancelUpdateOrDeleteTechnology()">Non</button>
-    </div>
 
     <v-btn v-on:click='sendIds()' color='#75b658' style='margin: 10px'>Sauvegarder</v-btn>
     <v-divider style='margin: 20px'></v-divider>
