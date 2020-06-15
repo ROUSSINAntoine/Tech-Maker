@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "chrome-headless-render-pdf": "^1.8.4",
     "core-js": "^3.6.4",
     "node-fetch": "^2.6.0",
     "vue": "^2.6.11",
