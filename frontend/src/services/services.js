@@ -249,6 +249,13 @@ export function setModifiedprojectData (modifiedData) {
   });
 }
 
+export function createPDF (projectName) {
+  fetch(`${SERVER_URL}/createPDF`, {
+    method: 'post',
+    body: projectName
+  });
+}
+
 /**
  * Get all semesters for the teacher.
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
