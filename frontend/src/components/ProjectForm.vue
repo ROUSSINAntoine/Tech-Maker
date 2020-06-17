@@ -102,7 +102,7 @@
             <v-card class="mx-auto">
               <v-card-title style='background-color:#75b658'>Logo</v-card-title>
               <v-card-text>
-                <img v-if='oldData.log !== null' :src="oldData.logo"/>
+                <img v-if='oldData.logo !== null' :src="oldData.logo"/>
                 <v-file-input
                   v-if="!currentData.logo && editable"
                   label="Logo"
@@ -187,14 +187,14 @@
               >Sauvegarder</v-btn>
           </v-col>
 
-          <v-btn v-on:click="testPDF()">Test PDF</v-btn>
-
           <router-link :to='"/student/createPDF/" + this.projectId' class='routerlink'>
-            <v-col cols="12" sm="12">
-              <v-btn
-                >Générer PDF</v-btn>
-            </v-col>
+            <v-btn v-on:click="testPDF()">Test PDF</v-btn>
           </router-link>
+
+          <v-col cols="12" sm="12">
+            <v-btn v-on:click="submitPDF()"
+              >Générer PDF</v-btn>
+          </v-col>
 
           <div class="text-center">
             <v-snackbar
@@ -218,7 +218,8 @@ import {
   getProjectData,
   setModifiedprojectData,
   getSemestersPerTeacher,
-  getAllSemestersName
+  getAllSemestersName,
+  createPDF
 } from '../services/services.js';
 
 export default {
@@ -351,6 +352,9 @@ export default {
     removeImage () {
       this.currentData.logo = '';
     },
+    submitPDF() {
+      createPDF(this.currentData.name);
+    },
     submitForm() {
       if (this.currentData.membersId.length === 0) {
         this.errorMessage = 'Il doit y avoir au moins un membre dans le projet.';
@@ -368,7 +372,7 @@ export default {
       }
       if (this.oldData.slogan !== this.currentData.slogan) {
         if (!this.currentData.slogan) {
-          this.errorMessage = 'Le slogant ne doit pas être laissé vide.';
+          this.errorMessage = 'Le slogan ne doit pas être laissé vide.';
           return;
         }
         form.append('slogan' , this.currentData.slogan);
@@ -407,6 +411,7 @@ export default {
       // var res = [...form.entries()]
       // if (res.length > 1) {
         setModifiedprojectData(form);
+        console.log(form);
         this.errorMessage = null;
       // }
     },

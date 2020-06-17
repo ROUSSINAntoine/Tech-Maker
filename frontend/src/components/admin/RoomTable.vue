@@ -95,7 +95,7 @@
               ></v-text-field>
             </v-col>
         </v-row>
-        <v-color-picker style='margin:auto'></v-color-picker>
+        <v-color-picker v-model="color" style='margin:auto' required></v-color-picker>
         <v-btn v-on:click='createRoom()' color='#75b658' style='margin:20px'>Sauvegarder</v-btn>
       </v-cards-action>
     </v-card>
@@ -122,6 +122,8 @@ export default {
       max_project: null,
       /** @type {Number} */
       max_student_per_project: null,
+      /** @type {String} */
+      color: null,
 
       /** @type {Array.<{
        *  id: number,
@@ -162,7 +164,7 @@ export default {
       } else if (this.max_student_per_project === null || this.max_student_per_project === '') {
         this.errorMessage = 'Le champ étudiants/projets ne doit pas être laissé vide.';
       } else {
-        const success = await createRoom(this.name, this.max_student, this.max_project, this.max_student_per_project);
+        const success = await createRoom(this.name, this.max_student, this.max_project, this.max_student_per_project, this.color);
         
         if (success.error === undefined || success.error === null) {
           console.log('created');

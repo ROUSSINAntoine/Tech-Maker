@@ -64,13 +64,47 @@
       </tbody>
     </table>
     
-    <span v-if='errorUpdateMessage !== null && selectedId !== null'>{{ errorUpdateMessage }}</span>
+    <v-alert style='margin: 10px' type='error' v-if='errorUpdateMessage !== null && selectedId !== null'>{{ errorUpdateMessage }}</v-alert>
 
-    <div  v-if="!updateOrDelete && selectedId !== null">
-      <span>Êtes-vous sûr de vouloir supprimer la technologie: {{ selectedName }}</span>
-      <button v-on:click="deleteTechnology()">Oui</button>
-      <button v-on:click="cancelUpdateOrDeleteTechnology()">Non</button>
-    </div>
+    <v-row justify="center">
+    <!--   <v-btn
+        color="primary"
+        dark
+        @click.stop="dialog = true"
+      >
+        Open Dialog
+      </v-btn> -->
+
+      <v-dialog v-if="!updateOrDelete && selectedId !== null" v-model="dialog" max-width="300">
+        <v-card>
+          <v-card-title class="headline">Confirmation de <br>suppression</v-card-title>
+
+          <v-card-text>
+            Êtes-vous sûr de vouloir supprimer la technologie "{{ selectedName }}" ?
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              color="green darken-1"
+              text
+              v-on:click="deleteTechnology()"
+            >
+              Oui
+            </v-btn>
+
+            <v-btn
+              color="green darken-1"
+              text
+              v-on:click="cancelUpdateOrDeleteTechnology()"
+            >
+              Annuler
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+    </v-dialog>
+  </v-row>
 
     <v-btn v-on:click='sendIds()' color='#75b658' style='margin: 10px'>Sauvegarder</v-btn>
     <v-divider style='margin: 20px'></v-divider>
@@ -100,6 +134,7 @@ export default {
   },
   data() {
     return {
+      dialog: true,
       snackbar: false,
       timeout: 5000,
       /** @type {Array.<{ id: Number, name: String, checkedIds: Array.<Number>, modifyIds: Array.<Number> }>} */

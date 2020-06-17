@@ -136,14 +136,14 @@ export function createProject (name, membersId, projectManager) {
     .then(data => data);
 }
 
-export function createRoom (name, max_student, max_project, max_student_per_project) {
+export function createRoom (name, max_student, max_project, max_student_per_project, color) {
   return fetch(`${SERVER_URL}/admin/createRoom`, {
     method: 'post',
     credentialds: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({name, max_student, max_project, max_student_per_project})
+    body: JSON.stringify({name, max_student, max_project, max_student_per_project, color})
   })
   .then(resp => resp.json())
   .then(data => data);
@@ -246,6 +246,13 @@ export function setModifiedprojectData (modifiedData) {
     method: 'put',
     credentials: 'include',
     body: modifiedData
+  });
+}
+
+export function createPDF (projectName) {
+  fetch(`${SERVER_URL}/createPDF`, {
+    method: 'post',
+    body: projectName
   });
 }
 
