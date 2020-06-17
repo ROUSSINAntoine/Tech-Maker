@@ -60,7 +60,7 @@ export default {
 <style>
   @font-face {
   font-family: "Mono";
-  src: url("C:/Users/CELLIERTitouan/Desktop/charte/PTM75F.ttf")
+  
   }
 
   .pdf {

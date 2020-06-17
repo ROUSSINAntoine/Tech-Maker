@@ -118,7 +118,7 @@ router.put('/modifiedProject', upload.single('logo'), async function (req, res, 
   if (req.body.name) project.name = req.body.name;
   if (req.body.slogan) project.slogan = req.body.slogan;
   if (req.body.describe) project.describe = req.body.describe;
-  if (req.file.fieldname) project.image = req.file.filename;
+  if (req.file) project.image = req.file.filename;
   if (req.body.technologies) techno = req.body.technologies;
   if (req.body.membersId) student.push(...req.body.membersId);
   if (req.body.projectManager) projectManager = req.body.projectManager;
