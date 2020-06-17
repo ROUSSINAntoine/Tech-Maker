@@ -32,6 +32,16 @@ class Room {
     return result.rows;
   }
 
+  static async newRoom (name, max_student, max_project, max_student_per_project, color) {
+    const result = await PostgressStore.client.query({
+			text: `INSERT INTO ${this.tableName}
+				(name, max_student, max_project, max_student_per_project, color, usable)
+        VALUES ($1, $2, $3, $4, $5, false);`,
+      values: [name, max_student, max_project, max_student_per_project, color]
+    });
+    return result.rows;
+  }
+
   static async update (params, values) {
     await PostgressStore.client.query({
       text: `

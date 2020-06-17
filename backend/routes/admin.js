@@ -176,6 +176,10 @@ router.put('/rooms/update', async (req, res) => {
   res.status(200).send({ error: false, message: 'Opération effectuée avec succès.' });
 });
 
+router.post('/createRoom', async function (req, res, next) {
+  Room.newRoom(req.body.name, req.body.max_student, req.body.max_project, req.body.max_student_per_project, '')
+});
+
 router.post('/juryCSV', async function (req, res, next) {
   // RenderPDF.default.
   RenderPDF.default.generateSinglePdf('http://google.com', 'outputPdf.pdf', {chromeBinary : 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'});
