@@ -164,7 +164,7 @@ export default {
       } else if (this.max_student_per_project === null || this.max_student_per_project === '') {
         this.errorMessage = 'Le champ étudiants/projets ne doit pas être laissé vide.';
       } else {
-        const success = await createRoom(this.name, this.max_student, this.max_project, this.max_student_per_project, this.color);
+        const success = await createRoom(this.name, this.max_student, this.max_project, this.max_student_per_project, this.color.hex);
         
         if (success.error === undefined || success.error === null) {
           console.log('created');
