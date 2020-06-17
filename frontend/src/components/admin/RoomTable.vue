@@ -62,6 +62,7 @@
         <v-row style='margin:auto'>
           <v-col cols="12" sm="6" md="5">
             <v-text-field
+              v-on:keyup.enter="createRoom()"
               label="Nom"
               v-model="name"
               required
@@ -70,6 +71,7 @@
           </v-col>
           <v-col cols="12" sm="6" md="5">
               <v-text-field
+                v-on:keyup.enter="createRoom()"
                 label="max étudiants"
                 v-model="max_student"
                 min="1" required 
@@ -79,6 +81,7 @@
 
             <v-col cols="12" sm="6" md="5">
               <v-text-field
+                v-on:keyup.enter="createRoom()"
                 label="max projets"
                 v-model="max_project"
                 min="1" required 
@@ -88,6 +91,7 @@
 
             <v-col cols="12" sm="6" md="5">
               <v-text-field
+                v-on:keyup.enter="createRoom()"
                 label="étudiants/projets"
                 v-model="max_student_per_project"
                 min="1" required 
