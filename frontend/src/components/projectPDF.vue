@@ -7,7 +7,7 @@
       <h1>{{data.name}}</h1>
       <div class="headInformation">
         <div class='colorGrey'><span>N°1</span> - <span>E09</span><br></div>
-        <span>Semestre 1</span>
+        <!-- <span>{{ semester.find(s => s.id === data.semesterId).name }}</span> -->
       </div>  
     <br/>
     </div>
@@ -33,23 +33,25 @@
 </template>
 
 <script>
-import { getProjectData, getAllTechnologies } from '../services/services.js';
+import { getProjectData, getAllTechnologies, getAllSemestersName } from '../services/services.js';
 
 export default {
   props: {
     projectId: Number
   },
   async created () {
+    this.semester = getAllSemestersName();
     this.data = await getProjectData(this.projectId);
     const technologies = (await getAllTechnologies()).technologies;
     const projectTechnologiesName = this.data.technologies.map(t => technologies.find(i => i.id === t).name);
     this.data.technologies = projectTechnologiesName;
-    
-    console.log(projectTechnologiesName);
+    console.log(this.semester)
+    console.log(this.data);
     
   },
   data () {
     return {
+      semester: null,
       data: {}
     }
   },
