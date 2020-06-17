@@ -177,7 +177,7 @@ router.put('/rooms/update', async (req, res) => {
 });
 
 router.post('/createRoom', async function (req, res, next) {
-  Room.newRoom(req.body.name, req.body.max_student, req.body.max_project, req.body.max_student_per_project, '')
+  Room.newRoom(req.body.name, req.body.max_student, req.body.max_project, req.body.max_student_per_project, req.body.color)
 });
 
 router.post('/juryCSV', async function (req, res, next) {
