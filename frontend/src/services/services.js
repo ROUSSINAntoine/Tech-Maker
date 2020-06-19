@@ -249,10 +249,10 @@ export function setModifiedprojectData (modifiedData) {
   });
 }
 
-export function createPDF (projectName) {
+export function createPDF (projectId) {
   fetch(`${SERVER_URL}/createPDF`, {
     method: 'post',
-    body: projectName
+    body: projectId
   });
 }
 

@@ -124,6 +124,8 @@ router.put('/modifiedProject', upload.single('logo'), async function (req, res, 
   if (req.body.projectManager) projectManager = req.body.projectManager;
   project.validate = req.session.userType === 'student' ? 'waiting' : 'yes';
 
+  console.log(req.body.projectManager);
+
   if (Object.keys(project).length !== 1) {
     const validCollumn = ['id', 'name', 'describe', 'slogan', 'image', 'validate'];
     const collumn = Object.keys(project);

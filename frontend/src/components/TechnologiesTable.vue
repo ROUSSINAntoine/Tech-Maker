@@ -16,6 +16,7 @@
             <span v-if='selectedId !== technology.id'>{{ technology.name }}</span>
 
             <input
+              v-on:keyup.enter="updateTechnology()"
               type='text'
               v-model='selectedName'
               v-if='selectedId === technology.id && isAdmin && updateOrDelete'

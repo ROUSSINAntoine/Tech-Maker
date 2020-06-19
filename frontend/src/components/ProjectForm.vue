@@ -353,7 +353,7 @@ export default {
       this.currentData.logo = '';
     },
     submitPDF() {
-      createPDF(this.currentData.name);
+      createPDF(this.projectId);
     },
     submitForm() {
       if (this.currentData.membersId.length === 0) {

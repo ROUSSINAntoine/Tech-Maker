@@ -5,7 +5,8 @@
     <v-card class="mx-auto" max-width="500px">
       <v-card-title style='background-color:#75b658'>Ajouter une technologie</v-card-title>
         <v-text-field
-        style='margin:20px'
+          v-on:keyup.enter="sendTechnology()"
+          style='margin:20px'
           v-model="technologyName"
           required
           label="Nom de la technologie"

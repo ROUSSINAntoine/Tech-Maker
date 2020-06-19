@@ -186,7 +186,7 @@ router.post('/juryCSV', async function (req, res, next) {
   res.send({ response: 'Les étudiants ont bien été ajouté à la base de donnée.' });
 });
 
-router.get('pdf', async function (req, res, next) {
+router.get('createPDF', async function (req, res, next) {
   project = Project.getById(req.params.id)
   RenderPDF.generateSinglePdf(`http://localhost:8080/student/createPDF/${id}`, `${__dirname}/../pdf/${project.name}.pdf`);
 })

@@ -5,6 +5,7 @@
       <v-card-title style='background-color:#75b658'>Créer un projet</v-card-title>
       <v-card-actions>
           <v-text-field
+            v-on:keyup.enter="saveProject()"
             v-model="projectName"
             required
             dense
