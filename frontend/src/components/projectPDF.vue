@@ -46,7 +46,6 @@ export default {
     this.data.technologies = projectTechnologiesName;
     
     console.log(projectTechnologiesName);
-    
   },
   data () {
     return {

@@ -187,7 +187,8 @@ router.post('/juryCSV', async function (req, res, next) {
 });
 
 router.get('pdf', async function (req, res, next) {
-  RenderPDF.default.generateSinglePdf(``, `${__dirname}/../pdf/${req.body.name}.pdf`)
+  project = Project.getById(req.params.id)
+  RenderPDF.generateSinglePdf(`http://localhost:8080/student/createPDF/${id}`, `${__dirname}/../pdf/${project.name}.pdf`);
 })
 
 module.exports = router;
