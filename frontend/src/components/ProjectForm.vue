@@ -170,7 +170,7 @@
                       <v-card-text v-for="student in students" v-bind:key="student.id">
                           <v-btn 
                             v-on:click="addMember(student.id)"
-                            @click.stop="dialog = false" text> {{ student.name }} </v-btn>
+                            @click.stop="dialog = false" text> {{ student.name }} {{student.id}} </v-btn>
                       </v-card-text>
                     </v-card>
                   </v-dialog>

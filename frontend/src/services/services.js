@@ -167,8 +167,8 @@ export function getTechnologiesPerSemester (semesterId) {
  * @param {Number} semesterId Id of the semester
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
-export function getStudentsPerSemester (semesterId) {
-  return fetch(`${SERVER_URL}/${semesterId}/students`, {
+export function getStudentsByProject (projectId) {
+  return fetch(`${SERVER_URL}/${projectId}/pdf`, {
     credentials: 'include'
   })
     .then(resp => resp.json())
@@ -205,6 +205,14 @@ export function getStudentsPerSemesterNotOnProject (semesterId, projectId) {
  */
 export function getProjectData (projectId) {
   return fetch(`${SERVER_URL}/${projectId}/project`, {
+    credentials: 'include'
+  })
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+export function getStudentsPerSemester (semesterId) {
+  return fetch(`${SERVER_URL}/${semesterId}/Students`, {
     credentials: 'include'
   })
     .then(resp => resp.json())

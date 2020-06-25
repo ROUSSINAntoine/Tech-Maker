@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div class='pdf'>
+      <div class="head">
+        <div class='image'>
+          <img style='width: 50px;' src="../assets/logo_mini_blanc.png">
+        </div>
+        <h1><%= project.name %></h1>
+        <div class="headInformation">
+          <div class='colorGrey'><span>N°1</span> - <span>E09</span><br></div>
+          <span><%= project.semester %></span>
+        </div>  
+      <br/>
+      </div>
+      <div class='body'>
+        <img src="" alt="">
+        <h2 class='slogan'><%= project.slogan %></h2>
+        <p class="description"><%= project.describe %></p>
+        <br>
+        <div>
+          <div class='titleTechnology'>
+            <h3>TECHNOLOGIES</h3>
+          </div>
+          <ul class='technologies' v-for="technology in data.technologies" v-bind:key="technology">
+            <li><%= project.technologies %></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="foot" v-for="student in students.filter(s => data.membersId.includes(s.id))" v-bind:key="student.name">
+        <span> <%= project.students.name %> </span>
+
+      </div>
+    </div>
+  </body>
+</html>

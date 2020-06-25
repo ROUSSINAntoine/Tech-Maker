@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const renderPDF = require('chrome-headless-render-pdf')
 // var Technology = require('../models/technology.model.js');
 const TechnologySemester = require('../models/technology_semester.model.js');
 const Student = require('../models/student.model.js');
@@ -23,6 +24,28 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/api/pdf/generate', (req, res, next) => {
+  res.render('pdf-generator', {
+    project: {
+      name: '',
+      slogan: '',
+      semester: '',
+      describe: '',
+      technologies: [],
+      students: []
+    }
+  })
+})
+
+router.get('/api/pdf/render', async (req, res, next) => {
+  const buffer = await renderPDF.generatePdfBuffer("http://localhost:3000/api/pdf/generate")
+
+  res.setHeader('Content-Type', 'application/pdf')
+  res.setHeader('Content-Disposition', `attachment; filename="pouet.pdf"`)
+  res.write(buffer)
+  res.end()
+})
+
 router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
   const changes = req.body;
   for (let i = 0; i < changes.length; i++) {
@@ -36,9 +59,6 @@ router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
 
 router.get('/:semesterId/Students', async function (req, res, next) {
   const students = await Student.getStudentBySemesterId(req.params.semesterId);
-  // console.log(await Student.getStudentBySemesterId(req.params.semesterId));
-  console.log(req.params.semesterId);
-  console.log(students);
   res.send(students);
 });
 
@@ -49,7 +69,11 @@ router.get('/technologiesPerSemester/:semesterId', async function (req, res, nex
 
 router.get('/:semesterId/:projectId/studentsNotOnProject', async function (req, res, next) {
   const students = await Student.getStudentBySemesterIdNotOnProject(req.params.semesterId, req.params.projectId);
-  // console.log(await Student.getStudentBySemesterId(req.params.semesterId));
+  res.send(students);
+});
+
+router.get('/:projectId/pdf', async function (req, res, next) {
+  const students = await Student.getByProject(req.params.projectId);
   res.send(students);
 });
 
