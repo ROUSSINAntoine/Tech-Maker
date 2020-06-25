@@ -14,7 +14,6 @@ const Judge = require('../models/judge.model.js');
 const Jury = require('../models/jury.model');
 const Project = require('../models/project.model.js');
 const Room = require('../models/room.model.js');
-const RenderPDF = require('chrome-headless-render-pdf');
 
 router.get('/techno', async function (req, res, next) {
   const semesters = await Semester.getAllNamesIds();
@@ -185,10 +184,5 @@ router.post('/juryCSV', async function (req, res, next) {
   RenderPDF.default.generateSinglePdf('http://google.com', 'outputPdf.pdf', {chromeBinary : 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'});
   res.send({ response: 'Les étudiants ont bien été ajouté à la base de donnée.' });
 });
-
-router.get('createPDF', async function (req, res, next) {
-  project = Project.getById(req.params.id)
-  RenderPDF.generateSinglePdf(`http://localhost:8080/student/createPDF/${id}`, `${__dirname}/../pdf/${project.name}.pdf`);
-})
 
 module.exports = router;

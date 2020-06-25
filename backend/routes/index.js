@@ -6,6 +6,7 @@ const Student = require('../models/student.model.js');
 const User = require('../models/user.model.js');
 const Project = require('../models/project.model.js');
 const ProjectTechno = require('../models/techno_project.model.js');
+const RenderPDF = require('chrome-headless-render-pdf');
 const multer = require('multer');
 const upload = multer({
   dest: `${__dirname}/../logos`,
@@ -119,12 +120,10 @@ router.put('/modifiedProject', upload.single('logo'), async function (req, res, 
   if (req.body.slogan) project.slogan = req.body.slogan;
   if (req.body.describe) project.describe = req.body.describe;
   if (req.file) project.image = req.file.filename;
-  if (req.body.technologies) techno = req.body.technologies;
-  if (req.body.membersId) student.push(...req.body.membersId);
-  if (req.body.projectManager) projectManager = req.body.projectManager;
+  if (req.body.technologies) techno = JSON.parse(req.body.technologies);
+  if (req.body.membersId) student.push(...JSON.parse(req.body.membersId));
+  if (req.body.projectManager) projectManager = JSON.parse(req.body.projectManager);
   project.validate = req.session.userType === 'student' ? 'waiting' : 'yes';
-
-  console.log(req.body.projectManager);
 
   if (Object.keys(project).length !== 1) {
     const validCollumn = ['id', 'name', 'describe', 'slogan', 'image', 'validate'];
@@ -164,5 +163,12 @@ router.put('/modifiedProject', upload.single('logo'), async function (req, res, 
   }
   console.log('panda');
 });
+
+router.post('/createPDF', async function (req, res, next) {
+  project = Project.getById(req.body.id)
+  console.log(`${__dirname}/../pdf/${project.name}.pdf`)
+  RenderPDF.default.generateSinglePdf(`http://localhost:8080/student/createPDF/${req.body.id}`, `${__dirname}/../pdf/${project.name}.pdf`, {chromeBinary: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'});
+  res.send
+})
 
 module.exports = router;
