@@ -395,17 +395,17 @@ export default {
         this.oldData.semesterId = this.currentData.semesterId;
       }
       if (this.oldData.projectManager !== this.currentData.projectManager) {
-        form.append('projectManager', { old: this.oldData.projectManager, new: this.currentData.projectManager });
+        form.append('projectManager', JSON.stringify({ old: this.oldData.projectManager, new: this.currentData.projectManager }));
         this.oldData.projectManager = this.currentData.projectManager;
       }
       let update = this.getUpdatedElement(this.oldData.technologies, this.currentData.technologies);
       if (update.length > 0) {
-        form.append('technologies', update);
+        form.append('technologies', JSON.stringify(update));
         this.oldData.technologies = [ ...this.currentData.technologies ];
       }
       update = this.getUpdatedElement(this.oldData.membersId, this.currentData.membersId);
       if (update.length > 0) {
-        form.append('membersId', update);
+        form.append('membersId', JSON.stringify(update));
         this.oldData.membersId = [ ...this.currentData.membersId ];
       }
       // var res = [...form.entries()]
