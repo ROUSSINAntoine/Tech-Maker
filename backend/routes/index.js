@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const renderPDF = require('chrome-headless-render-pdf')
+const renderPDF = require('chrome-headless-render-pdf');
 // var Technology = require('../models/technology.model.js');
 const TechnologySemester = require('../models/technology_semester.model.js');
 const Student = require('../models/student.model.js');
@@ -26,7 +26,6 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/api/pdf/generate', (req, res, next) => {
-
   res.render('pdf-generator', {
     title: 'Fiche projet',
     user: {
@@ -39,17 +38,17 @@ router.get('/api/pdf/generate', (req, res, next) => {
       technologies: [],
       members: []
     }
-  })
-})
+  });
+});
 
 router.get('/api/pdf/render', async (req, res, next) => {
-  const buffer = await renderPDF.generatePdfBuffer("http://localhost:3000/api/pdf/generate")
+  const buffer = await renderPDF.generatePdfBuffer('http://localhost:3000/api/pdf/generate');
 
-  res.setHeader('Content-Type', 'application/pdf')
-  res.setHeader('Content-Disposition', `attachment; filename="ficheProjet.pdf"`)
-  res.write(buffer)
-  res.end()
-})
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', 'attachment; filename="ficheProjet.pdf"');
+  res.write(buffer);
+  res.end();
+});
 
 router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
   const changes = req.body;
@@ -91,6 +90,9 @@ router.get('/:projectId/project', async function (req, res, next) {
   for (let i = 0; i < students.length; i++) {
     if (students[i].project_manager === true) projectManager = students[i].id;
   }
+  let logo;
+  if (project[0].logo === null) logo = null;
+  else logo = `http://localhost:3000/logo/${project[0].logo}`;
 
   const response = {
     id: req.params.projectId,
@@ -100,7 +102,7 @@ router.get('/:projectId/project', async function (req, res, next) {
     image: project[0].image,
     technologies: projectTechno.map(i => i.technology_id),
     membersId: students.map(i => i.id),
-    logo: `http://localhost:3000/logo/${project[0].logo}`,
+    logo: logo,
     needs: project[0].needs,
     semesterId: students[0].semester_id,
     projectManager: projectManager
