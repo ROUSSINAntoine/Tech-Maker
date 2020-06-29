@@ -6,7 +6,7 @@ const Student = require('../models/student.model.js');
 const User = require('../models/user.model.js');
 const Project = require('../models/project.model.js');
 const ProjectTechno = require('../models/techno_project.model.js');
-const RenderPDF = require('chrome-headless-render-pdf');
+const path = require('path');
 const multer = require('multer');
 const upload = multer({
   dest: `${__dirname}/../logos`,
@@ -72,6 +72,7 @@ router.get('/:projectId/project', async function (req, res, next) {
     image: project[0].image,
     technologies: projectTechno.map(i => i.technology_id),
     membersId: students.map(i => i.id),
+    logo: `http://localhost:3000/logo/${project[0].logo}`,
     needs: project[0].needs,
     semesterId: students[0].semester_id,
     projectManager: projectManager
@@ -164,11 +165,8 @@ router.put('/modifiedProject', upload.single('logo'), async function (req, res, 
   console.log('panda');
 });
 
-router.post('/createPDF', async function (req, res, next) {
-  project = Project.getById(req.body.id)
-  console.log(`${__dirname}/../pdf/${project.name}.pdf`)
-  RenderPDF.default.generateSinglePdf(`http://localhost:8080/student/createPDF/${req.body.id}`, `${__dirname}/../pdf/${project.name}.pdf`, {chromeBinary: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'});
-  res.send
-})
+router.get('/logo/:name', (req, res) => {
+  res.sendFile(path.resolve(`${__dirname}/../logos/${req.params.name}`));
+});
 
 module.exports = router;
