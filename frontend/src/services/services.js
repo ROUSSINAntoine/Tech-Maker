@@ -98,6 +98,14 @@ export function getProjectsPerTeacher () {
     .then(data => data);
 }
 
+export function getAllProjects () {
+  return fetch(`${SERVER_URL}/admin/projects`, {
+    credentials: 'include'
+  })
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
 /**
  * Send technology's name and get id.
  * @param {String} name Technology's name

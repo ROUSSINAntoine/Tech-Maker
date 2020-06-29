@@ -34,6 +34,21 @@ router.get('/techno', async function (req, res, next) {
   res.send(response);
 });
 
+router.get('/projects', async function (req, res, next) {
+  const response = [];
+  const semesters = await Semester.getAllNamesIds();
+
+  for (let i = 0; i < semesters.length; i++) {
+    response.push({
+      id: semesters[i].id,
+      name: semesters[i].name,
+      projects: await Project.getBySemester(semesters[i].id)
+    });
+  }
+  
+  res.send(response);
+});
+
 router.put('/techno/:technoId/rename', async function (req, res, next) {
   Technology.rename(req.params.technoId, req.body.name);
   res.end('it worked');

@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { getProjectsPerTeacher } from '../../services/services.js';
+import { getProjectsPerTeacher, getAllProjects } from '../../services/services.js';
 import CreateProject from './CreateProject.vue';
 
 export default {
@@ -60,7 +60,9 @@ export default {
     };
   },
   async created() {
-    this.semesters = await getProjectsPerTeacher();
+    this.userType = this.$route.path.split('/')[1];
+    if (this.userType === 'teacher') this.semesters = await getProjectsPerTeacher();
+    else if (this.userType === 'admin') this.semesters = await getAllProjects();
   },
   methods: {
     /**

@@ -26,14 +26,18 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/api/pdf/generate', (req, res, next) => {
+
   res.render('pdf-generator', {
-    project: {
+    title: 'Fiche projet',
+    user: {
       name: '',
-      slogan: '',
+      number: '',
+      room: '',
       semester: '',
+      slogan: '',
       describe: '',
       technologies: [],
-      students: []
+      members: []
     }
   })
 })
@@ -42,7 +46,7 @@ router.get('/api/pdf/render', async (req, res, next) => {
   const buffer = await renderPDF.generatePdfBuffer("http://localhost:3000/api/pdf/generate")
 
   res.setHeader('Content-Type', 'application/pdf')
-  res.setHeader('Content-Disposition', `attachment; filename="pouet.pdf"`)
+  res.setHeader('Content-Disposition', `attachment; filename="ficheProjet.pdf"`)
   res.write(buffer)
   res.end()
 })
