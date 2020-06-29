@@ -61,7 +61,7 @@ class Project {
   static async getById (id) {
     // console.log('getbyid', id);
     const result = await PostgressStore.client.query({
-      text: `SELECT name, slogan, describe, image, needs 
+      text: `SELECT name, slogan, describe, image AS logo, needs 
               FROM ${Project.tableName} 
               WHERE id = $1`,
       values: [id]

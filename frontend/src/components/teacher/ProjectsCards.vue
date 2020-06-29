@@ -13,11 +13,6 @@
             <v-row>
               <v-col cols="12" sm="5">
                 <h2>{{project.name}}</h2><br>
-                <img
-                style='width: 50px;'
-                  :src="project.logo ? project.logo : 'https://www.intechinfo.fr/wp-content/uploads/2019/09/logo-intechinfo-sans-baseline-retina.png' /* DEDAULT LOGO */" 
-                  :alt="'Logo du projet ' + project.name"
-                /><br>
                 <router-link :to="'project/' + project.id" :projectId="project.id" class='routerlink'><v-btn style='margin:5px'>Modifier</v-btn></router-link>
               </v-col>
               <v-col cols="12" sm="5">
