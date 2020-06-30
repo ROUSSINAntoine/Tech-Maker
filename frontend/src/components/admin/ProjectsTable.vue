@@ -24,12 +24,14 @@
           </v-expansion-panel>
         </v-expansion-panels>
     </v-card>
-    <v-alert v-if="errorMessage" dismissible style="width: 400px; margin:auto" type="error">
-      {{ errorMessage }}
-    </v-alert>
-    <v-alert v-if="notification" dismissible style="width: 400px; margin:auto" type="success">
-      {{ notification }}
-    </v-alert>
+    <div style='margin:20px'>
+      <v-alert v-if="errorMessage" dismissible style="width: 400px; margin:auto" type="error">
+        {{ errorMessage }}
+      </v-alert>
+      <v-alert v-if="notification" dismissible style="width: 400px; margin:auto" type="success">
+        {{ notification }}
+      </v-alert>
+    </div>
   </div>
 </template>
 
