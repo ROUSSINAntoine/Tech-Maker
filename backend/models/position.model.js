@@ -51,6 +51,24 @@ class Position {
     });
     return resp.rows[0];
   }
+
+  static async getByRoomId (roomId) {
+    const resp = await PostgressStore.client.query({
+      text: `
+        SELECT id
+        FROM ${Position.tableName}
+        WHERE room_id = $1;`,
+      values: [roomId]
+    });
+    return resp.rows;
+  }
+
+  static async deleteByRoomId (roomId) {
+    await PostgressStore.client.query({
+      text: `DELETE FROM ${Position.tableName} WHERE room_id = $1;`,
+      values: [roomId]
+    });
+  }
 }
 
 /** @type {String} */

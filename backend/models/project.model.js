@@ -138,6 +138,13 @@ class Project {
     });
     return result.rows[0];
   }
+
+  static async setNullPositionByPositionId (positionId) {
+    await PostgressStore.client.query({
+      text: `UPDATE ${Project.tableName} SET position_id = null WHERE position_id = $1;`,
+      values: [positionId]
+    });
+  }
 }
 
 /** @type {String} */

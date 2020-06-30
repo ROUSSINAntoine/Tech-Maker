@@ -51,6 +51,7 @@
             </v-col>
           </v-row>
           <v-color-picker v-model="room.color"></v-color-picker>
+          <v-btn v-on:click="deleteRoom(room.id)" style='margin-top:10px; margin-bottom:10px; background-color: #75b658'>Supprimer</v-btn>
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-btn v-on:click="send" style='margin-top:20px; margin-bottom:20px; background-color: #75b658'>Sauvegarder</v-btn>
@@ -114,7 +115,7 @@
 </template>
 
 <script>
-import { getRooms, updateRoomsData, createRoom } from '../../services/services.js';
+import { getRooms, updateRoomsData, createRoom, deleteRoomById } from '../../services/services.js';
 import ProjectsTable from './ProjectsTable.vue';
 
 export default {
@@ -164,6 +165,9 @@ export default {
     this.roomsSettings = this.oldRoomsSettings.map(room => { return { ...room }; });
   },
   methods: {
+    async deleteRoom(roomId) {
+      await deleteRoomById(roomId);
+    },
     async createRoom () {
       if (this.name === null || this.name === '') {
         this.errorMessage = 'Le nom de la salle ne doit pas être laissée vide.';
