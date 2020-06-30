@@ -395,3 +395,32 @@ export function updateRoomsData (data) {
     .then(resp => resp.json())
     .then(data => data);
 }
+
+/**
+ * @returns {Promise<{
+ *  projects: Array.<{ id: number, name: string, nbStudents: number, roomId: number }>,
+ * }>}
+ */
+export function getProjectShortData () {
+  return fetch(`${SERVER_URL}/admin/projectShortData`, {
+    credentials: 'include'
+  })
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
+/**
+ * Send new rooms for the projects.
+ * @param {Array.<{ id: number, roomId: number }>} projects List of changed rooms for the projects
+ * @returns {Promise<{ error: boolean, message: string }>}
+ */
+export function updateProjectsRoom (projects) {
+  return fetch(`${SERVER_URL}/admin/updateProjectsRoom`, {
+    method: 'put',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(projects)
+  })
+    .then(resp => resp.json())
+    .then(data => data);
+}

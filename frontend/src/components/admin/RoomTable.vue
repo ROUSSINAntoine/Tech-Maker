@@ -108,14 +108,20 @@
         {{notification}}
       </v-alert>
       <v-alert v-if="errorMessage" dismissible style='width: 400px; margin:auto' type='error'></v-alert>
+
+    <ProjectsTable :rooms="oldRoomsSettings" />
   </div>
 </template>
 
 <script>
 import { getRooms, updateRoomsData, createRoom } from '../../services/services.js';
+import ProjectsTable from './ProjectsTable.vue';
 
 export default {
   name: 'RoomTable',
+  components: {
+    ProjectsTable
+  },
   data () {
     return {
       /** @type {String} */

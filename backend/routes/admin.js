@@ -200,4 +200,42 @@ router.post('/juryCSV', async function (req, res, next) {
   res.send({ response: 'Les étudiants ont bien été ajouté à la base de donnée.' });
 });
 
+router.get('/projectShortData', async (req, res) => {
+  const result = await Project.getData();
+  res.status(200).send(result.map(r => {
+    return {
+      id: r.id,
+      name: r.name,
+      nbStudents: Number(r.nbstudents),
+      roomId: r.room_id
+    }
+  }));
+});
+
+router.put('/updateProjectsRoom', async (req, res) => {
+  console.log(req.body);
+  for (const project of req.body) {
+    if (project.remove) {
+      console.log('ici');
+      const position = await Project.getPosition(project.id);
+      await Project.updateRoom(project.id, null);
+      console.log('là', position);
+      await Position.deleteById(position.position_id);
+      console.log("ayaya");
+      continue;
+    }
+    
+    /** @type {{ nb: number, max_project: number }} */
+    console.log('project.roomId', project.roomId);
+    const positionsPerRoom = await Position.nbPerRoom(project.roomId);
+    console.log('response', positionsPerRoom);
+    if (Number(positionsPerRoom.nb) < positionsPerRoom.max_project) {
+      const position = await Position.add(project.roomId);
+      console.log("new position:", position);
+      await Project.updateRoom(project.id, position.id);
+    }
+  }
+  res.status(200).send({ error: false, message: 'Opération effectuée avec succès.'});
+});
+
 module.exports = router;
