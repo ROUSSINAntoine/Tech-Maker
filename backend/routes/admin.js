@@ -114,9 +114,9 @@ router.post('/StudentCSV', async function (req, res, next) {
   for (let i = 0; i < csv2.length; i++) {
     emails.push(csv2[i][9]);
   }
-  await Users.createStudentUsers(emails);
+  await Users.createStudentUser(emails);
   for (let i = 0; i < csv2.length; i++) {
-    csv2[i].push(await Users.getUsersByEmail(csv2[i][9]));
+    csv2[i].push(await Users.getUserByEmail(csv2[i][9]));
   }
   await Student.createStudents(csv2);
   res.send({ response: 'Les étudiants ont bien été ajouté à la base de donnée.' });
@@ -187,9 +187,28 @@ router.get('/projectShortData', async (req, res) => {
   }));
 });
 
-router.put('/updateProjectsRoom'), (async (req, res) => {
-  for (const project in req.body) {
-    await Project.updateRoom(project.projectId, project.roomId);
+router.put('/updateProjectsRoom', async (req, res) => {
+  console.log(req.body);
+  for (const project of req.body) {
+    if (project.remove) {
+      console.log('ici');
+      const position = await Project.getPosition(project.id);
+      await Project.updateRoom(project.id, null);
+      console.log('là', position);
+      await Position.deleteById(position.position_id);
+      console.log("ayaya");
+      continue;
+    }
+    
+    /** @type {{ nb: number, max_project: number }} */
+    console.log('project.roomId', project.roomId);
+    const positionsPerRoom = await Position.nbPerRoom(project.roomId);
+    console.log('response', positionsPerRoom);
+    if (Number(positionsPerRoom.nb) < positionsPerRoom.max_project) {
+      const position = await Position.add(project.roomId);
+      console.log("new position:", position);
+      await Project.updateRoom(project.id, position.id);
+    }
   }
   res.status(200).send({ error: false, message: 'Opération effectuée avec succès.'});
 });

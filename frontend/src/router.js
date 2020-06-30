@@ -41,6 +41,11 @@ const routes = [
       {
         path: 'rooms',
         component: RoomTable
+      },
+      {
+        path: 'projet/:projectId',
+        component: ProjectForm,
+        props: (route) => ({ editable: true, projectId: Number(route.params.projectId) })
       }
     ]
   },

@@ -118,13 +118,25 @@ class Project {
     return result.rows;
   }
 
-  static async updateRoom (projectId, roomId) {
+  static async updateRoom (projectId, positionId) {
     await PostgressStore.client.query({
       text: `
         UPDATE ${Project.tableName}
-        SET `,
-        values: [projectId, roomId]
+        SET position_id = $2
+        WHERE id = $1;`,
+        values: [projectId, positionId]
     });
+  }
+
+  static async getPosition (projectId) {
+    const result = await PostgressStore.client.query({
+      text: `
+        SELECT position_id
+        FROM ${Project.tableName}
+        WHERE id = $1;`,
+        values: [ projectId ]
+    });
+    return result.rows[0];
   }
 }
 

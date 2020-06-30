@@ -51,7 +51,7 @@ export default {
     }
   },
   props: {
-    rooms: Array // Array<{ id: Number: name: String, max_student: Number, max_project: Number, max_student_per_project: Number, color: String, usable: Boolean }>
+    rooms: Array
   },
   async created () {
     this.projects = await getProjectShortData();
@@ -94,8 +94,14 @@ export default {
       const sendData = [];
       for (const oldData of this.oldProjectsValues) {
         const project = this.projects.find(p => p.id === oldData.id);
+        /*if (project.roomId === null) {
+          sendData.push({ id: project.id, remove: true });
+        }*/
         if (oldData.roomId !== project.roomId) {
-          sendData.push({ id: project.id, roomId: project.roomId });
+          sendData.push(project.roomId
+            ? { id: project.id, roomId: project.roomId }
+            : { id: project.id, remove: true }
+          );
         }
       }
       console.log(sendData);
