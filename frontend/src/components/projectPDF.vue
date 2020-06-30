@@ -7,7 +7,7 @@
       <h1>{{data.name}}</h1>
       <div class="headInformation">
         <div class='colorGrey'><span>N°1</span> - <span>E09</span><br></div>
-        <span>Semestre 1</span>
+        <span>{{ semester.find(s => s.id === data.semesterId).name }}</span>
       </div>  
     <br/>
     </div>
@@ -26,30 +26,34 @@
       </div>
     </div>
 
-    <div class="foot">
-      <span>Titouan CELLIER | </span><span>Romain DELORME-GLORIEUX | </span><span>Antoine ROUSSIN</span>
+    <div class="foot" v-for="student in students.filter(s => data.membersId.includes(s.id))" v-bind:key="student.name">
+      <span> {{ student.name }} </span>
+
     </div>
   </div>
 </template>
 
 <script>
-import { getProjectData, getAllTechnologies } from '../services/services.js';
+import { getProjectData, getAllTechnologies, getAllSemestersName, getStudentsByProject } from '../services/services.js';
 
 export default {
   props: {
     projectId: Number
   },
   async created () {
+    this.semester = await getAllSemestersName();
     this.data = await getProjectData(this.projectId);
+    this.students = await getStudentsByProject(this.data.id);
     const technologies = (await getAllTechnologies()).technologies;
     const projectTechnologiesName = this.data.technologies.map(t => technologies.find(i => i.id === t).name);
     this.data.technologies = projectTechnologiesName;
-    
-    console.log(projectTechnologiesName);
-    
+    console.log(this.students);
+    console.log(this.data);
   },
   data () {
     return {
+      semester: [],
+      students: [],
       data: {}
     }
   },
@@ -58,10 +62,6 @@ export default {
 </script>
 
 <style>
-/*  @font-face {
-  font-family: "Mono";
-  src: url("C:/Users/CELLIERTitouan/Desktop/charte/PTM75F.ttf")
-  }*/
 
   .pdf {
     margin: auto;
@@ -107,7 +107,7 @@ export default {
 
   .titleTechnology {
     background-color: #334048;
-    width: 270px;
+    width: 300px;
 
   }
 

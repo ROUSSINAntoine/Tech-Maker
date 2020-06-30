@@ -9,11 +9,14 @@ const studentRouter = require('./routes/student.js');
 const adminRouter = require('./routes/admin.js');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+
 PostgressStore.init();
 
 const app = express();
 
-app.use(bodyParser(bodyParser.json()));
+app.use(bodyParser.json({
+  limit: 10516480
+}));
 
 app.use(cors({
   credentials: true,

@@ -98,6 +98,14 @@ export function getProjectsPerTeacher () {
     .then(data => data);
 }
 
+export function getAllProjects () {
+  return fetch(`${SERVER_URL}/admin/projects`, {
+    credentials: 'include'
+  })
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
 /**
  * Send technology's name and get id.
  * @param {String} name Technology's name
@@ -136,14 +144,14 @@ export function createProject (name, membersId, projectManager) {
     .then(data => data);
 }
 
-export function createRoom (name, max_student, max_project, max_student_per_project) {
+export function createRoom (name, max_student, max_project, max_student_per_project, color) {
   return fetch(`${SERVER_URL}/admin/createRoom`, {
     method: 'post',
     credentialds: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({name, max_student, max_project, max_student_per_project})
+    body: JSON.stringify({name, max_student, max_project, max_student_per_project, color})
   })
   .then(resp => resp.json())
   .then(data => data);
@@ -167,8 +175,8 @@ export function getTechnologiesPerSemester (semesterId) {
  * @param {Number} semesterId Id of the semester
  * @returns {Promise<Array.<{ id: Number, name: String }>>}
  */
-export function getStudentsPerSemester (semesterId) {
-  return fetch(`${SERVER_URL}/${semesterId}/students`, {
+export function getStudentsByProject (projectId) {
+  return fetch(`${SERVER_URL}/${projectId}/pdf`, {
     credentials: 'include'
   })
     .then(resp => resp.json())
@@ -211,6 +219,14 @@ export function getProjectData (projectId) {
     .then(data => data);
 }
 
+export function getStudentsPerSemester (semesterId) {
+  return fetch(`${SERVER_URL}/${semesterId}/Students`, {
+    credentials: 'include'
+  })
+    .then(resp => resp.json())
+    .then(data => data);
+}
+
 /**
  * Get student data.
  * @returns {Promise<{ name: String, projectId: (Number | null) }>}
@@ -240,13 +256,19 @@ export function getStudentData () {
  * }} modifiedData
  */
 export function setModifiedprojectData (modifiedData) {
+  console.log(modifiedData);
+
   fetch(`${SERVER_URL}/modifiedProject`, {
     method: 'put',
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(modifiedData)
+    body: modifiedData
+  });
+}
+
+export function createPDF (projectId) {
+  fetch(`${SERVER_URL}/createPDF`, {
+    method: 'post',
+    body: projectId
   });
 }
 

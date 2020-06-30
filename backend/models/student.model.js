@@ -73,7 +73,7 @@ class Student {
 
   static async getByProject (projectId) {
     const result = await PostgressStore.client.query({
-      text: `SELECT user_id AS id, project_manager, semester_id
+      text: `SELECT CONCAT(firstname, ' ', lastname) AS name, user_id AS id, project_manager, semester_id
         FROM ${Student.tableName}
         WHERE project_id = $1`,
       values: [projectId]

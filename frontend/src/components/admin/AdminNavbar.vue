@@ -23,7 +23,7 @@
           </v-list-item>
         </router-link>
 
-        <!-- <router-link :to='"/admin/" + $route.params.id + "/projects"' class='routerlink'> -->
+        <router-link to='/admin/projects' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-laptop</v-icon>
@@ -32,7 +32,7 @@
               <v-list-item-title>Projets</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        <!-- </router-link> -->
+        </router-link>
 
         <router-link to='/admin/technologies' class='routerlink'>
           <v-list-item link>
@@ -45,7 +45,7 @@
           </v-list-item>
         </router-link>
 
-        <!-- <router-link :to='"/admin/" + $route.params.id + "/juges"' class='routerlink'> -->
+        <!-- <router-link :to='"/admin/juges"' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-account-tie</v-icon>
@@ -54,7 +54,7 @@
               <v-list-item-title>Juges</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        <!-- </router-link> -->
+        </router-link>
 
         <router-link :to='"/admin/juryCSV"' class='routerlink'>
           <v-list-item link>
@@ -67,7 +67,7 @@
           </v-list-item>
         </router-link>
 
-        <!-- <router-link :to='"/admin/" + $route.params.id + "/enseignants"' class='routerlink'> -->
+        <router-link :to='"/admin/enseignants"' class='routerlink'>
           <v-list-item link>
             <v-list-item-action>
               <v-icon>mdi-teach</v-icon>
@@ -76,7 +76,7 @@
               <v-list-item-title>Enseignants</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        <!-- </router-link> -->
+        </router-link> -->
 
         <router-link to='/admin/rooms' class='routerlink'>
           <v-list-item link>

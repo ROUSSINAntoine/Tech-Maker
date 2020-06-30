@@ -22,6 +22,14 @@ class TechnoProject {
     });
   }
 
+  static async delete (technoId) {
+    await PostgressStore.client.query({
+      text: `DELETE FROM ${TechnoProject.tableName}
+              WHERE technology_id = $1`,
+      values: [technoId]
+    });
+  }
+
   static async add (projectId, technoId) {
     await PostgressStore.client.query({
       text: `INSERT INTO ${TechnoProject.tableName}(

@@ -112,7 +112,6 @@
 
                 <div v-else>
                   <div v-if="currentData.logo">
-                    <img:src="currentData.logo" alt=""/>
                     <v-alert type='error' v-if="imageError">{{ imageError }}</v-alert>
                     <v-btn @click="removeImage" v-if="editable">Supprimer l'image</v-btn>
                     </div>
@@ -169,7 +168,7 @@
                       <v-card-text v-for="student in students" v-bind:key="student.id">
                           <v-btn 
                             v-on:click="addMember(student.id)"
-                            @click.stop="dialog = false" text> {{ student.name }} </v-btn>
+                            @click.stop="dialog = false" text> {{ student.name }} {{student.id}} </v-btn>
                       </v-card-text>
                     </v-card>
                   </v-dialog>
@@ -186,14 +185,14 @@
               >Sauvegarder</v-btn>
           </v-col>
 
-          <v-btn v-on:click="testPDF()">Test PDF</v-btn>
-
           <router-link :to='"/student/createPDF/" + this.projectId' class='routerlink'>
-            <v-col cols="12" sm="12">
-              <v-btn
-                >Générer PDF</v-btn>
-            </v-col>
+            <v-btn v-on:click="testPDF()">Test PDF</v-btn>
           </router-link>
+
+          <v-col cols="12" sm="12">
+            <v-btn v-on:click="submitPDF()"
+              >Générer PDF</v-btn>
+          </v-col>
 
           <div class="text-center">
             <v-snackbar
@@ -217,7 +216,8 @@ import {
   getProjectData,
   setModifiedprojectData,
   getSemestersPerTeacher,
-  getAllSemestersName
+  getAllSemestersName,
+  createPDF
 } from '../services/services.js';
 
 export default {
@@ -343,49 +343,37 @@ export default {
       this.createImage(file);
     },
     createImage(file) {
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        const img = new Image();
-
-        img.onload = () => {
-          if (img.width < this.imageMinSize.width || img.height < this.imageMinSize.height) {
-            document.getElementById('inputImage').value = '';
-            this.imageError = `L'image doit avoir un format minimum de ${this.imageMinSize.width} x ${this.imageMinSize.height}.`;
-            this.removeImage();
-          } else {
-            this.currentData.logo = e.target.result;
-            this.imageError = null;
-          }
-        };
-        img.src = e.target.result;
-        
-      };
-      reader.readAsDataURL(file);
+      this.currentData.logoFile = file;
+      console.log(this.currentData.logoFile)
+      this.currentData.logo = 'sdfgsdf';
     },
     removeImage () {
       this.currentData.logo = '';
+    },
+    submitPDF() {
+      createPDF(this.projectId);
     },
     submitForm() {
       if (this.currentData.membersId.length === 0) {
         this.errorMessage = 'Il doit y avoir au moins un membre dans le projet.';
         return;
       }
-      const modifiedData = { projectId: Number(this.projectId) };
+      const form = new FormData();
+      form.append('projectId', Number(this.projectId))
       if (this.oldData.name !== this.currentData.name) {
         if (!this.currentData.name) {
           this.errorMessage = 'Le nom du projet ne doit pas être laissé vide.';
           return;
         }
-        modifiedData.name = this.currentData.name;
+        form.append("name", this.currentData.name);
         this.oldData.name = this.currentData.name;
       }
       if (this.oldData.slogan !== this.currentData.slogan) {
         if (!this.currentData.slogan) {
-          this.errorMessage = 'Le slogant ne doit pas être laissé vide.';
+          this.errorMessage = 'Le slogan ne doit pas être laissé vide.';
           return;
         }
-        modifiedData.slogan = this.currentData.slogan;
+        form.append('slogan' , this.currentData.slogan);
         this.oldData.slogan = this.currentData.slogan;
       }
       if (this.oldData.describe !== this.currentData.describe) {
@@ -393,35 +381,37 @@ export default {
           this.errorMessage = 'La description ne doit pas être laissée vide.';
           return;
         }
-        modifiedData.describe = this.currentData.describe;
+        form.append('describe', this.currentData.describe);
         this.oldData.describe = this.currentData.describe;
       }
       if (this.oldData.logo !== this.currentData.logo) {
-        modifiedData.logo = this.currentData.logo;
+        form.append('logo', this.currentData.logoFile);
         this.oldData.logo = this.currentData.logo;
       }
       if (this.oldData.semesterId !== this.currentData.semesterId) {
-        modifiedData.semesterId = this.currentData.semesterId;
+        form.append('semesterId', this.currentData.semesterId);
         this.oldData.semesterId = this.currentData.semesterId;
       }
       if (this.oldData.projectManager !== this.currentData.projectManager) {
-        modifiedData.projectManager = { old: this.oldData.projectManager, new: this.currentData.projectManager };
+        form.append('projectManager', JSON.stringify({ old: this.oldData.projectManager, new: this.currentData.projectManager }));
         this.oldData.projectManager = this.currentData.projectManager;
       }
       let update = this.getUpdatedElement(this.oldData.technologies, this.currentData.technologies);
       if (update.length > 0) {
-        modifiedData.technologies = update;
+        form.append('technologies', JSON.stringify(update));
         this.oldData.technologies = [ ...this.currentData.technologies ];
       }
       update = this.getUpdatedElement(this.oldData.membersId, this.currentData.membersId);
       if (update.length > 0) {
-        modifiedData.membersId = update;
+        form.append('membersId', JSON.stringify(update));
         this.oldData.membersId = [ ...this.currentData.membersId ];
       }
-      if (Object.keys(modifiedData).length > 1) {
-        setModifiedprojectData(modifiedData);
+      // var res = [...form.entries()]
+      // if (res.length > 1) {
+        setModifiedprojectData(form);
+        console.log(form);
         this.errorMessage = null;
-      }
+      // }
     },
     /**
      * Get list with the deleted or added element from the currentList.

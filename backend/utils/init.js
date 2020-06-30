@@ -2,6 +2,7 @@ const PostgressStore = require('./PostgressStore.js');
 const Users = require('../models/user.model.js');
 const Teacher = require('../models/teacher.model.js');
 const Semester = require('../models/semester.model.js');
+const Room = require('../models/room.model.js');
 const pgtools = require('pgtools');
 
 const config = require('../server.config.js');
@@ -25,5 +26,7 @@ const config = require('../server.config.js');
   await Users.init();
   await Teacher.init();
   await Semester.init();
+  await Room.init();
+  await PostgressStore.close();
   console.log('Is ok');
 })();

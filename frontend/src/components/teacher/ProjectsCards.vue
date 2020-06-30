@@ -13,12 +13,7 @@
             <v-row>
               <v-col cols="12" sm="5">
                 <h2>{{project.name}}</h2><br>
-                <img
-                style='width: 50px;'
-                  :src="project.logo ? project.logo : 'https://www.intechinfo.fr/wp-content/uploads/2019/09/logo-intechinfo-sans-baseline-retina.png' /* DEDAULT LOGO */" 
-                  :alt="'Logo du projet ' + project.name"
-                /><br>
-                <v-btn style='margin:5px'><router-link :to="'project/' + project.id" :projectId="project.id" class='routerlink'>Modifier</router-link></v-btn>
+                <router-link :to="'project/' + project.id" :projectId="project.id" class='routerlink'><v-btn style='margin:5px'>Modifier</v-btn></router-link>
               </v-col>
               <v-col cols="12" sm="5">
                 <span v-if="project.status === 'waiting'"><v-icon>update</v-icon></span>
@@ -39,7 +34,7 @@
 </template>
 
 <script>
-import { getProjectsPerTeacher } from '../../services/services.js';
+import { getProjectsPerTeacher, getAllProjects } from '../../services/services.js';
 import CreateProject from './CreateProject.vue';
 
 export default {
@@ -60,7 +55,9 @@ export default {
     };
   },
   async created() {
-    this.semesters = await getProjectsPerTeacher();
+    this.userType = this.$route.path.split('/')[1];
+    if (this.userType === 'teacher') this.semesters = await getProjectsPerTeacher();
+    else if (this.userType === 'admin') this.semesters = await getAllProjects();
   },
   methods: {
     /**

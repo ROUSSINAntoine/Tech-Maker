@@ -33,6 +33,10 @@ const routes = [
         component: TechnologiesTable
       },
       {
+        path: 'projects',
+        component: ProjectsCards
+      },
+      {
         path: 'studentCSV',
         components: {
           default: AdminStudentTable,
@@ -50,6 +54,11 @@ const routes = [
       {
         path: 'rooms',
         component: RoomTable
+      },
+      {
+        path: 'project/:projectId',
+        component: ProjectForm,
+        props: (route) => ({ editable: true, projectId: Number(route.params.projectId) })
       }
     ]
   },

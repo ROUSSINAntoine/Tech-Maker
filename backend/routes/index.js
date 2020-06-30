@@ -1,15 +1,53 @@
 const express = require('express');
 const router = express.Router();
+const renderPDF = require('chrome-headless-render-pdf');
 // var Technology = require('../models/technology.model.js');
 const TechnologySemester = require('../models/technology_semester.model.js');
 const Student = require('../models/student.model.js');
 const User = require('../models/user.model.js');
 const Project = require('../models/project.model.js');
 const ProjectTechno = require('../models/techno_project.model.js');
+const path = require('path');
+const multer = require('multer');
+const upload = multer({
+  dest: `${__dirname}/../logos`,
+  fileFilter: function pngonly (req, file, callback) {
+    if (file.mimetype === 'image/png') {
+      callback(null, true);
+    } else {
+      callback(new Error('Invalide file'), false);
+    }
+  }
+});
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
+});
+
+router.get('/api/pdf/generate', (req, res, next) => {
+  res.render('pdf-generator', {
+    title: 'Fiche projet',
+    user: {
+      name: '',
+      number: '',
+      room: '',
+      semester: '',
+      slogan: '',
+      describe: '',
+      technologies: [],
+      members: []
+    }
+  });
+});
+
+router.get('/api/pdf/render', async (req, res, next) => {
+  const buffer = await renderPDF.generatePdfBuffer('http://localhost:3000/api/pdf/generate');
+
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', 'attachment; filename="ficheProjet.pdf"');
+  res.write(buffer);
+  res.end();
 });
 
 router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
@@ -25,9 +63,6 @@ router.put('/modifiedTechnologiesPerSemester', async function (req, res, next) {
 
 router.get('/:semesterId/Students', async function (req, res, next) {
   const students = await Student.getStudentBySemesterId(req.params.semesterId);
-  // console.log(await Student.getStudentBySemesterId(req.params.semesterId));
-  console.log(req.params.semesterId);
-  console.log(students);
   res.send(students);
 });
 
@@ -38,7 +73,11 @@ router.get('/technologiesPerSemester/:semesterId', async function (req, res, nex
 
 router.get('/:semesterId/:projectId/studentsNotOnProject', async function (req, res, next) {
   const students = await Student.getStudentBySemesterIdNotOnProject(req.params.semesterId, req.params.projectId);
-  // console.log(await Student.getStudentBySemesterId(req.params.semesterId));
+  res.send(students);
+});
+
+router.get('/:projectId/pdf', async function (req, res, next) {
+  const students = await Student.getByProject(req.params.projectId);
   res.send(students);
 });
 
@@ -47,21 +86,23 @@ router.get('/:projectId/project', async function (req, res, next) {
   const students = await Student.getByProject(req.params.projectId);
   const projectTechno = await ProjectTechno.getByProjectId(req.params.projectId);
 
-  if (req.session.userType !== 'student') {
-    Project.setValidate(req.params.projectId, 'yes');
-  }
-
   let projectManager = null;
   for (let i = 0; i < students.length; i++) {
     if (students[i].project_manager === true) projectManager = students[i].id;
   }
+  let logo;
+  if (project[0].logo === null) logo = null;
+  else logo = `http://localhost:3000/logo/${project[0].logo}`;
+
   const response = {
     id: req.params.projectId,
     name: project[0].name,
     slogan: project[0].slogan,
     describe: project[0].describe,
+    image: project[0].image,
     technologies: projectTechno.map(i => i.technology_id),
     membersId: students.map(i => i.id),
+    logo: logo,
     needs: project[0].needs,
     semesterId: students[0].semester_id,
     projectManager: projectManager
@@ -99,23 +140,21 @@ router.get('/connected', (req, res) => {
   }
 });
 
-router.put('/modifiedProject', async function (req, res, next) {
+router.put('/modifiedProject', upload.single('logo'), async function (req, res, next) {
+  console.log(req.file);
   const project = {};
   const student = [];
-  let logo;
   let projectManager = {};
   let techno = [];
   if (req.body.projectId) project.id = req.body.projectId;
   if (req.body.name) project.name = req.body.name;
   if (req.body.slogan) project.slogan = req.body.slogan;
   if (req.body.describe) project.describe = req.body.describe;
-  if (req.body.logo) logo = req.body.logo;
-  if (req.body.technologies) techno = req.body.technologies;
-  if (req.body.membersId) student.push(...req.body.membersId);
-  if (req.body.projectManager) projectManager = req.body.projectManager;
+  if (req.file) project.image = req.file.filename;
+  if (req.body.technologies) techno = JSON.parse(req.body.technologies);
+  if (req.body.membersId) student.push(...JSON.parse(req.body.membersId));
+  if (req.body.projectManager) projectManager = JSON.parse(req.body.projectManager);
   project.validate = req.session.userType === 'student' ? 'waiting' : 'yes';
-
-  console.log(req.body);
 
   if (Object.keys(project).length !== 1) {
     const validCollumn = ['id', 'name', 'describe', 'slogan', 'image', 'validate'];
@@ -150,12 +189,14 @@ router.put('/modifiedProject', async function (req, res, next) {
   }
 
   if (projectManager !== {}) {
-    console.log(projectManager);
     Student.deassignProjectManager(projectManager.old);
     if (projectManager.new !== null) Student.setProjectManager(projectManager.new);
   }
+  console.log('panda');
+});
 
-  console.log('logo', logo);
+router.get('/logo/:name', (req, res) => {
+  res.sendFile(path.resolve(`${__dirname}/../logos/${req.params.name}`));
 });
 
 module.exports = router;

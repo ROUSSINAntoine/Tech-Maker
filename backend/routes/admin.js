@@ -34,6 +34,21 @@ router.get('/techno', async function (req, res, next) {
   res.send(response);
 });
 
+router.get('/projects', async function (req, res, next) {
+  const response = [];
+  const semesters = await Semester.getAllNamesIds();
+
+  for (let i = 0; i < semesters.length; i++) {
+    response.push({
+      id: semesters[i].id,
+      name: semesters[i].name,
+      projects: await Project.getBySemester(semesters[i].id)
+    });
+  }
+  
+  res.send(response);
+});
+
 router.put('/techno/:technoId/rename', async function (req, res, next) {
   Technology.rename(req.params.technoId, req.body.name);
   res.end('it worked');
@@ -157,22 +172,32 @@ router.put('/rooms/update', async (req, res) => {
     return;
   }
 
-  const avalible_columns = ['name', 'max_student', 'max_project', 'max_student_per_project', 'color', 'usable'];
+  const avalibleColumns = ['name', 'max_student', 'max_project', 'max_student_per_project', 'color', 'usable'];
 
   for (let i = 0; i < req.body.length; i++) {
     const params = [];
-    const values = [req.body[i].id ];
-    for (let j = 0; j < avalible_columns.length; j++) {
-      if (req.body[i][avalible_columns[j]] !== undefined) {
-        values.push(req.body[i][avalible_columns[j]]);
-        params.push(`${avalible_columns[j]} = $${values.length}`);
+    const values = [req.body[i].id];
+    for (let j = 0; j < avalibleColumns.length; j++) {
+      if (req.body[i][avalibleColumns[j]] !== undefined) {
+        values.push(req.body[i][avalibleColumns[j]]);
+        params.push(`${avalibleColumns[j]} = $${values.length}`);
       }
     }
     console.log(`UPDATE ${Room.tableName} SET ${params.join(', ')} WHERE id = $1`, values);
     await Room.update(params.join(', '), values);
   }
 
-  res.status(200).send({ error: false, message: "Opération effectuée avec succès." });
+  res.status(200).send({ error: false, message: 'Opération effectuée avec succès.' });
+});
+
+router.post('/createRoom', async function (req, res, next) {
+  Room.newRoom(req.body.name, req.body.max_student, req.body.max_project, req.body.max_student_per_project, req.body.color)
+});
+
+router.post('/juryCSV', async function (req, res, next) {
+  // RenderPDF.default.
+  RenderPDF.default.generateSinglePdf('http://google.com', 'outputPdf.pdf', {chromeBinary : 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'});
+  res.send({ response: 'Les étudiants ont bien été ajouté à la base de donnée.' });
 });
 
 module.exports = router;
