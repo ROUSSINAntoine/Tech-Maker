@@ -112,6 +112,7 @@
 
                 <div v-else>
                   <div v-if="currentData.logo">
+                    <img v-if='oldData.log !== null' :src="oldData.logo" width="800px" height="800px"/>
                     <v-alert type='error' v-if="imageError">{{ imageError }}</v-alert>
                     <v-btn @click="removeImage" v-if="editable">Supprimer l'image</v-btn>
                     </div>
