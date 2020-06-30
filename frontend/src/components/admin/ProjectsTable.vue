@@ -1,35 +1,37 @@
 <template>
   <div class="ProjectsTable">
-    <h1>Placement des projets</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Nombre d'étudiants</th>
-          <th>Salle</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="project in projects" v-bind:key="project.id">
-          <td>
-            <router-link :to="`/admin/project/${project.id}`">{{ project.name }}</router-link>
-          </td>
-          <td>{{ project.nbStudents }}</td>
-          <td>
-            <select v-model="project.roomId">
-              <option :value="null">Choisir</option>
-              <option
-                v-for="room in getValidRooms(project)" v-bind:key="room.id"
-                :value="room.id"
-                >{{ room.name }}</option>
-            </select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <button v-on:click="send">Sauvegarder</button>
-    <span v-if="errorMessage">{{ errorMessage }}</span>
-    <span v-if="notification">{{ notification }}</span>
+    <v-card class="mx-auto" max-width="500">
+      <v-card-title style="background-color:#75b658">Placement de projets</v-card-title>
+        <v-expansion-panels>
+          <v-expansion-panel v-for="project in projects" v-bind:key="project.id">
+            <v-expansion-panel-header>{{ project.name }}</v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-divider style='margin:10px'></v-divider>
+                <router-link :to="`/admin/project/${project.id}`"><v-btn>Accéder au projet</v-btn></router-link>
+                <v-spacer style='margin:10px'></v-spacer>
+                Nombre d'étudiants : {{ project.nbStudents }}
+                <v-spacer style='margin:10px'></v-spacer>
+                Salle : <select v-model="project.roomId">
+                    <option :value="null">Choisir</option>
+                    <option
+                      v-for="room in getValidRooms(project)" v-bind:key="room.id"
+                      :value="room.id"
+                      >{{ room.name }}</option>
+                  </select>
+                  <v-spacer style='margin:10px'></v-spacer>
+                  <v-btn v-on:click="send" style='margin-top:20px; margin-bottom:20px; background-color: #75b658'>Sauvegarder</v-btn>
+              </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+    </v-card>
+    <div style='margin:20px'>
+      <v-alert v-if="errorMessage" dismissible style="width: 400px; margin:auto" type="error">
+        {{ errorMessage }}
+      </v-alert>
+      <v-alert v-if="notification" dismissible style="width: 400px; margin:auto" type="success">
+        {{ notification }}
+      </v-alert>
+    </div>
   </div>
 </template>
 
