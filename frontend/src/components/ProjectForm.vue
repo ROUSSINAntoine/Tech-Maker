@@ -185,7 +185,8 @@
               >Sauvegarder</v-btn>
           </v-col>
 
-          <router-link :to='"/student/createPDF/" + this.projectId' class='routerlink'>
+          <!-- <router-link :to='"/student/createPDF/" + this.projectId' class='routerlink'> -->
+          <router-link to='/api/pdf/generate' class='routerlink'>
             <v-btn v-on:click="testPDF()">Test PDF</v-btn>
           </router-link>
 

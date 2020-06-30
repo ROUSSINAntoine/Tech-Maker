@@ -56,7 +56,9 @@
       <v-btn v-on:click="send" style='margin-top:20px; margin-bottom:20px; background-color: #75b658'>Sauvegarder</v-btn>
     </v-expansion-panels>
 
-    <v-card class="mx-auto" max-width="500">
+    <ProjectsTable :rooms="oldRoomsSettings" />
+
+    <v-card class="mx-auto" max-width="500" style='margin: 20px'>
       <v-card-title style="background-color:#75b658">Créer une salle</v-card-title>
       <v-cards-action>
         <v-row style='margin:auto'>
@@ -109,7 +111,6 @@
       </v-alert>
       <v-alert v-if="errorMessage" dismissible style='width: 400px; margin:auto' type='error'></v-alert>
 
-    <ProjectsTable :rooms="oldRoomsSettings" />
   </div>
 </template>
 
