@@ -7,6 +7,8 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Administrateur</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn v-on:click='disconnect' color='red' justify='center'>Déconnexion</v-btn>
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" app clipped>
@@ -91,7 +93,6 @@
 
         <v-spacer class=''></v-spacer>
 
-        <v-btn style='margin:10px' color="red" v-on:click='disconnect'>Déconnexion</v-btn><br>
         <v-btn style='margin:10px' id='test' @click="snackbar = true" v-on:click="resetData()">Réinitialiser</v-btn><br>
 
         <v-btn style='width:100px; height:35px; margin:10px; color:black; background-color: white' v-if="$vuetify.theme.dark" @click='$vuetify.theme.dark = !$vuetify.theme.dark'>Clair</v-btn>
