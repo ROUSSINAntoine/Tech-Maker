@@ -238,4 +238,17 @@ router.put('/updateProjectsRoom', async (req, res) => {
   res.status(200).send({ error: false, message: 'Opération effectuée avec succès.'});
 });
 
+router.delete('/deleteRoom/:roomId', async (req, res) => {
+  const positionsId = await Position.getByRoomId(req.params.roomId);
+  console.log(positionsId);
+
+  for (const positionId of positionsId) {
+    await Project.setNullPositionByPositionId(positionId.id);
+  }
+  await Position.deleteByRoomId(req.params.roomId);
+  await Room.deleteById(req.params.roomId);
+
+  res.sendStatus(200);
+});
+
 module.exports = router;

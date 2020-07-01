@@ -51,6 +51,13 @@ class Room {
       values: [...values]
     });
   }
+
+  static async deleteById (roomId) {
+    await PostgressStore.client.query({
+      text: `DELETE FROM ${Room.tableName} WHERE id = $1`,
+      values: [roomId]
+    });
+  }
 }
 
 /** @type {String} */

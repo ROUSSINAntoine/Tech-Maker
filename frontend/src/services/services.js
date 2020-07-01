@@ -147,7 +147,7 @@ export function createProject (name, membersId, projectManager) {
 export function createRoom (name, max_student, max_project, max_student_per_project, color) {
   return fetch(`${SERVER_URL}/admin/createRoom`, {
     method: 'post',
-    credentialds: 'include',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -423,4 +423,15 @@ export function updateProjectsRoom (projects) {
   })
     .then(resp => resp.json())
     .then(data => data);
+}
+
+/**
+ * Delete room and set null in project_id for all projects in this room.
+ * @param {number} roomId Id of the room
+ */
+export function deleteRoomById(roomId) {
+  fetch(`${SERVER_URL}/admin/deleteRoom/${roomId}`, {
+    method: 'delete',
+    credentials: 'include'
+  });
 }
